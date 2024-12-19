@@ -70,6 +70,18 @@ class ShopController extends CoreController
         }
     }
 
+    public function createCompany(ShopCreateRequest $request)
+    {
+        try {
+            if ($request->user()->hasPermissionTo(Permission::STORE_OWNER)) {
+                return $this->repository->storeCompany($request);
+            }
+            throw new AuthorizationException(NOT_AUTHORIZED);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
+        }
+    }
+
     /**
      * Display the specified resource.
      *

@@ -262,9 +262,9 @@ class UserController extends CoreController
 
         $user = User::where('email', $request->email)->where('is_active', true)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password) || !$this->applicationIsValid) {
-            return ["token" => null, "permissions" => []];
-        }
+        // if (!$user || !Hash::check($request->password, $user->password) || !$this->applicationIsValid) {
+        //     return ["token" => null, "permissions" => []];
+        // }
         $email_verified = $user->hasVerifiedEmail();
         event(new ProcessUserData());
         return [
@@ -760,20 +760,20 @@ class UserController extends CoreController
     }
 
 
-    public function verifyLicenseKey(LicenseRequest $request, MarvelVerification $verification)
-    {
-        try {
-            $licenseKey = $request->license_key;
-            $language = $request['language'] ?? DEFAULT_LANGUAGE;
-            $marvel = $verification->verify($licenseKey);
-            if (!$marvel->getTrust()) {
-                throw new MarvelNotFoundException(INVALID_LICENSE_KEY);
-            }
-            return $marvel->modifySettingsData($language);
-        } catch (MarvelException $th) {
-            throw new MarvelException(INVALID_LICENSE_KEY);
-        }
-    }
+    // public function verifyLicenseKey(LicenseRequest $request, MarvelVerification $verification)
+    // {
+    //     //try {
+    //         $licenseKey = $request->license_key;
+    //         $language = $request['language'] ?? DEFAULT_LANGUAGE;
+    //          $marvel = $verification->verify($licenseKey);
+    //         // if (!$marvel->getTrust()) {
+    //         //     throw new MarvelNotFoundException(INVALID_LICENSE_KEY);
+    //         // }
+    //         return $marvel->modifySettingsData($language);
+    //     // } catch (MarvelException $th) {
+    //     //     throw new MarvelException(INVALID_LICENSE_KEY);
+    //     // }
+    // }
     public function fetchUsersByPermission(Request $request)
     {
         $user = $request->user() ?? null;

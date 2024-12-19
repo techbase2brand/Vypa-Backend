@@ -39,6 +39,16 @@ class ShopCreateRequest extends FormRequest
             'cover_image'            => ['nullable', 'array'],
             'settings'               => ['array'],
             'address'                => ['array'],
+
+            'loginDetails'                  => ['required', 'array'],
+            'loginDetails.username or email' => [
+                'required_with:loginDetails',
+                'email',
+                'max:255',
+                'unique:users,email'
+            ],            
+            'loginDetails.password'         => ['required_with:loginDetails', 'string', 'min:8', 'confirmed'],
+            'loginDetails.confirmpassword'  => ['required_with:loginDetails', 'string', 'same:loginDetails.password'],
         ];
     }
 

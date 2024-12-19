@@ -149,6 +149,7 @@ Route::apiResource('attributes', AttributeController::class, [
 Route::apiResource('shops', ShopController::class, [
     'only' => ['index', 'show'],
 ]);
+
 Route::apiResource('settings', SettingsController::class, [
     'only' => ['index'],
 ]);
@@ -360,6 +361,17 @@ Route::group(
         Route::apiResource('shops', ShopController::class, [
             'only' => ['store', 'update', 'destroy'],
         ]);
+        Route::post('company/create', [ShopController::class, 'createCompany']);
+        Route::put('company/update/{id}', [ShopController::class, 'update']);
+        Route::get('company/list', [ShopController::class, 'index']);
+        Route::delete('company/{id}', [ShopController::class, 'destroy']);
+        Route::get('company/info/{slug}', [ShopController::class, 'show']);
+
+
+
+
+
+        
         // Route::get('analytics', [AnalyticsController::class, 'analytics']);
         Route::apiResource('withdraws', WithdrawController::class, [
             'only' => ['store', 'index', 'show'],

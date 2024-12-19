@@ -22,6 +22,8 @@ class Shop extends Model
         'cover_image' => 'json',
         'address' => 'json',
         'settings' => 'json',
+        'business_contact_detail' => 'json',
+        'primary_contact_detail' => 'json'
     ];
 
     /**

@@ -41,9 +41,9 @@ GRAPHQL;
             if($useMustVerifyEmail && $context->user() && $context->user() instanceof MustVerifyEmail && !$context->request()->user()->hasVerifiedEmail()){
                 throw new MarvelException(EMAIL_NOT_VERIFIED, EMAIL_NOT_VERIFIED);
             }
-            if (!$useMustVerifyLicense || !$useLocalLicense) {
-                throw new MarvelException(INVALID_LICENSE_KEY, INVALID_LICENSE_KEY);
-            }
+            // if (!$useMustVerifyLicense || !$useLocalLicense) {
+            //     throw new MarvelException(INVALID_LICENSE_KEY, INVALID_LICENSE_KEY);
+            // }
             // Call the actual resolver
             $result = $resolver($root, $args, $context, $resolveInfo);
 

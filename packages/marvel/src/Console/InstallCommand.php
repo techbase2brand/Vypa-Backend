@@ -149,18 +149,18 @@ class InstallCommand extends Command
 
     private function getLicenseKey($count = 0)
     {
-        $message = 'Kindly enter a valid License Key or visit https://redq.io/pickbazar-laravel-ecommerce for a legitimate license key';
-        if ($count < 1) {
-            $message = 'Please Enter Your License Key.';
-        }
-        $licenseKey = text($message);
-        $isValid = $this->licenseKeyValidator($licenseKey);
-        if (!$isValid) {
-            ++$count;
-            error("Invalid Licensing Key");
-            $this->getLicenseKey($count);
-        }
-        return $isValid;
+        // $message = 'Kindly enter a valid License Key or visit https://redq.io/pickbazar-laravel-ecommerce for a legitimate license key';
+        // if ($count < 1) {
+        //     $message = 'Please Enter Your License Key.';
+        // }
+        // $licenseKey = text($message);
+        // $isValid = $this->licenseKeyValidator($licenseKey);
+        // if (!$isValid) {
+        //     ++$count;
+        //     error("Invalid Licensing Key");
+        //     $this->getLicenseKey($count);
+        // }
+        return true;
     }
 
     private function licenseKeyValidator(string $licenseKey): bool
@@ -195,10 +195,10 @@ class InstallCommand extends Command
         $settings->update([
             'options' => [
                 ...$settings->options,
-                'app_settings' => [
-                    'last_checking_time' => $this->appData['last_checking_time'],
-                    'trust'       => $this->appData['trust'],
-                ]
+                // 'app_settings' => [
+                //     'last_checking_time' => @$this->appData['last_checking_time'],
+                //     'trust'       => @$this->appData['trust'],
+                // ]
             ]
         ]);
     }

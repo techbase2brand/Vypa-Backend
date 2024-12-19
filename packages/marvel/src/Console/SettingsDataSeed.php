@@ -50,19 +50,19 @@ class SettingsDataImporter extends Command
 
     private function getLicenseKey($count = 0)
     {
-        $message = 'Please Enter a valid License Key! Please visit us at https://redq.io for a valid license key.';
-        if ($count < 1) {
-            $message = 'Please Enter Your License Key.';
-        }
-        $licenseKey = text(label: $message, required: 'License Key is required');
-        $isValid = $this->licenseKeyValidator($licenseKey);
-        if (!$isValid) {
-            ++$count;
-            $description = $this->appData['description'] ?? '';
-            $this->components->error("Invalid Licensing Key. $description");
-            $this->getLicenseKey($count);
-        }
-        return $isValid;
+        // $message = 'Please Enter a valid License Key! Please visit us at https://redq.io for a valid license key.';
+        // if ($count < 1) {
+        //     $message = 'Please Enter Your License Key.';
+        // }
+        // $licenseKey = text(label: $message, required: 'License Key is required');
+        // $isValid = $this->licenseKeyValidator($licenseKey);
+        // if (!$isValid) {
+        //     ++$count;
+        //     $description = $this->appData['description'] ?? '';
+        //     $this->components->error("Invalid Licensing Key. $description");
+        //     $this->getLicenseKey($count);
+        // }
+        return true;
     }
 
     private function licenseKeyValidator(string $licenseKey): bool

@@ -78,7 +78,7 @@ class CouponRepository extends BaseRepository
             $data['is_approve'] = $request->user()->hasPermissionTo(Permission::SUPER_ADMIN);
             return $this->create($data);
         } catch (Exception $th) {
-            throw new MarvelBadRequestException(COULD_NOT_CREATE_THE_RESOURCE);
+            throw new MarvelBadRequestException(COULD_NOT_CREATE_THE_RESOURCE."_coupon");
         }
     }
     public function verifyCoupon(Request $request)

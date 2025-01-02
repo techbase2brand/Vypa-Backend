@@ -117,7 +117,7 @@ class PaymentMethodRepository extends BaseRepository
                     break;
             }
         } catch (Exception $e) {
-            throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE);
+            throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_payment");
         }
     }
 

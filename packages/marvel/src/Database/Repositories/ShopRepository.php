@@ -61,7 +61,7 @@ class ShopRepository extends BaseRepository
         'primary_contact_detail',
         'loginDetails',
     ];
-    
+
 
     public function boot()
     {
@@ -108,7 +108,7 @@ class ShopRepository extends BaseRepository
     {
         try {
             // $data = $request->only($this->dataArray);
-            
+
             $data['slug'] = $this->makeSlug($request);
             $data['owner_id'] = $request->user()->id;
             if ($request->has('name')) {
@@ -134,27 +134,27 @@ class ShopRepository extends BaseRepository
             if ($request->has('description')) {
                 $data['description'] = $request->input('description');
             }
-           
+
             $shop = $this->create($data);
-            
+
             if ($request->has('businessContactdetail')) {
                 $shop->business_contact_detail = ($request->input('businessContactdetail'));
                 $shop->save();
             }
 
-        
+
             if (isset($request['categories'])) {
                 $shop->categories()->attach($request['categories']);
             }
-            
+
             if (isset($request['balance']['payment_info'])) {
                 $shop->balance()->create($request['balance']);
             }
 
-          
+
             if ($request->has('loginDetails')) {
                 $loginDetails = $request->input('loginDetails');
-                
+
                 $user = User::create([
                     'name' => $request->input('name'),
                     'email' => $loginDetails['username or email'],
@@ -167,12 +167,12 @@ class ShopRepository extends BaseRepository
             return $shop;
 
         } catch (Exception $e) {
-            throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE);
+            throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_SHOP");
         }
     }
 
-   
-    
+
+
     // public function updateShop($request, $id)
     // {
     //     try {
@@ -202,7 +202,7 @@ class ShopRepository extends BaseRepository
 
 
     //         // 1. Shop owner maintenance time set korbe.. then ekta event fire hobe jeita shop notifications (email, sms) send korbe super-admin, vendor, staff, oi specific shop er front-end a ekta notice dekhabe with countdown.
-    //         // 2. countDown start er 1 day ago or 6 hours ago ekta final email/sms dibe vendor, staff k 
+    //         // 2. countDown start er 1 day ago or 6 hours ago ekta final email/sms dibe vendor, staff k
     //         // 3. countdown onStart a sob product private
     //         // 4. countdown onComplete a sob product public
 

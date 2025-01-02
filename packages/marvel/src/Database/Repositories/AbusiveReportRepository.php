@@ -58,7 +58,7 @@ class AbusiveReportRepository extends BaseRepository
             }
             return $model->abusive_reports()->create($request->only($this->dataArray));
         } catch (Exception $th) {
-            throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE);
+            throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_abusive");
         }
     }
 }

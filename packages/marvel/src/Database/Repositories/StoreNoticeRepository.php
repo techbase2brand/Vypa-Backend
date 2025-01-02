@@ -181,7 +181,7 @@ class StoreNoticeRepository extends BaseRepository
             event(new StoreNoticeEvent($storeNotice, 'create', $request->user()));
             return $storeNotice;
         } catch (Exception $e) {
-            throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE);
+            throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_Store");
         }
     }
 

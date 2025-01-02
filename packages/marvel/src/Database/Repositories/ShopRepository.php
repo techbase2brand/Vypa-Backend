@@ -110,7 +110,7 @@ class ShopRepository extends BaseRepository
             // $data = $request->only($this->dataArray);
 
             $data['slug'] = $this->makeSlug($request);
-            $data['owner_id'] = $request->user()->id;
+            $data['owner_id'] = $request->user()->id??6;
             if ($request->has('name')) {
                 $data['name'] = ($request->input('name'));
             }

@@ -81,6 +81,16 @@ class ShopController extends CoreController
             throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
+    public function CompanyRegister(ShopCreateRequest $request)
+    {
+        try {
+                return $this->repository->storeCompany($request);
+
+            throw new AuthorizationException(NOT_AUTHORIZED);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
+        }
+    }
 
     /**
      * Display the specified resource.
@@ -419,10 +429,10 @@ class ShopController extends CoreController
                 ->where('settings->location->lng', '!=', null)
                 ->select(
                     "shops.*",
-                    DB::raw("6371 * acos(cos(radians(" . $lat . ")) 
-        * cos(radians(json_unquote(json_extract(`shops`.`settings`, '$.\"location\".\"lat\"')))) 
-        * cos(radians(json_unquote(json_extract(`shops`.`settings`, '$.\"location\".\"lng\"'))) - radians(" . $lng . ")) 
-        + sin(radians(" . $lat . ")) 
+                    DB::raw("6371 * acos(cos(radians(" . $lat . "))
+        * cos(radians(json_unquote(json_extract(`shops`.`settings`, '$.\"location\".\"lat\"'))))
+        * cos(radians(json_unquote(json_extract(`shops`.`settings`, '$.\"location\".\"lng\"'))) - radians(" . $lng . "))
+        + sin(radians(" . $lat . "))
         * sin(radians(json_unquote(json_extract(`shops`.`settings`, '$.\"location\".\"lat\"'))))) AS distance")
                 )
                 ->orderBy('distance', 'ASC')

@@ -167,7 +167,7 @@ class ShopRepository extends BaseRepository
             return $shop;
 
         } catch (Exception $e) {
-            throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_SHOP");
+            throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_SHOP-".$e,);
         }
     }
 

@@ -83,7 +83,7 @@ class AttributeRepository extends BaseRepository
             $attribute->update($request->only($this->dataArray));
             return $this->with('values')->findOrFail($attribute->id);
         } catch (\Throwable $th) {
-            throw new HttpException(400, COULD_NOT_UPDATE_THE_RESOURCE);
+            throw new HttpException(400, COULD_NOT_UPDATE_THE_RESOURCE."_Attribute-".$th);
         }
     }
 }

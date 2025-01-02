@@ -297,7 +297,7 @@ class ShopRepository extends BaseRepository
 
         return $shop;
     } catch (Exception $e) {
-        throw new HttpException(400, COULD_NOT_UPDATE_THE_RESOURCE);
+        throw new HttpException(400, COULD_NOT_UPDATE_THE_RESOURCE."_Shop-".$e);
     }
 }
 

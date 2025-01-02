@@ -111,7 +111,7 @@ class QuestionController extends CoreController
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
         } catch (MarvelException $th) {
-            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE);
+            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE."_Question-".$th);
         }
     }
 

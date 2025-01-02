@@ -112,7 +112,7 @@ class AuthorController extends CoreController
             $request->id = $id;
             return $this->updateAuthor($request);
         } catch (MarvelException $th) {
-            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE);
+            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE."_Author-".$th);
         }
     }
 

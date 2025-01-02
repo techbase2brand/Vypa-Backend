@@ -78,7 +78,7 @@ class AddressController extends CoreController
             $validatedData = $request->all();
             return $this->repository->findOrFail($id)->update($validatedData);
         } catch (MarvelException $e) {
-            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE);
+            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE."_address-".$e);
         }
     }
 

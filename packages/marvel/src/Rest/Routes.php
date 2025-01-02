@@ -354,14 +354,14 @@ Route::group(
  * Authorized Route for Store owner Only
  * *****************************************
  */
-
+Route::post('company/create', [ShopController::class, 'createCompany']);
 Route::group(
     ['middleware' => ['permission:' . Permission::STORE_OWNER, 'auth:sanctum', 'email.verified']],
     function () {
         Route::apiResource('shops', ShopController::class, [
             'only' => ['store', 'update', 'destroy'],
         ]);
-        Route::post('company/create', [ShopController::class, 'createCompany']);
+        //Route::post('company/create', [ShopController::class, 'createCompany']);
         Route::put('company/update/{id}', [ShopController::class, 'update']);
         Route::get('company/list', [ShopController::class, 'index']);
         Route::delete('company/{id}', [ShopController::class, 'destroy']);
@@ -371,7 +371,7 @@ Route::group(
 
 
 
-        
+
         // Route::get('analytics', [AnalyticsController::class, 'analytics']);
         Route::apiResource('withdraws', WithdrawController::class, [
             'only' => ['store', 'index', 'show'],

@@ -52,7 +52,7 @@ class ProductCreateRequest extends FormRequest
             'shop_id'                      => ['required', 'exists:Marvel\Database\Models\Shop,id'],
             'manufacturer_id'              => ['nullable', 'exists:Marvel\Database\Models\Manufacturer,id'],
             'author_id'                    => ['nullable', 'exists:Marvel\Database\Models\Author,id'],
-            'product_type'                 => ['required', Rule::in($productType)],
+           // 'product_type'                 => ['required', Rule::in($productType)],
             'categories'                   => ['array'],
             'tags'                         => ['array'],
             'language'                     => ['nullable', 'string'],

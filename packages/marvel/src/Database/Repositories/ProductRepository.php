@@ -57,7 +57,7 @@ class ProductRepository extends BaseRepository
         'language',
         'metas.key',
         'metas.value',
-        'product_type',
+//        'product_type',
         'visibility'
     ];
 
@@ -72,7 +72,7 @@ class ProductRepository extends BaseRepository
         'author_id',
         'language',
         'manufacturer_id',
-        'product_type',
+//        'product_type',
         'quantity',
         'unit',
         'is_digital',
@@ -218,10 +218,10 @@ class ProductRepository extends BaseRepository
                 }
             }
 
-            if ($request->product_type == ProductType::SIMPLE) {
+           /* if ($request->product_type == ProductType::SIMPLE) {
                 $data['max_price'] = $data['price'];
                 $data['min_price'] = $data['price'];
-            }
+            }*/
 
             $product = $this->create($data);
 
@@ -467,15 +467,15 @@ class ProductRepository extends BaseRepository
                 $data['status'] = $this->checkProductForPublish($request, $product);
             }
 
-            if ($request->product_type == ProductType::VARIABLE) {
+           // if ($request->product_type == ProductType::VARIABLE) {
                 $data['price'] = NULL;
                 $data['sale_price'] = NULL;
                 $data['sku'] = NULL;
-            }
-            if ($request->product_type == ProductType::SIMPLE) {
+           // }
+            /*if ($request->product_type == ProductType::SIMPLE) {
                 $data['max_price'] = $data['price'];
                 $data['min_price'] = $data['price'];
-            }
+            }*/
 
             if (!empty($request->slug) &&  $request->slug != $product->slug) {
                 $stringifySlug = $this->makeSlug($request);
@@ -489,10 +489,10 @@ class ProductRepository extends BaseRepository
             }
 
             $product->update($data);
-            if ($product->product_type === ProductType::SIMPLE) {
+           /* if ($product->product_type === ProductType::SIMPLE) {
                 $product->variations()->delete();
                 $product->variation_options()->delete();
-            }
+            }*/
             $product->save();
 
             if (TRANSLATION_ENABLED) {
@@ -507,7 +507,7 @@ class ProductRepository extends BaseRepository
             }
 
             if ($setting->options["enableEmailForDigitalProduct"]) {
-                if ($request->product_type == 'variable') {
+               // if ($request->product_type == 'variable') {
                     foreach ($request['variation_options']['upsert'] as $variation_data) {
                         if ($variation_data['inform_purchased_customer']) {
                             event(new DigitalProductUpdateEvent($product, $request->user(), [
@@ -516,14 +516,14 @@ class ProductRepository extends BaseRepository
                             ]));
                         }
                     }
-                } else {
+              /*  } else {
                     if ($request->inform_purchased_customer) {
                         event(new DigitalProductUpdateEvent($product, $request->user(), [
                             'inform_customer' => $request->inform_purchased_customer,
                             'update_message' => $request->product_update_message
                         ]));
                     }
-                }
+                } */
             }
 
             return $product;

@@ -49,7 +49,7 @@ class ProductCreateRequest extends FormRequest
             'price'                        => ['nullable', 'numeric'],
             'sale_price'                   => ['nullable', 'lte:price'],
             'type_id'                      => ['required', 'exists:Marvel\Database\Models\Type,id'],
-            'shop_id'                      => ['required', 'exists:Marvel\Database\Models\Shop,id'],
+            //'shop_id'                      => ['required', 'exists:Marvel\Database\Models\Shop,id'],
             'manufacturer_id'              => ['nullable', 'exists:Marvel\Database\Models\Manufacturer,id'],
             'author_id'                    => ['nullable', 'exists:Marvel\Database\Models\Author,id'],
            // 'product_type'                 => ['required', Rule::in($productType)],

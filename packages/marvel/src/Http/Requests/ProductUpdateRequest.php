@@ -46,7 +46,7 @@ class ProductUpdateRequest extends FormRequest
             'price'                        => ['nullable', 'numeric'],
             'sale_price'                   => ['nullable', 'lte:price'],
             'type_id'                      => ['exists:Marvel\Database\Models\Type,id'],
-            'shop_id'                      => ['exists:Marvel\Database\Models\Shop,id'],
+           // 'shop_id'                      => ['exists:Marvel\Database\Models\Shop,id'],
             'manufacturer_id'              => ['nullable', 'exists:Marvel\Database\Models\Manufacturer,id'],
             'author_id'                    => ['nullable', 'exists:Marvel\Database\Models\Author,id'],
             'categories'                   => ['exists:Marvel\Database\Models\Category,id'],

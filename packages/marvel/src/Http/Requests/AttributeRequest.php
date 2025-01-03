@@ -29,7 +29,7 @@ class AttributeRequest extends FormRequest
         return [
             'name'        => ['required', 'string'],
             'slug'        => ['nullable', 'string'],
-            'shop_id'     => ['required', 'exists:Marvel\Database\Models\Shop,id'],
+            //'shop_id'     => ['required', 'exists:Marvel\Database\Models\Shop,id'],
             'values'      => ['array'],
             'language'     => ['nullable', 'string'],
         ];

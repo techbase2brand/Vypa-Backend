@@ -300,7 +300,7 @@ class ShopServiceProvider extends ServiceProvider
         $this->commands($this->commandList);
     }
 
-
+ 
     /**
      * Load Middleware from shop
      */

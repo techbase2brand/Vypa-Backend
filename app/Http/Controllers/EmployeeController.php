@@ -44,6 +44,7 @@ class EmployeeController extends Controller
                 "password"=>bcrypt($validated['password'])
             ]
         );
+        $user->givePermissionTo('employee');
         $employee->owner_id = $user->id;
         $employee->save();
         return response()->json([

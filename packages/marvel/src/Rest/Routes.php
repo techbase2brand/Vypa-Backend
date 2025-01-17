@@ -20,6 +20,7 @@ use Marvel\Http\Controllers\ConversationController;
 use Marvel\Http\Controllers\CouponController;
 use Marvel\Http\Controllers\DeliveryTimeController;
 use Marvel\Http\Controllers\DownloadController;
+use Marvel\Http\Controllers\EmployeeController;
 use Marvel\Http\Controllers\FaqsController;
 use Marvel\Http\Controllers\FeedbackController;
 use Marvel\Http\Controllers\FlashSaleController;
@@ -366,6 +367,12 @@ Route::group(
         Route::get('company/list', [ShopController::class, 'index']);
         Route::delete('company/{id}', [ShopController::class, 'destroy']);
         Route::get('company/info/{slug}', [ShopController::class, 'show']);
+
+        Route::post('employee/create', [EmployeeController::class, 'createEmployee']);
+        Route::put('employee/update/{id}', [EmployeeController::class, 'update']);
+        Route::get('employee/list', [EmployeeController::class, 'index']);
+        Route::delete('employee/{id}', [EmployeeController::class, 'destroy']);
+        Route::get('employee/info/{slug}', [EmployeeController::class, 'show']);
 
 
 

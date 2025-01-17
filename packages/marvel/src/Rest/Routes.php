@@ -1,4 +1,5 @@
 <?php
+namespace Marvel;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Broadcast;
@@ -20,7 +21,7 @@ use Marvel\Http\Controllers\ConversationController;
 use Marvel\Http\Controllers\CouponController;
 use Marvel\Http\Controllers\DeliveryTimeController;
 use Marvel\Http\Controllers\DownloadController;
-use Marvel\Http\Controllers\EmployeeController;
+use App\Http\Controllers\EmployeeController;
 use Marvel\Http\Controllers\FaqsController;
 use Marvel\Http\Controllers\FeedbackController;
 use Marvel\Http\Controllers\FlashSaleController;
@@ -356,19 +357,21 @@ Route::group(
  * *****************************************
  */
 Route::post('company', [ShopController::class, 'CompanyRegister']);
+Route::post('company/create', [ShopController::class, 'createCompany']);
+Route::post('employee/create', [EmployeeController::class, 'store']);
 Route::group(
     ['middleware' => ['permission:' . Permission::STORE_OWNER, 'auth:sanctum', 'email.verified']],
     function () {
         Route::apiResource('shops', ShopController::class, [
             'only' => ['store', 'update', 'destroy'],
         ]);
-        Route::post('company/create', [ShopController::class, 'createCompany']);
+
         Route::put('company/update/{id}', [ShopController::class, 'update']);
         Route::get('company/list', [ShopController::class, 'index']);
         Route::delete('company/{id}', [ShopController::class, 'destroy']);
         Route::get('company/info/{slug}', [ShopController::class, 'show']);
 
-        Route::post('employee/create', [EmployeeController::class, 'createEmployee']);
+
         Route::put('employee/update/{id}', [EmployeeController::class, 'update']);
         Route::get('employee/list', [EmployeeController::class, 'index']);
         Route::delete('employee/{id}', [EmployeeController::class, 'destroy']);

@@ -2,7 +2,6 @@
 
 namespace Marvel\Http\Controllers;
 
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Marvel\Enums\Permission;
 use Marvel\Database\Models\Employee;
@@ -28,10 +27,11 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class EmployeeController extends CoreController
 {
     use OrderStatusManagerWithPaymentTrait;
-    public $repository;
+    public EmployeeRepository $repository;
 
     public function __construct(EmployeeRepository $repository)
     {
+
         $this->repository = $repository;
     }
 
@@ -72,11 +72,12 @@ class EmployeeController extends CoreController
 
     public function createEmployee(EmployeeCreateRequest $request)
     {
+        dd($request);
         try {
-            if ($request->user()->hasPermissionTo(Permission::STORE_OWNER)) {
+           // if ($request->user()->hasPermissionTo(Permission::STORE_OWNER)) {
                 return $this->repository->storeEmployee($request);
-            }
-            throw new AuthorizationException(NOT_AUTHORIZED);
+           // }
+            //throw new AuthorizationException(NOT_AUTHORIZED);
         } catch (MarvelException $th) {
             throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
         }

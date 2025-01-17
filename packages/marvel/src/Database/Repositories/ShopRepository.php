@@ -10,6 +10,7 @@ use Marvel\Database\Models\OwnershipTransfer;
 use Marvel\Database\Models\Product;
 use Marvel\Database\Models\Shop;
 use Marvel\Database\Models\User;
+use Marvel\Database\Models\Employee;
 use Marvel\Enums\DefaultStatusType;
 use Marvel\Enums\Permission;
 use Marvel\Enums\ProductVisibilityStatus;
@@ -159,6 +160,72 @@ class ShopRepository extends BaseRepository
                     'name' => $request->input('name'),
                     'email' => $loginDetails['username or email'],
                     'password' => bcrypt($loginDetails['password']),
+                ]);
+                $shop->owner_id = $user->id;
+                $shop->save();
+            }
+
+            return $shop;
+
+        } catch (Exception $e) {
+            throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_SHOP-".$e,);
+        }
+    }
+    public function storeEmployee($request)
+    {
+        try {
+            // $data = $request->only($this->dataArray);
+
+            $data['slug'] = $this->makeSlug($request);
+            $data['owner_id'] = $request->user()->id??6;
+            if ($request->has('name')) {
+                $data['name'] = ($request->input('name'));
+            }
+            if ($request->has('cover_image')) {
+                $data['cover_image'] = ($request->input('cover_image'));
+            }
+            if ($request->has('logo')) {
+                $data['logo'] = ($request->input('logo'));
+            }
+
+            if ($request->has('address')) {
+                $data['address'] = $request->input('address');
+            }
+
+            if ($request->has('primary_contact_detail')) {
+                $data['primary_contact_detail'] = $request->input('primary_contact_detail');
+            }
+            if ($request->has('settings')) {
+                $data['settings'] = $request->input('settings');
+            }
+            if ($request->has('description')) {
+                $data['description'] = $request->input('description');
+            }
+
+            $shop = Employee::create($data);
+
+            if ($request->has('businessContactdetail')) {
+                $shop->business_contact_detail = ($request->input('businessContactdetail'));
+                $shop->save();
+            }
+
+
+            if (isset($request['categories'])) {
+                $shop->categories()->attach($request['categories']);
+            }
+
+            if (isset($request['balance']['payment_info'])) {
+                $shop->balance()->create($request['balance']);
+            }
+
+
+            if ($request->has('Employee_email')) {
+                $loginDetails = $request->input('loginDetails');
+
+                $user = User::create([
+                    'name' => $request->input('name'),
+                    'email' => $request->input('Employee_email'),
+                    'password' => bcrypt($request->input('password')),
                 ]);
                 $shop->owner_id = $user->id;
                 $shop->save();

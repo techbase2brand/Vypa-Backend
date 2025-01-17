@@ -28,7 +28,7 @@ class ShopCreateRequest extends FormRequest
     {
         return [
             'name'                   => ['required', 'string', 'max:255'],
-            'categories'             => ['array'],
+            'categories'             => ['nullable','array'],
             'is_active'              => ['boolean'],
             'description'            => ['nullable', 'string', 'max:10000'],
             'admin_commission_rate'  => ['nullable', 'numeric'],
@@ -40,13 +40,13 @@ class ShopCreateRequest extends FormRequest
             'settings'               => ['array'],
             'address'                => ['array'],
 
-            'loginDetails'                  => ['required', 'array'],
+            'loginDetails'                  => ['nullable', 'array'],
             'loginDetails.username or email' => [
                 'required_with:loginDetails',
                 'email',
                 'max:255',
                 'unique:users,email'
-            ],            
+            ],
             'loginDetails.password'         => ['required_with:loginDetails', 'string', 'min:8', 'confirmed'],
             'loginDetails.confirmpassword'  => ['required_with:loginDetails', 'string', 'same:loginDetails.password'],
         ];

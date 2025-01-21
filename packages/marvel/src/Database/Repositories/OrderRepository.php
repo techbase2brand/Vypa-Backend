@@ -113,7 +113,7 @@ class OrderRepository extends BaseRepository
         //     'payable'         => $request['paid_total'], // amount to be paid through paymentGateway
         //     'wallet_currency' => 0
         // ]);
-        dd($request);
+
         $fullWalletOrCODPayment = $request?->isFullWalletPayment ? PaymentGatewayType::FULL_WALLET_PAYMENT : PaymentGatewayType::CASH_ON_DELIVERY;
         $payment_gateway_type = !empty($request->payment_gateway) ? $request->payment_gateway : $fullWalletOrCODPayment;
 
@@ -145,6 +145,7 @@ class OrderRepository extends BaseRepository
         } else {
             $request['customer_id'] = $request->user()->id ?? null;
         }
+
         try {
             $user = User::findOrFail($request['customer_id']);
             if ($user) {
@@ -155,7 +156,8 @@ class OrderRepository extends BaseRepository
             $request['customer_id'] =  $request['customer_id'];
            // dd("check once");
         }
-
+        echo "hi";
+        dd($request);
 //        if (!$user) {
 //            $settings = Settings::getData($request->language);
 //            if (isset($settings->options['guestCheckout']) && !$settings->options['guestCheckout']) {

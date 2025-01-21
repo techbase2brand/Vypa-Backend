@@ -113,7 +113,7 @@ class OrderRepository extends BaseRepository
         //     'payable'         => $request['paid_total'], // amount to be paid through paymentGateway
         //     'wallet_currency' => 0
         // ]);
-
+        dd($request);
         $fullWalletOrCODPayment = $request?->isFullWalletPayment ? PaymentGatewayType::FULL_WALLET_PAYMENT : PaymentGatewayType::CASH_ON_DELIVERY;
         $payment_gateway_type = !empty($request->payment_gateway) ? $request->payment_gateway : $fullWalletOrCODPayment;
 

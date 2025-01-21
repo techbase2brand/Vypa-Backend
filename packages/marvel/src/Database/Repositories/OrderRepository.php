@@ -306,10 +306,14 @@ class OrderRepository extends BaseRepository
     {
         //try {
             $orderInput = $request->only($this->dataArray);
+            echo "<pre>";
+            echo "order Input";
             print_r($orderInput);
             $order = $this->create($orderInput);
+            echo "order";
             print_r($order);
             $products = $this->processProducts($request['products'], $request['customer_id'], $order);
+            echo "products";
             print_r($products);
             $order->products()->attach($products);
             echo "attach product";
@@ -317,8 +321,10 @@ class OrderRepository extends BaseRepository
             echo "child";
             //  $this->calculateShopIncome($order);
             $invoiceData = $this->createInvoiceDataForEmail($request, $order);
+            echo "invoiceData";
             print_r($invoiceData);
             $customer = $request->user() ?? User::findOrFail($orderInput['customer_id']);
+            echo "customer";
             dd($customer);
             event(new OrderCreated($order, $invoiceData, $customer));
             return $order;

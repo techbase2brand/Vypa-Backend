@@ -201,7 +201,8 @@ class OrderRepository extends BaseRepository
         } else {
             $amount = round($request['paid_total'], 2);
         }
-
+        echo "before order";
+        dd($request);
         $order = $this->createOrder($request);
 
         if (($useWalletPoints || $request->isFullWalletPayment) && $user) {

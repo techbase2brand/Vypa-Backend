@@ -47,11 +47,9 @@ class OrderCreated implements ShouldQueue, ShouldBroadcast
      */
     public function __construct(Order $order, array $invoiceData, ?User $user)
     {
-        echo "eeeee";
         $this->order = $order;
         $this->invoiceData = $invoiceData;
         $this->user = $user;
-        dd($this->order);
     }
 
     /**
@@ -61,7 +59,7 @@ class OrderCreated implements ShouldQueue, ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        $event_channels = $shop_ids = $vendor_ids = [];
+        $event_channels =  [6];
 
         // Notify in admin-end
 //        $admins = $this->getAdminUsers();
@@ -88,11 +86,11 @@ class OrderCreated implements ShouldQueue, ShouldBroadcast
 
         //if (isset($vendor_ids)) {
           //  foreach ($vendor_ids as $key => $vendor_id) {
-                $channel_name = new PrivateChannel('order.created.' );
+                $channel_name = new PrivateChannel('order.created.6' );
                 array_push($event_channels, $channel_name);
            // }
         //}
-
+        dd($event_channels);
         return $event_channels;
     }
 

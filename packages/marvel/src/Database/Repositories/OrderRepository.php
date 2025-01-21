@@ -308,13 +308,18 @@ class OrderRepository extends BaseRepository
             $orderInput = $request->only($this->dataArray);
             print_r($orderInput);
             $order = $this->create($orderInput);
-            dd($order);
+            print_r($order);
             $products = $this->processProducts($request['products'], $request['customer_id'], $order);
+            print_r($products);
             $order->products()->attach($products);
+            echo "attach product";
             $this->createChildOrder($order->id, $request);
+            echo "child";
             //  $this->calculateShopIncome($order);
             $invoiceData = $this->createInvoiceDataForEmail($request, $order);
-            $customer = $request->user() ?? null;
+            print_r($invoiceData);
+            $customer = $request->user() ?? User::findOrFail($orderInput['customer_id']);
+            dd($customer);
             event(new OrderCreated($order, $invoiceData, $customer));
             return $order;
        // } catch (Exception $e) {

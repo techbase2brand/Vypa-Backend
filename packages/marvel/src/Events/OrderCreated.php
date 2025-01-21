@@ -47,9 +47,11 @@ class OrderCreated implements ShouldQueue, ShouldBroadcast
      */
     public function __construct(Order $order, array $invoiceData, ?User $user)
     {
+        echo "eeeee";
         $this->order = $order;
         $this->invoiceData = $invoiceData;
         $this->user = $user;
+        dd($this->order);
     }
 
     /**
@@ -62,13 +64,13 @@ class OrderCreated implements ShouldQueue, ShouldBroadcast
         $event_channels = $shop_ids = $vendor_ids = [];
 
         // Notify in admin-end
-        $admins = $this->getAdminUsers();
-        if (isset($admins)) {
-            foreach ($admins as $key => $user) {
-                $channel_name = new PrivateChannel('order.created.' . $user->id);
-                array_push($event_channels, $channel_name);
-            }
-        }
+//        $admins = $this->getAdminUsers();
+//        if (isset($admins)) {
+//            foreach ($admins as $key => $user) {
+//                $channel_name = new PrivateChannel('order.created.' . $user->id);
+//                array_push($event_channels, $channel_name);
+//            }
+//        }
 
 
         // Notify in vendor-end

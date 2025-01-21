@@ -326,7 +326,7 @@ class OrderRepository extends BaseRepository
             $customer = $request->user() ?? User::findOrFail($orderInput['customer_id']);
             echo "customer";
            // dd($customer);
-            event(new OrderCreated($order, $invoiceData, $customer));
+            //event(new OrderCreated($order, $invoiceData, $customer));
             echo "event";
             return $order;
        // } catch (Exception $e) {

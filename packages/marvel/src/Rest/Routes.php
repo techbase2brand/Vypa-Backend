@@ -22,6 +22,7 @@ use Marvel\Http\Controllers\CouponController;
 use Marvel\Http\Controllers\DeliveryTimeController;
 use Marvel\Http\Controllers\DownloadController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\GroupController;
 use Marvel\Http\Controllers\FaqsController;
 use Marvel\Http\Controllers\FeedbackController;
 use Marvel\Http\Controllers\FlashSaleController;
@@ -359,6 +360,13 @@ Route::group(
 Route::post('company', [ShopController::class, 'CompanyRegister']);
 Route::post('company/create', [ShopController::class, 'createCompany']);
 Route::post('employee/create', [EmployeeController::class, 'store']);
+
+
+Route::apiResource('groups', GroupController::class);
+Route::post('groups/{group}/users', [GroupController::class, 'addUsers']);
+Route::delete('groups/{group}/users', [GroupController::class, 'removeUsers']);
+Route::get('groups/{group}/users', [GroupController::class, 'listUsers']);
+
 Route::group(
     ['middleware' => ['permission:' . Permission::STORE_OWNER, 'auth:sanctum', 'email.verified']],
     function () {

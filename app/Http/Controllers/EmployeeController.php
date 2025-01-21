@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Marvel\Enums\Role as UserRole;
 
 class EmployeeController extends Controller
 {
@@ -44,12 +45,14 @@ class EmployeeController extends Controller
                 "password"=>bcrypt($validated['password'])
             ]
         );
-        $user->givePermissionTo('employee');
+
+        $user->assignRole('super_admin');
         $employee->owner_id = $user->id;
         $employee->save();
         return response()->json([
             'message' => 'Employee created successfully',
-            'employee' => $employee
+            'employee' => $employee,
+            'user' => $user
         ], 201);
     }
 }

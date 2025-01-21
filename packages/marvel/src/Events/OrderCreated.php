@@ -72,24 +72,24 @@ class OrderCreated implements ShouldQueue, ShouldBroadcast
 
 
         // Notify in vendor-end
-        if (isset($this->order->products)) {
-            foreach ($this->order->products as $key => $product) {
-                if (!in_array($product->shop_id, $shop_ids)) {
-                    $vendor_shop = Shop::findOrFail($product->shop_id);
-                    if (!in_array($vendor_shop->owner_id, $vendor_ids)) {
-                        array_push($vendor_ids, $vendor_shop->owner_id);
-                    }
-                    array_push($shop_ids, $product->shop_id);
-                }
-            }
-        }
+//        if (isset($this->order->products)) {
+//            foreach ($this->order->products as $key => $product) {
+//                if (!in_array($product->shop_id, $shop_ids)) {
+//                    $vendor_shop = Shop::findOrFail($product->shop_id);
+//                    if (!in_array($vendor_shop->owner_id, $vendor_ids)) {
+//                        array_push($vendor_ids, $vendor_shop->owner_id);
+//                    }
+//                    array_push($shop_ids, $product->shop_id);
+//                }
+//            }
+//        }
 
-        if (isset($vendor_ids)) {
-            foreach ($vendor_ids as $key => $vendor_id) {
-                $channel_name = new PrivateChannel('order.created.' . $vendor_id);
+        //if (isset($vendor_ids)) {
+          //  foreach ($vendor_ids as $key => $vendor_id) {
+                $channel_name = new PrivateChannel('order.created.' );
                 array_push($event_channels, $channel_name);
-            }
-        }
+           // }
+        //}
 
         return $event_channels;
     }

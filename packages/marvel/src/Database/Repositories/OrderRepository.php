@@ -306,8 +306,9 @@ class OrderRepository extends BaseRepository
     {
         //try {
             $orderInput = $request->only($this->dataArray);
-
+            print_r($orderInput);
             $order = $this->create($orderInput);
+            dd($order);
             $products = $this->processProducts($request['products'], $request['customer_id'], $order);
             $order->products()->attach($products);
             $this->createChildOrder($order->id, $request);

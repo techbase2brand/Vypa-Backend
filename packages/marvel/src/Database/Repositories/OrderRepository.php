@@ -327,6 +327,7 @@ class OrderRepository extends BaseRepository
             echo "customer";
            // dd($customer);
             event(new OrderCreated($order, $invoiceData, $customer));
+            echo "event";
             return $order;
        // } catch (Exception $e) {
             //throw $e;

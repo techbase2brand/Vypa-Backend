@@ -304,8 +304,9 @@ class OrderRepository extends BaseRepository
      */
     protected function createOrder($request)
     {
-        try {
+        //try {
             $orderInput = $request->only($this->dataArray);
+            dd($orderInput);
             $order = $this->create($orderInput);
             $products = $this->processProducts($request['products'], $request['customer_id'], $order);
             $order->products()->attach($products);
@@ -315,9 +316,9 @@ class OrderRepository extends BaseRepository
             $customer = $request->user() ?? null;
             event(new OrderCreated($order, $invoiceData, $customer));
             return $order;
-        } catch (Exception $e) {
-            throw $e;
-        }
+       // } catch (Exception $e) {
+            //throw $e;
+       // }
     }
     /**
      * This function creates an array of data for an email invoice, including order information,

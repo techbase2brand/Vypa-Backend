@@ -205,13 +205,13 @@ class OrderRepository extends BaseRepository
 
         $order = $this->createOrder($request);
         echo "after order";
-        dd($request);
+       // dd($request);
         if (($useWalletPoints || $request->isFullWalletPayment) && $user) {
             $this->storeOrderWalletPoint(round($request['paid_total'], 2) - $amount, $order->id);
             $this->manageWalletAmount(round($request['paid_total'], 2), $user->id);
         }
         echo "new";
-        dd($request);
+       // dd($request);
         $eligible = $this->checkOrderEligibility();
         if (!$eligible) {
             throw new MarvelBadRequestException('COULD_NOT_PROCESS_THE_ORDER_PLEASE_CONTACT_WITH_THE_ADMIN');
@@ -230,7 +230,7 @@ class OrderRepository extends BaseRepository
             $this->orderStatusManagementOnPayment($order, OrderStatus::PENDING, PaymentStatus::PENDING);
         }
 
-        event(new OrderProcessed($order));
+       // event(new OrderProcessed($order));
 
         return $order;
     }

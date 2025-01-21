@@ -152,7 +152,8 @@ class OrderRepository extends BaseRepository
             }
         } catch (Exception $e) {
             $user = null;
-            dd("check once");
+            $request['customer_id'] =  $request['customer_id'];
+           // dd("check once");
         }
 
 //        if (!$user) {

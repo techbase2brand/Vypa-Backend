@@ -61,7 +61,6 @@ class OrderRepository extends BaseRepository
     protected array $dataArray = [
         'tracking_number',
         'customer_id',
-        'shop_id',
         'language',
         'order_status',
         'payment_status',

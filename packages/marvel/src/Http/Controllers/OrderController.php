@@ -134,7 +134,7 @@ class OrderController extends CoreController
             // if(!($this->settings->options['useCashOnDelivery'] && $this->settings->options['useEnableGateway'])){
             //     throw new HttpException(400, PLEASE_ENABLE_PAYMENT_OPTION_FROM_THE_SETTINGS);
             // }
-
+            dd("reach here");
             return DB::transaction(fn () => $this->repository->storeOrder($request, $this->settings));
         } catch (MarvelException $th) {
             throw new MarvelException(SOMETHING_WENT_WRONG, $th->getMessage());

@@ -143,7 +143,7 @@ class OrderRepository extends BaseRepository
         if ($request->user() && $request->user()->hasPermissionTo(Permission::SUPER_ADMIN) && isset($request['customer_id'])) {
             $request['customer_id'] =  $request['customer_id'];
         } else {
-            $request['customer_id'] = $request->user()->id ?? null;
+            $request['customer_id'] = $request->user()->id ?? $request['customer_id'];
         }
 
         try {
@@ -306,7 +306,7 @@ class OrderRepository extends BaseRepository
     {
         //try {
             $orderInput = $request->only($this->dataArray);
-            dd($orderInput);
+
             $order = $this->create($orderInput);
             $products = $this->processProducts($request['products'], $request['customer_id'], $order);
             $order->products()->attach($products);

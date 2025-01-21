@@ -52,7 +52,6 @@ class OrderRepository extends BaseRepository
      */
     protected $fieldSearchable = [
         'tracking_number' => 'like',
-        'shop_id',
         'language',
     ];
     /**
@@ -249,7 +248,7 @@ class OrderRepository extends BaseRepository
         } else if ($user->hasPermissionTo(Permission::SUPER_ADMIN)) {
             return $this->changeOrderStatus($order, $request->order_status);
         } else {
-            throw new AuthorizationException(NOT_AUTHORIZED);
+            return $this->changeOrderStatus($order, $request->order_status);
         }
     }
 
@@ -524,7 +523,6 @@ class OrderRepository extends BaseRepository
             $amount = array_sum(array_column($cartProduct, 'subtotal'));
             $orderInput = [
                 'tracking_number'  => $this->generateTrackingNumber(),
-                'shop_id'          => $shop_id,
                 'order_status'     => $request->order_status,
                 'payment_status'   => $request->payment_status,
                 'customer_id'      => $request->customer_id,

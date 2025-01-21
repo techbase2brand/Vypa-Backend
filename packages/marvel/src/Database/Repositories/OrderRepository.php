@@ -156,8 +156,7 @@ class OrderRepository extends BaseRepository
             $request['customer_id'] =  $request['customer_id'];
            // dd("check once");
         }
-        echo "hi";
-        dd($request);
+
 //        if (!$user) {
 //            $settings = Settings::getData($request->language);
 //            if (isset($settings->options['guestCheckout']) && !$settings->options['guestCheckout']) {
@@ -209,7 +208,8 @@ class OrderRepository extends BaseRepository
             $this->storeOrderWalletPoint(round($request['paid_total'], 2) - $amount, $order->id);
             $this->manageWalletAmount(round($request['paid_total'], 2), $user->id);
         }
-
+        echo "new";
+        dd($request);
         $eligible = $this->checkOrderEligibility();
         if (!$eligible) {
             throw new MarvelBadRequestException('COULD_NOT_PROCESS_THE_ORDER_PLEASE_CONTACT_WITH_THE_ADMIN');

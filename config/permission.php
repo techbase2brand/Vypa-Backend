@@ -12,7 +12,7 @@ return [
          * The model you want to use as a Permission model needs to implement the
          * `Spatie\Permission\Contracts\Permission` contract.
          */
-
+        'user' => Marvel\Database\Models\User::class,
         'permission' => Spatie\Permission\Models\Permission::class,
 
         /*

@@ -35,16 +35,15 @@ class EmployeeController extends CoreController
     {
         $this->repository = $repository;
     }
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json([
-            'message' => 'Employee list',
-            'employees' => [] // Return a list of employees here
-        ]);
+        $limit = $request->limit ? $request->limit : 15;
+        return $this->fetchEmployee($request)->paginate($limit)->withQueryString();
+
     }
-    public function fetchShops(Request $request)
+    public function fetchEmployee(Request $request)
     {
-        return $this->repository->withCount(['employee'])->with(['owner.profile', 'ownership_history'])->where('id', '!=', null);
+        return $this->repository->with(['owner.profile'])->where('id', '!=', null);
     }
     public function store(EmployeeCreateRequest $request)
     {
@@ -91,6 +90,22 @@ class EmployeeController extends CoreController
             return $employee;
         }
         throw new AuthorizationException(NOT_AUTHORIZED);
+    }
+    public function show($slug, Request $request)
+    {
+        $shop = $this->repository
+            ->with(['owner']);
+        if ($request->user() && ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN) || $request->user()->shops->contains('slug', $slug))) {
+            $shop = $shop->with('balance');
+        }
+        try {
+            return match (true) {
+                is_numeric($slug) => $shop->where('id', $slug)->firstOrFail(),
+                is_string($slug)  => $shop->where('slug', $slug)->firstOrFail(),
+            };
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
+        }
     }
 }
 

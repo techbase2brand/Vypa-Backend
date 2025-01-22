@@ -51,13 +51,10 @@ class EmployeeRepository extends BaseRepository
         'name',
         'slug',
         'description',
-        'cover_image',
         'logo',
         'is_active',
         'address',
         'notifications',
-        'primary_contact_detail',
-        'loginDetails',
     ];
 
 
@@ -108,35 +105,39 @@ class EmployeeRepository extends BaseRepository
             // $data = $request->only($this->dataArray);
 
             $data['slug'] = $this->makeSlug($request);
-            $data['owner_id'] = $request->user()->id??6;
+            //$data['owner_id'] = $request->user()->id??6;
+            $data['company_id'] = $request->user()->id??0;
             if ($request->has('name')) {
                 $data['name'] = ($request->input('name'));
             }
-            if ($request->has('cover_image')) {
-                $data['cover_image'] = ($request->input('cover_image'));
+            if ($request->has('tag')) {
+                $data['tag'] = ($request->input('tag'));
+            }
+            if ($request->has('Employee_email')) {
+                $data['email'] = ($request->input('Employee_email'));
             }
             if ($request->has('logo')) {
                 $data['logo'] = ($request->input('logo'));
             }
 
-            if ($request->has('address')) {
-                $data['address'] = $request->input('address');
+            if ($request->has('contact_no')) {
+                $data['contact_no'] = $request->input('contact_no');
             }
 
-            if ($request->has('primary_contact_detail')) {
-                $data['primary_contact_detail'] = $request->input('primary_contact_detail');
+            if ($request->has('job_title')) {
+                $data['job_title'] = $request->input('job_title');
             }
-            if ($request->has('settings')) {
-                $data['settings'] = $request->input('settings');
+            if ($request->has('joining_date')) {
+                $data['joining_date'] = $request->input('joining_date');
             }
-            if ($request->has('description')) {
-                $data['description'] = $request->input('description');
+            if ($request->has('gender')) {
+                $data['gender'] = $request->input('gender');
             }
 
             $shop = $this->create($data);
 
-            if ($request->has('businessContactdetail')) {
-                $shop->business_contact_detail = ($request->input('businessContactdetail'));
+            if ($request->has('company_name')) {
+                $shop->company_name = ($request->input('company_name'));
                 $shop->save();
             }
 
@@ -150,17 +151,18 @@ class EmployeeRepository extends BaseRepository
             }
 
 
-            if ($request->has('loginDetails')) {
-                $loginDetails = $request->input('loginDetails');
+
 
                 $user = User::create([
                     'name' => $request->input('name'),
-                    'email' => $loginDetails['username or email'],
-                    'password' => bcrypt($loginDetails['password']),
+                    'email' => $request->input('Employee_email'),
+                    'password' => bcrypt($request->input('password')),
                 ]);
+            $user->givePermissionTo(Permission::CUSTOMER);
+            $user->assignRole(Permission::CUSTOMER);
                 $shop->owner_id = $user->id;
                 $shop->save();
-            }
+
 
             return $shop;
 
@@ -219,67 +221,61 @@ class EmployeeRepository extends BaseRepository
     // }
     public function updateEmployee($request, $id)
     {
+        $employee = $this->findOrFail($id);
         try {
-            $shop = $this->findOrFail($id);
-
-            // Update shop details
+            $employee->slug = $this->makeSlug($request);
             if ($request->has('name')) {
-                $shop->name = $request->input('name');
+                $employee->name = $request->input('name');
             }
-            if ($request->has('cover_image')) {
-                $shop->cover_image = $request->input('cover_image');
+            if ($request->has('tag')) {
+                $employee->tag = ($request->input('tag'));
+            }
+            if ($request->has('Employee_email')) {
+                $employee->email = ($request->input('Employee_email'));
             }
             if ($request->has('logo')) {
-                $shop->logo = $request->input('logo');
-            }
-            if ($request->has('address')) {
-                $shop->address = $request->input('address');
-            }
-            if ($request->has('primary_contact_detail')) {
-                $shop->primary_contact_detail = $request->input('primary_contact_detail');
+                $employee->logo = ($request->input('logo'));
             }
 
-            if ($request->has('description')) {
-                $shop->description = $request->input('description');
+            if ($request->has('contact_no')) {
+                $employee->contact_no = $request->input('contact_no');
+            }
+
+            if ($request->has('job_title')) {
+                $employee->job_title = $request->input('job_title');
+            }
+            if ($request->has('joining_date')) {
+                $employee->joining_date = $request->input('joining_date');
+            }
+            if ($request->has('gender')) {
+                $employee->gender = $request->input('gender');
+            }
+            if ($request->has('company_name')) {
+                $employee->company_name = ($request->input('company_name'));
             }
 
             // Save shop updates
-            $shop->save();
+            $employee->save();
 
-            // Handle categories
-            if (isset($request['categories'])) {
-                $shop->categories()->sync($request['categories']);
-            }
-
-            // Handle balance updates
-            if (isset($request['balance'])) {
-                if (isset($request['balance']['admin_commission_rate']) && $shop->balance->admin_commission_rate !== $request['balance']['admin_commission_rate']) {
-                    if ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
-                        $this->updateBalance($request['balance'], $id);
-                    }
-                } else {
-                    $this->updateBalance($request['balance'], $id);
-                }
-            }
 
 
 
             // Handle password change
-            if ($request->has('loginDetails') && isset($request->loginDetails['password'])) {
-                $loginDetails = $request->input('loginDetails');
+            if ($request->has('password')) {
+
 
                 // Find the owner user
-                $owner = User::find($shop->owner_id);
+                $owner = User::find($employee->owner_id);
 
                 if ($owner) {
                     // Update the user's password
-                    $owner->password = bcrypt($loginDetails['password']);
+                    $owner->password = bcrypt($request->input('password'));
                     $owner->save();
                 }
             }
 
 
-            return $shop;
+            return $employee;
         } catch (Exception $e) {
             throw new HttpException(400, COULD_NOT_UPDATE_THE_RESOURCE."_Shop-".$e);
         }

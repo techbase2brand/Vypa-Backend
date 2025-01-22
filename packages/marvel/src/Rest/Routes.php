@@ -21,7 +21,7 @@ use Marvel\Http\Controllers\ConversationController;
 use Marvel\Http\Controllers\CouponController;
 use Marvel\Http\Controllers\DeliveryTimeController;
 use Marvel\Http\Controllers\DownloadController;
-use App\Http\Controllers\EmployeeController;
+use Marvel\Http\Controllers\EmployeeController;
 use App\Http\Controllers\GroupController;
 use Marvel\Http\Controllers\FaqsController;
 use Marvel\Http\Controllers\FeedbackController;
@@ -358,8 +358,7 @@ Route::group(
  * *****************************************
  */
 Route::post('company', [ShopController::class, 'CompanyRegister']);
-Route::post('company/create', [ShopController::class, 'createCompany']);
-Route::post('employee/create', [EmployeeController::class, 'store']);
+
 
 
 Route::apiResource('groups', GroupController::class);
@@ -373,12 +372,13 @@ Route::group(
         Route::apiResource('shops', ShopController::class, [
             'only' => ['store', 'update', 'destroy'],
         ]);
-
+        Route::post('company/create', [ShopController::class, 'createCompany']);
         Route::put('company/update/{id}', [ShopController::class, 'update']);
         Route::get('company/list', [ShopController::class, 'index']);
         Route::delete('company/{id}', [ShopController::class, 'destroy']);
         Route::get('company/info/{slug}', [ShopController::class, 'show']);
 
+        Route::post('employee/create', [EmployeeController::class, 'store']);
 
         Route::put('employee/update/{id}', [EmployeeController::class, 'update']);
         Route::get('employee/list', [EmployeeController::class, 'index']);

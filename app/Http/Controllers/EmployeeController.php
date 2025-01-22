@@ -45,8 +45,8 @@ class EmployeeController extends Controller
                 "password"=>bcrypt($validated['password'])
             ]
         );
-
-        $user->assignRole('super_admin');
+        $user->givePermissionTo(['employee']);
+        $user->assignRole('employee');
         $employee->owner_id = $user->id;
         $employee->save();
         return response()->json([

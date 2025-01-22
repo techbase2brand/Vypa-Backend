@@ -14,12 +14,24 @@ class Employee extends Model
     use Sluggable;
 
     protected $table = 'employees';
+    protected $hidden = ['password'];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'company_name',
+        'gender',
+        'contact_no',
+        'joining_date',
+        'tag',
+        'job_title',
+        'logo'
+    ];
 
     public $guarded = [];
 
     protected $casts = [
         'logo' => 'json',
-        'primary_contact_detail' => 'json'
     ];
 
     /**

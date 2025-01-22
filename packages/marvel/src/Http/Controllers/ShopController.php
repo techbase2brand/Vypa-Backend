@@ -82,18 +82,7 @@ class ShopController extends CoreController
             throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
-    public function createEmployee(ShopCreateRequest $request)
-    {
 
-        try {
-            // if ($request->user()->hasPermissionTo(Permission::STORE_OWNER)) {
-            return $this->repository->storeEmployee($request);
-            // }
-            // throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (MarvelException $th) {
-            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
-        }
-    }
 
     public function CompanyRegister(ShopCreateRequest $request)
     {

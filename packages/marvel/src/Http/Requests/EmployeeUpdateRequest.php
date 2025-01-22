@@ -6,8 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-
-class EmployeeCreateRequest extends FormRequest
+class EmployeeUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,20 +27,9 @@ class EmployeeCreateRequest extends FormRequest
     {
         return [
             'name'                   => ['required', 'string', 'max:255'],
-            'Employee_email'         => ['required', 'string', 'max:255', 'unique:users,email'],
-            'categories'             => ['array'],
-            'company_name'           => ['nullable', 'string', 'max:255'],
-            'gender'                 => ['nullable', 'string', 'max:255'],
-            'contact_no'             => ['nullable', 'string', 'max:255'],
             'is_active'              => ['boolean'],
             'description'            => ['nullable', 'string', 'max:10000'],
-            'withdrawn_amount'       => ['nullable', 'numeric'],
-            'current_balance'        => ['nullable', 'numeric'],
             'image'                  => ['nullable', 'array'],
-            'address'                => ['array'],
-
-            'password'               => ['required', 'string', 'min:8', 'confirmed'], // Use 'confirmed' here
-            'confirmpassword'        => ['required', 'string', 'same:password'], // This line can be removed
         ];
     }
 

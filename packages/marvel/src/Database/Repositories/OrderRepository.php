@@ -308,7 +308,7 @@ class OrderRepository extends BaseRepository
 
             $order = $this->create($orderInput);
             $products = $this->processProducts($request['products'], $request['customer_id'], $order);
-            dd($products);
+            //dd($products);
            $order->products()->attach($products);
 
             $this->createChildOrder($order->id, $request);
@@ -318,7 +318,7 @@ class OrderRepository extends BaseRepository
 
             $customer = $request->user() ?? User::findOrFail($orderInput['customer_id']);
 
-           // dd($customer);
+            dd($customer);
             event(new OrderCreated($order, $invoiceData, $customer));
             return $order;
        // } catch (Exception $e) {

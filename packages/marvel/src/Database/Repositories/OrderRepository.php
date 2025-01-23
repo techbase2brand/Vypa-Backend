@@ -229,9 +229,9 @@ class OrderRepository extends BaseRepository
         } else {
             $this->orderStatusManagementOnPayment($order, OrderStatus::PENDING, PaymentStatus::PENDING);
         }
-        echo "orderProcessed";
+
         event(new OrderProcessed($order));
-        dd($order);
+        //dd($order);
         return $order;
     }
 

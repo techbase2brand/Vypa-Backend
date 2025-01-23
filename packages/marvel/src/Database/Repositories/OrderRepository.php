@@ -388,11 +388,11 @@ class OrderRepository extends BaseRepository
                 $product['variation_option_id'] = null;
                 $products[$key] = $product;
             }
-            echo "before";
-            dd($products);
+
            // try {
                 if ($order->parent_id === null) {
                     $productData = Product::with('digital_file')->findOrFail($product['product_id']);
+                    dd($productData);
                     // if rental product
                     $isRentalProduct = $productData->is_rental;
                     if ($isRentalProduct) {

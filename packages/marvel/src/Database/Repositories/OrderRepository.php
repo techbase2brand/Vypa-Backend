@@ -307,7 +307,6 @@ class OrderRepository extends BaseRepository
             $orderInput = $request->only($this->dataArray);
 
             $order = $this->create($orderInput);
-            dd($order);
             $products = $this->processProducts($request['products'], $request['customer_id'], $order);
             dd($products);
            $order->products()->attach($products);
@@ -389,6 +388,8 @@ class OrderRepository extends BaseRepository
                 $product['variation_option_id'] = null;
                 $products[$key] = $product;
             }
+            echo "before";
+            dd($products);
            // try {
                 if ($order->parent_id === null) {
                     $productData = Product::with('digital_file')->findOrFail($product['product_id']);
@@ -410,6 +411,7 @@ class OrderRepository extends BaseRepository
            //     throw $e;
            // }
         }
+        dd($products);
         return $products;
     }
 

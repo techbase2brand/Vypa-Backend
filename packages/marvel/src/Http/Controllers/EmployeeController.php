@@ -95,9 +95,7 @@ class EmployeeController extends CoreController
     {
         $shop = $this->repository
             ->with(['owner']);
-        if ($request->user() && ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN) || $request->user()->shops->contains('slug', $slug))) {
-            $shop = $shop->with('balance');
-        }
+
         try {
             return match (true) {
                 is_numeric($slug) => $shop->where('id', $slug)->firstOrFail(),

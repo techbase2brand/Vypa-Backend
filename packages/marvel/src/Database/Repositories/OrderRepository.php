@@ -405,17 +405,17 @@ class OrderRepository extends BaseRepository
                         echo "simple";
                         $this->storeOrderedFile($productData, $product['order_quantity'], $customer_id, $order->tracking_number);
                     } else if ($productData->product_type === ProductType::VARIABLE) {
-                        echo "variable";
-                        $variation_option = Variation::with('digital_file')->findOrFail($product['variation_option_id']);
-                        dd($variation_option);
-                        $this->storeOrderedFile($variation_option, $product['order_quantity'], $customer_id, $order->tracking_number);
+                        //echo "variable";
+                        //$variation_option = Variation::with('digital_file')->findOrFail($product['variation_option_id']);
+                       // dd($variation_option);
+                        //$this->storeOrderedFile($variation_option, $product['order_quantity'], $customer_id, $order->tracking_number);
                     }
                 }
           //  } catch (Exception $e) {
            //     throw $e;
            // }
         }
-        dd($products);
+        //dd($products);
         return $products;
     }
 

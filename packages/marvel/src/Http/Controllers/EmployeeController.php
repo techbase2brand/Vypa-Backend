@@ -107,7 +107,7 @@ class EmployeeController extends CoreController
             // Replace the 'email' key with 'Employee_email'
             if (isset($shopArray['owner']['email'])) {
                 $shopArray['Employee_email'] = $shopArray['owner']['email'];
-                unset($shopArray['owner']['email']); // Optionally remove the original email key
+                unset($shopArray['email']); // Optionally remove the original email key
             }
 
             return response()->json($shopArray);

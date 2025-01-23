@@ -85,7 +85,7 @@ class FeedbackController extends CoreController
                 }
             }
         } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."88");
         }
     }
 

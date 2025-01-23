@@ -18,7 +18,7 @@ class PaymentIntentMutator
         try {
             return Shop::call('Marvel\Http\Controllers\PaymentMethodController@savePaymentMethod', $args);
         } catch (\Exception $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."21");
         }
     }
 }

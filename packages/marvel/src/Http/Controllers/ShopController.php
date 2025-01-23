@@ -218,7 +218,7 @@ class ShopController extends CoreController
             $balance->save();
             return $shop;
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."221");
         }
     }
 
@@ -242,7 +242,7 @@ class ShopController extends CoreController
 
             return $shop;
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."245");
         }
     }
 
@@ -265,7 +265,7 @@ class ShopController extends CoreController
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."268");
         }
     }
 
@@ -445,7 +445,7 @@ class ShopController extends CoreController
 
             return $near_shop;
         } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."448");
         }
     }
 
@@ -461,7 +461,7 @@ class ShopController extends CoreController
             $limit = $request->limit ? $request->limit : 15;
             return $this->repository->withCount(['orders', 'products'])->with(['owner.profile'])->where('is_active', '=', $request->is_active)->paginate($limit)->withQueryString();
         } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."464", $e->getMessage());
         }
     }
 
@@ -474,7 +474,7 @@ class ShopController extends CoreController
         try {
             return DB::transaction(fn () => $this->repository->transferShopOwnership($request));
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."477");
         }
     }
 }

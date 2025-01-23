@@ -331,7 +331,7 @@ class UserController extends CoreController
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."334");
         }
     }
     function inactiveUserShops($userId)
@@ -356,7 +356,7 @@ class UserController extends CoreController
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."359");
         }
     }
 
@@ -381,7 +381,7 @@ class UserController extends CoreController
         if ($this->repository->sendResetEmail($request->email, $tokenData->token)) {
             return ['message' => CHECK_INBOX_FOR_PASSWORD_RESET_EMAIL, 'success' => true];
         } else {
-            return ['message' => SOMETHING_WENT_WRONG, 'success' => false];
+            return ['message' => SOMETHING_WENT_WRONG."384", 'success' => false];
         }
     }
     public function verifyForgetPasswordToken(Request $request)
@@ -413,7 +413,7 @@ class UserController extends CoreController
 
             return ['message' => PASSWORD_RESET_SUCCESSFUL, 'success' => true];
         } catch (\Exception $th) {
-            return ['message' => SOMETHING_WENT_WRONG, 'success' => false];
+            return ['message' => SOMETHING_WENT_WRONG."416", 'success' => false];
         }
     }
 
@@ -429,7 +429,7 @@ class UserController extends CoreController
                 return ['message' => OLD_PASSWORD_INCORRECT, 'success' => false];
             }
         } catch (\Exception $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."432");
         }
     }
     public function contactAdmin(Request $request)
@@ -448,7 +448,7 @@ class UserController extends CoreController
             Mail::to($emailTo)->send(new ContactAdmin($details));
             return ['message' => EMAIL_SENT_SUCCESSFUL, 'success' => true];
         } catch (\Exception $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."451");
         }
     }
 
@@ -463,7 +463,7 @@ class UserController extends CoreController
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
         } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."466");
         }
     }
 
@@ -721,7 +721,7 @@ class UserController extends CoreController
             Newsletter::subscribeOrUpdate($email);
             return true;
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."724");
         }
     }
     public function updateUserEmail(Request $request)

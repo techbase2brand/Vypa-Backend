@@ -51,7 +51,7 @@ class AttributeValueController extends CoreController
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."attributeValue");
         }
     }
 
@@ -116,7 +116,7 @@ class AttributeValueController extends CoreController
     }
     /**
      * It deletes an attribute from the database
-     * 
+     *
      * @param Request request The request object.
      * @return JsonResponse
      */

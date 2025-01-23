@@ -121,7 +121,7 @@ class StoreNoticeRepository extends BaseRepository
             }
             return $storeNotices->whereDate('expired_at', '>=', now());
         } catch (Exception $e) {
-            throw new Exception(SOMETHING_WENT_WRONG);
+            throw new Exception(SOMETHING_WENT_WRONG."124");
         }
     }
 
@@ -160,7 +160,7 @@ class StoreNoticeRepository extends BaseRepository
                 return $request->user()->shops->where('is_active', 1);
             }
         } catch (Exception $e) {
-            throw new Exception(SOMETHING_WENT_WRONG);
+            throw new Exception(SOMETHING_WENT_WRONG."163");
         }
     }
 
@@ -202,7 +202,7 @@ class StoreNoticeRepository extends BaseRepository
             event(new StoreNoticeEvent($storeNotice, 'update', $request->user()));
             return $storeNotice;
         } catch (Exception $e) {
-            throw new Exception(SOMETHING_WENT_WRONG);
+            throw new Exception(SOMETHING_WENT_WRONG."205");
         }
     }
 }

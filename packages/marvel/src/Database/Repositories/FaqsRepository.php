@@ -78,7 +78,7 @@ class FaqsRepository extends BaseRepository
             $this->create($faqs);
             return $faqs;
         } catch (Exception $th) {
-            throw new Exception(SOMETHING_WENT_WRONG, $th->getMessage());
+            throw new Exception(SOMETHING_WENT_WRONG."81", $th->getMessage());
         }
     }
 
@@ -96,7 +96,7 @@ class FaqsRepository extends BaseRepository
             $faqs->update($request->only($this->dataArray));
             return $faqs;
         } catch (Exception $e) {
-            throw new Exception(SOMETHING_WENT_WRONG, $e->getMessage());
+            throw new Exception(SOMETHING_WENT_WRONG."99", $e->getMessage());
         }
     }
 }

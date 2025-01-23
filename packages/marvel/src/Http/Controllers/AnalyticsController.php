@@ -144,7 +144,7 @@ class AnalyticsController extends CoreController
                 'yearlyTotalOrderByStatus'  => $yearlyTotalOrderByStatus,
             ];
         } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."analytics", $e->getMessage());
         }
     }
 

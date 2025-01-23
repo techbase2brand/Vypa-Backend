@@ -76,7 +76,7 @@ class StoreNoticeReadRepository extends BaseRepository
             }
             return $update;
         } catch (Exception $e) {
-            throw new Exception(SOMETHING_WENT_WRONG);
+            throw new Exception(SOMETHING_WENT_WRONG."79");
         }
     }
 
@@ -108,7 +108,7 @@ class StoreNoticeReadRepository extends BaseRepository
             }
             return $this->whereIn('store_notice_id', $noticeIdArr)->where('user_id', $userId)->get();
         } catch (Exception $e) {
-            throw new HttpException(400, SOMETHING_WENT_WRONG);
+            throw new HttpException(400, SOMETHING_WENT_WRONG."111");
         }
     }
 }

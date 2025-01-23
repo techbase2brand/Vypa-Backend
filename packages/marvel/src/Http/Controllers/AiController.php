@@ -14,7 +14,7 @@ class AiController extends CoreController
         try {
             return Ai::generateDescription($request);
         } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."17", $e->getMessage());
         }
     }
 }

@@ -23,7 +23,7 @@ class PaymentIntentController extends CoreController
 
     /**
      * getPaymentIntent
-     * 
+     *
      * This function create the payment intent for the payment & store that into database with related to that order.
      * So that, if the intent was kept track in any case for current or future payment.
      *
@@ -38,7 +38,7 @@ class PaymentIntentController extends CoreController
             }
             return $this->repository->getPaymentIntent($request, $this->settings);
         } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."41", $e->getMessage());
         }
     }
 }

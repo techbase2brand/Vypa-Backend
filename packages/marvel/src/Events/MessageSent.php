@@ -139,7 +139,7 @@ class MessageSent implements ShouldBroadcast
             return $enableBroadCast;
             // return $settings->options['pushNotification']['all']['message'] == true;
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $th->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."142", $th->getMessage());
         }
     }
 }

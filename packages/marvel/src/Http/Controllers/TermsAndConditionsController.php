@@ -82,7 +82,7 @@ class TermsAndConditionsController extends CoreController
                 }
             }
         } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."85", $e->getMessage());
         }
     }
 
@@ -196,7 +196,7 @@ class TermsAndConditionsController extends CoreController
             $term->save();
             return $term;
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."199");
         }
     }
 
@@ -223,7 +223,7 @@ class TermsAndConditionsController extends CoreController
             $term->save();
             return $term;
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."226");
         }
     }
 }

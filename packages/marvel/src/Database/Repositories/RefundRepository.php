@@ -87,7 +87,7 @@ class RefundRepository extends BaseRepository
                 $this->create($data);
             }
         } catch (Exception $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."90");
         }
     }
 

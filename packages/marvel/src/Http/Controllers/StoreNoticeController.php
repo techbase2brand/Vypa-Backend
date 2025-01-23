@@ -45,7 +45,7 @@ class StoreNoticeController extends CoreController
             $data = StoreNoticeResource::collection($storeNotices)->response()->getData(true);
             return formatAPIResourcePaginate($data);
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $th->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."48", $th->getMessage());
         }
     }
 
@@ -74,7 +74,7 @@ class StoreNoticeController extends CoreController
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."77");
         }
     }
 
@@ -116,7 +116,7 @@ class StoreNoticeController extends CoreController
             // return $storeNotice;
             return new GetSingleStoreNoticeResource($storeNotice);
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."119");
         }
     }
 
@@ -134,7 +134,7 @@ class StoreNoticeController extends CoreController
             $request['id'] = $id;
             return $this->updateStoreNotice($request);
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."137");
         }
     }
 
@@ -196,7 +196,7 @@ class StoreNoticeController extends CoreController
     /**
      *  Update the specified resource in storage.
      * This method will update read_status of a single StoreNotice for requested user { id in requestBody }.
-     * @param Request $request 
+     * @param Request $request
      * @return JsonResponse|null
      * @throws MarvelException
      */
@@ -208,14 +208,14 @@ class StoreNoticeController extends CoreController
             ]);
             return $this->repositoryPivot->readSingleNotice($request);
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."211");
         }
     }
 
     /**
      *  Update or Store resources in storage.
      * This method will update read_status of a multiple StoreNotice for requested user { array of id in requestBody }.
-     * @param Request $request 
+     * @param Request $request
      * @return JsonResponse|null
      * @throws MarvelException
      */
@@ -228,7 +228,7 @@ class StoreNoticeController extends CoreController
             ]);
             return $this->repositoryPivot->readAllNotice($request);
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."231");
         }
     }
 }

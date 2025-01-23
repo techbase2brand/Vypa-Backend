@@ -17,6 +17,7 @@ trait CalculatePaymentTrait
         if (!is_array($cartItems)) {
             throw new MarvelException(CART_ITEMS_NOT_FOUND);
         }
+
         $subtotal = 0;
         try {
             foreach ($cartItems as $item) {

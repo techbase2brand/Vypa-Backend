@@ -75,7 +75,7 @@ class ReviewRepository extends BaseRepository
             event(new ReviewCreated($review));
             return $review;
         } catch (Exception $e) {
-            throw new HttpException(400, SOMETHING_WENT_WRONG);
+            throw new HttpException(400, SOMETHING_WENT_WRONG."78");
         }
     }
 
@@ -86,7 +86,7 @@ class ReviewRepository extends BaseRepository
             $review->update($request->only($this->dataArray));
             return $review;
         } catch (Exception $e) {
-            throw new HttpException(400, SOMETHING_WENT_WRONG);
+            throw new HttpException(400, SOMETHING_WENT_WRONG."89");
         }
     }
 }

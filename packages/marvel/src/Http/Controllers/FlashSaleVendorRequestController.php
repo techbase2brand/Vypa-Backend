@@ -50,7 +50,7 @@ class FlashSaleVendorRequestController extends CoreController
             $limit = $request->limit ? $request->limit : 10;
             return $this->fetchFlashSalesRequests($request)->paginate($limit)->withQueryString();
         } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."53", $e->getMessage());
         }
     }
 
@@ -197,7 +197,7 @@ class FlashSaleVendorRequestController extends CoreController
             $id = $request->id;
             $this->repository->approveFlashSaleVendorRequestFunc($id);
         } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."200", $e->getMessage());
         }
     }
 
@@ -216,7 +216,7 @@ class FlashSaleVendorRequestController extends CoreController
             $id = $request->id;
             $this->repository->disapproveFlashSaleVendorRequestFunc($id);
         } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."219", $e->getMessage());
         }
     }
 
@@ -233,7 +233,7 @@ class FlashSaleVendorRequestController extends CoreController
             $limit = $request->limit ? $request->limit : 10;
             return $this->fetchRequestedProducts($request)->paginate($limit)->withQueryString();
         } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."236", $e->getMessage());
         }
     }
 

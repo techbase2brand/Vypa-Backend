@@ -129,16 +129,16 @@ class OrderController extends CoreController
      */
     public function store(OrderCreateRequest $request)
     {
-        try {
+        //try {
             // decision need
             // if(!($this->settings->options['useCashOnDelivery'] && $this->settings->options['useEnableGateway'])){
             //     throw new HttpException(400, PLEASE_ENABLE_PAYMENT_OPTION_FROM_THE_SETTINGS);
             // }
 
             return DB::transaction(fn () => $this->repository->storeOrder($request, $this->settings));
-        } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $th->getMessage());
-        }
+        //} catch (MarvelException $th) {
+           // throw new MarvelException(SOMETHING_WENT_WRONG."140", $th->getMessage());
+        //}
     }
 
     /**
@@ -295,7 +295,7 @@ class OrderController extends CoreController
 
             return route('export_order.token', ['token' => $newToken->token]);
         } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."298", $e->getMessage());
         }
     }
 
@@ -475,7 +475,7 @@ class OrderController extends CoreController
                     break;
             }
         } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."478", $e->getMessage());
         }
     }
 }

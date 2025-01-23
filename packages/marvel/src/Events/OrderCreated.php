@@ -121,7 +121,7 @@ class OrderCreated implements ShouldQueue, ShouldBroadcast
      */
     public function broadcastWhen(): bool
     {
-        try {
+        //try {
             $settings = Settings::first();
             $enableBroadCast = false;
 
@@ -135,8 +135,8 @@ class OrderCreated implements ShouldQueue, ShouldBroadcast
                 }
             }
             return $enableBroadCast;
-        } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $th->getMessage());
-        }
+        //} catch (MarvelException $th) {
+          //  throw new MarvelException(SOMETHING_WENT_WRONG, $th->getMessage());
+        //}
     }
 }

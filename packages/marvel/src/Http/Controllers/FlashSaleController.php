@@ -44,7 +44,7 @@ class FlashSaleController extends CoreController
             // $data = FlashSaleResource::collection($flash_sales)->response()->getData(true);
             // return formatAPIResourcePaginate($data);
         } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."47", $e->getMessage());
         }
     }
 
@@ -173,7 +173,7 @@ class FlashSaleController extends CoreController
 
             return $flash_sale_info;
         } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."176", $e->getMessage());
         }
     }
 

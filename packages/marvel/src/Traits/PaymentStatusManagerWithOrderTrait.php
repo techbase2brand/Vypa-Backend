@@ -67,7 +67,7 @@ trait PaymentStatusManagerWithOrderTrait
                 }
             }
         } catch (Exception $e) {
-            throw new \Exception(SOMETHING_WENT_WRONG);
+            throw new \Exception(SOMETHING_WENT_WRONG."payment");
         }
     }
 

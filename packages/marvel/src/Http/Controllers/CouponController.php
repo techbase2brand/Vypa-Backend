@@ -72,7 +72,7 @@ class CouponController extends CoreController
             }
             return $query;
         } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."75", $e->getMessage());
         }
     }
 
@@ -212,7 +212,7 @@ class CouponController extends CoreController
             $coupon->update(['is_approve' => true]);
             return $coupon;
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."215");
         }
     }
 
@@ -227,7 +227,7 @@ class CouponController extends CoreController
             $coupon->save();
             return $coupon;
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."230");
         }
     }
 }

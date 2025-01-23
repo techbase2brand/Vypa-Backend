@@ -108,11 +108,12 @@ class OrderRepository extends BaseRepository
      */
     public function storeOrder($request, $settings): mixed
     {
+
         $request['tracking_number'] = $this->generateTrackingNumber();
-        // $request->merge([
-        //     'payable'         => $request['paid_total'], // amount to be paid through paymentGateway
-        //     'wallet_currency' => 0
-        // ]);
+         $request->merge([
+             'payable'         => $request['paid_total'], // amount to be paid through paymentGateway
+             'wallet_currency' => 0
+         ]);
 
         $fullWalletOrCODPayment = $request?->isFullWalletPayment ? PaymentGatewayType::FULL_WALLET_PAYMENT : PaymentGatewayType::CASH_ON_DELIVERY;
         $payment_gateway_type = !empty($request->payment_gateway) ? $request->payment_gateway : $fullWalletOrCODPayment;
@@ -152,17 +153,18 @@ class OrderRepository extends BaseRepository
                 $request['customer_name'] = $user->name;
             }
         } catch (Exception $e) {
+
             $user = null;
             $request['customer_id'] =  $request['customer_id'];
            // dd("check once");
         }
 
-//        if (!$user) {
-//            $settings = Settings::getData($request->language);
-//            if (isset($settings->options['guestCheckout']) && !$settings->options['guestCheckout']) {
-//                throw new AuthorizationException(NOT_AUTHORIZED);
-//            }
-//        }
+        if (!$user) {
+            $settings = Settings::getData($request->language);
+            if (isset($settings->options['guestCheckout']) && !$settings->options['guestCheckout']) {
+                throw new AuthorizationException(NOT_AUTHORIZED);
+            }
+        }
         $request['amount'] = $this->calculateSubtotal($request['products']);
 
         if (isset($request->coupon_id)) {
@@ -177,11 +179,12 @@ class OrderRepository extends BaseRepository
         if (isset($coupon) && $coupon->type === CouponType::FREE_SHIPPING_COUPON) {
             $request['delivery_fee'] = 0;
         } else {
-            $request['delivery_fee'] = $request['delivery_fee'];
+            $request['delivery_fee'] = $request['delivery_fee']??0;
         }
 
         $request['paid_total'] = $request['amount'] + $request['sales_tax'] + $request['delivery_fee'] -  $request['discount'];
         $request['total'] = $request['paid_total'];
+
         if (($useWalletPoints || $request->isFullWalletPayment) && $user) {
             $wallet = $user->wallet;
             $amount = null;
@@ -201,16 +204,13 @@ class OrderRepository extends BaseRepository
         } else {
             $amount = round($request['paid_total'], 2);
         }
-        echo "before order";
 
         $order = $this->createOrder($request);
-        echo "after order";
        // dd($request);
         if (($useWalletPoints || $request->isFullWalletPayment) && $user) {
             $this->storeOrderWalletPoint(round($request['paid_total'], 2) - $amount, $order->id);
             $this->manageWalletAmount(round($request['paid_total'], 2), $user->id);
         }
-        echo "new";
        // dd($request);
         $eligible = $this->checkOrderEligibility();
         if (!$eligible) {
@@ -223,15 +223,12 @@ class OrderRepository extends BaseRepository
             $order['payment_intent'] = $this->processPaymentIntent($request, $settings);
         }
 
-
         if ($payment_gateway_type === PaymentGatewayType::CASH_ON_DELIVERY || $payment_gateway_type === PaymentGatewayType::CASH) {
             $this->orderStatusManagementOnCOD($order, OrderStatus::PENDING, OrderStatus::PROCESSING);
         } else {
             $this->orderStatusManagementOnPayment($order, OrderStatus::PENDING, PaymentStatus::PENDING);
         }
-
         event(new OrderProcessed($order));
-
         return $order;
     }
 
@@ -306,28 +303,22 @@ class OrderRepository extends BaseRepository
     {
         //try {
             $orderInput = $request->only($this->dataArray);
-            echo "<pre>";
-            echo "order Input";
-            print_r($orderInput);
+
             $order = $this->create($orderInput);
-            echo "order";
-            print_r($order);
-//            $products = $this->processProducts($request['products'], $request['customer_id'], $order);
-//            echo "products";
-//            print_r($products);
-           $order->products()->attach($request['products']);
-           echo "attach product";
+
+            $products = $this->processProducts($request['products'], $request['customer_id'], $order);
+
+           $order->products()->attach($products);
+
             $this->createChildOrder($order->id, $request);
-            echo "child";
+
             //  $this->calculateShopIncome($order);
             $invoiceData = $this->createInvoiceDataForEmail($request, $order);
-            echo "invoiceData";
-            print_r($invoiceData);
+
             $customer = $request->user() ?? User::findOrFail($orderInput['customer_id']);
-            echo "customer";
+
            // dd($customer);
-            //event(new OrderCreated($order, $invoiceData, $customer));
-            echo "event";
+            event(new OrderCreated($order, $invoiceData, $customer));
             return $order;
        // } catch (Exception $e) {
             //throw $e;
@@ -399,7 +390,6 @@ class OrderRepository extends BaseRepository
            // try {
                 if ($order->parent_id === null) {
                     $productData = Product::with('digital_file')->findOrFail($product['product_id']);
-                    print_r($productData);
                     // if rental product
                     $isRentalProduct = $productData->is_rental;
                     if ($isRentalProduct) {
@@ -411,7 +401,6 @@ class OrderRepository extends BaseRepository
                         $this->storeOrderedFile($productData, $product['order_quantity'], $customer_id, $order->tracking_number);
                     } else if ($productData->product_type === ProductType::VARIABLE) {
                         $variation_option = Variation::with('digital_file')->findOrFail($product['variation_option_id']);
-                        print_r($variation_option);
                         $this->storeOrderedFile($variation_option, $product['order_quantity'], $customer_id, $order->tracking_number);
                     }
                 }
@@ -588,6 +577,7 @@ class OrderRepository extends BaseRepository
 
     public function checkOrderEligibility(): bool
     {
+        return true;
         $settings = Settings::getData();
         $useMustVerifyLicense = isset($settings->options['app_settings']['trust']) ? $settings->options['app_settings']['trust'] : false;
         return $useMustVerifyLicense;

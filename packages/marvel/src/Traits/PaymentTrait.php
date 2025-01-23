@@ -268,7 +268,7 @@ trait PaymentTrait
 
             return $payment_method;
         } catch (\Exception $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."dsfs");
         }
     }
 
@@ -297,7 +297,7 @@ trait PaymentTrait
             }
             return $customer;
         } catch (\Exception $e) {
-            throw new HttpException(400, SOMETHING_WENT_WRONG);
+            throw new HttpException(400, SOMETHING_WENT_WRONG."trait");
         }
     }
 

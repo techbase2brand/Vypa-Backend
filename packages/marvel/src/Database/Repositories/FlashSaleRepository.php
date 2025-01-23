@@ -84,13 +84,13 @@ class FlashSaleRepository extends BaseRepository
 
             throw new AuthorizationException(NOT_AUTHORIZED);
         } catch (Exception $th) {
-            throw new Exception(SOMETHING_WENT_WRONG, $th->getMessage());
+            throw new Exception(SOMETHING_WENT_WRONG."87", $th->getMessage());
         }
     }
 
 
     /**
-     * updateFlashSale 
+     * updateFlashSale
      *
      * @param  mixed $request
      * @param  mixed $id
@@ -119,7 +119,7 @@ class FlashSaleRepository extends BaseRepository
 
             throw new AuthorizationException(NOT_AUTHORIZED);
         } catch (Exception $e) {
-            throw new Exception(SOMETHING_WENT_WRONG, $e->getMessage());
+            throw new Exception(SOMETHING_WENT_WRONG."122", $e->getMessage());
         }
     }
 

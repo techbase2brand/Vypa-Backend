@@ -37,7 +37,7 @@ class NotifyLogsController extends CoreController
             $limit = $request->limit ? $request->limit : 10;
             return $this->fetchNotifyLogs($request)->paginate($limit)->withQueryString();
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $th->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."40", $th->getMessage());
         }
     }
 
@@ -105,7 +105,7 @@ class NotifyLogsController extends CoreController
             $request['id'] = $id;
             return $this->deleteNotifyLogs($request);
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $th->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."108", $th->getMessage());
         }
     }
 

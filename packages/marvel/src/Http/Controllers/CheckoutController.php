@@ -26,7 +26,7 @@ class CheckoutController extends CoreController
         try {
             return $this->repository->verify($request);
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."checkout");
         }
     }
 }

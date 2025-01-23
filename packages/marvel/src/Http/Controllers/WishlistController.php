@@ -69,7 +69,7 @@ class WishlistController extends CoreController
         try {
             return $this->repository->toggleWishlist($request);
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG."wishlist");
         }
     }
 

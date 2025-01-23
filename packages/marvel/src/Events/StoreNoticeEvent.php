@@ -47,7 +47,7 @@ class StoreNoticeEvent implements ShouldQueue, ShouldBroadcast
      * @param StoreNotice|array $storeNotice
      * @param null|string $action
      * @param User|array $user
-     * 
+     *
      * @return void
      */
     public function __construct(StoreNotice $storeNotice, ?string $action, User $user)
@@ -117,7 +117,7 @@ class StoreNoticeEvent implements ShouldQueue, ShouldBroadcast
             }
             return $enableBroadCast;
         } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $th->getMessage());
+            throw new MarvelException(SOMETHING_WENT_WRONG."120", $th->getMessage());
         }
     }
 }

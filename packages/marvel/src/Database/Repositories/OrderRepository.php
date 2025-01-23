@@ -396,13 +396,16 @@ class OrderRepository extends BaseRepository
                     // if rental product
                     $isRentalProduct = $productData->is_rental;
                     if ($isRentalProduct) {
+                        echo "rental"
                         $this->processRentalProduct($product, $order->id);
                     }
 
 
                     if ($productData->product_type === ProductType::SIMPLE) {
+                        echo "simple";
                         $this->storeOrderedFile($productData, $product['order_quantity'], $customer_id, $order->tracking_number);
                     } else if ($productData->product_type === ProductType::VARIABLE) {
+                        echo "variable";
                         $variation_option = Variation::with('digital_file')->findOrFail($product['variation_option_id']);
                         dd($variation_option);
                         $this->storeOrderedFile($variation_option, $product['order_quantity'], $customer_id, $order->tracking_number);

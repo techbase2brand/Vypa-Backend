@@ -308,7 +308,7 @@ class OrderRepository extends BaseRepository
 
             $order = $this->create($orderInput);
             $products = $this->processProducts($request['products'], $request['customer_id'], $order);
-            dd($products);
+            //dd($products);
            $order->products()->attach($products);
 
             $this->createChildOrder($order->id, $request);

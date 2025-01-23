@@ -392,7 +392,7 @@ class OrderRepository extends BaseRepository
            // try {
                 if ($order->parent_id === null) {
                     $productData = Product::with('digital_file')->findOrFail($product['product_id']);
-                    dd($productData);
+                    //dd($productData);
                     // if rental product
                     $isRentalProduct = $productData->is_rental;
                     if ($isRentalProduct) {
@@ -404,6 +404,7 @@ class OrderRepository extends BaseRepository
                         $this->storeOrderedFile($productData, $product['order_quantity'], $customer_id, $order->tracking_number);
                     } else if ($productData->product_type === ProductType::VARIABLE) {
                         $variation_option = Variation::with('digital_file')->findOrFail($product['variation_option_id']);
+                        dd($variation_option);
                         $this->storeOrderedFile($variation_option, $product['order_quantity'], $customer_id, $order->tracking_number);
                     }
                 }

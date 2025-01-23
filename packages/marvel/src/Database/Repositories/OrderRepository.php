@@ -204,33 +204,33 @@ class OrderRepository extends BaseRepository
         } else {
             $amount = round($request['paid_total'], 2);
         }
-        echo "order";
+        //echo "order";
         $order = $this->createOrder($request);
-        dd($order);
+       // dd($order);
         if (($useWalletPoints || $request->isFullWalletPayment) && $user) {
             $this->storeOrderWalletPoint(round($request['paid_total'], 2) - $amount, $order->id);
             $this->manageWalletAmount(round($request['paid_total'], 2), $user->id);
         }
-        dd("useWalletPoints");
+        //dd("useWalletPoints");
         $eligible = $this->checkOrderEligibility();
         if (!$eligible) {
             throw new MarvelBadRequestException('COULD_NOT_PROCESS_THE_ORDER_PLEASE_CONTACT_WITH_THE_ADMIN');
         }
-        dd("Create Intent");
+        //dd("Create Intent");
         // Create Intent
         if (!in_array($order->payment_gateway, [
             PaymentGatewayType::CASH, PaymentGatewayType::CASH_ON_DELIVERY, PaymentGatewayType::FULL_WALLET_PAYMENT
         ])) {
             $order['payment_intent'] = $this->processPaymentIntent($request, $settings);
         }
-        dd("Payment gateway");
+       // dd("Payment gateway");
         if ($payment_gateway_type === PaymentGatewayType::CASH_ON_DELIVERY || $payment_gateway_type === PaymentGatewayType::CASH) {
             $this->orderStatusManagementOnCOD($order, OrderStatus::PENDING, OrderStatus::PROCESSING);
         } else {
             $this->orderStatusManagementOnPayment($order, OrderStatus::PENDING, PaymentStatus::PENDING);
         }
         event(new OrderProcessed($order));
-        dd($order);
+       // dd($order);
         return $order;
     }
 
@@ -406,9 +406,9 @@ class OrderRepository extends BaseRepository
                         $this->storeOrderedFile($productData, $product['order_quantity'], $customer_id, $order->tracking_number);
                     } else if ($productData->product_type === ProductType::VARIABLE) {
                         //echo "variable";
-                        //$variation_option = Variation::with('digital_file')->findOrFail($product['variation_option_id']);
+                        $variation_option = Variation::with('digital_file')->findOrFail($product['variation_option_id']);
                        // dd($variation_option);
-                        //$this->storeOrderedFile($variation_option, $product['order_quantity'], $customer_id, $order->tracking_number);
+                        $this->storeOrderedFile($variation_option, $product['order_quantity'], $customer_id, $order->tracking_number);
                     }
                 }
           //  } catch (Exception $e) {

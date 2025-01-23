@@ -381,7 +381,7 @@ Route::group(
 
         Route::post('employee/create', [EmployeeController::class, 'store']);
         Route::get('employee', [EmployeeController::class, 'index']);
-        Route::get('employee/info/{slug}', [EmployeeController::class, 'show']);
+        Route::get('employee/{slug}', [EmployeeController::class, 'show']);
         Route::put('employee/update/{id}', [EmployeeController::class, 'update']);
         Route::get('employee/list', [EmployeeController::class, 'index']);
         Route::delete('employee/{id}', [EmployeeController::class, 'destroy']);

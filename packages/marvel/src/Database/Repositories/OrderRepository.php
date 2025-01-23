@@ -396,7 +396,7 @@ class OrderRepository extends BaseRepository
                     // if rental product
                     $isRentalProduct = $productData->is_rental;
                     if ($isRentalProduct) {
-                        echo "rental"
+                        echo "rental";
                         $this->processRentalProduct($product, $order->id);
                     }
 

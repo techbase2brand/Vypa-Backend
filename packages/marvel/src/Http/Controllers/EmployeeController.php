@@ -97,10 +97,20 @@ class EmployeeController extends CoreController
             ->with(['owner']);
 
         try {
-            return match (true) {
+            $shopData = match (true) {
                 is_numeric($slug) => $shop->where('id', $slug)->firstOrFail(),
                 is_string($slug)  => $shop->where('slug', $slug)->firstOrFail(),
             };
+            // Convert the shop data to an array
+            $shopArray = $shopData->toArray();
+
+            // Replace the 'email' key with 'Employee_email'
+            if (isset($shopArray['owner']['email'])) {
+                $shopArray['Employee_email'] = $shopArray['owner']['email'];
+                unset($shopArray['owner']['email']); // Optionally remove the original email key
+            }
+
+            return response()->json($shopArray);
         } catch (MarvelException $e) {
             throw new MarvelException(NOT_FOUND);
         }

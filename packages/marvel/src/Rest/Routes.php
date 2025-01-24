@@ -379,8 +379,8 @@ Route::group(
         Route::delete('company/{id}', [ShopController::class, 'destroy']);
         Route::get('company/info/{slug}', [ShopController::class, 'show']);
         Route::get('company/info/{slug}', [ShopController::class, 'show']);
-        Route::get('company/approve/{slug}', [ShopController::class, 'approveShop']);
-        Route::get('company/disapprove/{slug}', [ShopController::class, 'disApproveShop']);
+        Route::get('company/approve', [ShopController::class, 'approveShop']);
+        Route::get('company/disapprove', [ShopController::class, 'disApproveShop']);
 
         Route::post('employee/create', [EmployeeController::class, 'store']);
         Route::get('employee', [EmployeeController::class, 'index']);

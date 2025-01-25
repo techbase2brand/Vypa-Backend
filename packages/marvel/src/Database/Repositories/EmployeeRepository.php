@@ -239,7 +239,7 @@ class EmployeeRepository extends BaseRepository
 
         $employee = $this->findOrFail($id);
         try {
-            $employee->company_id = $request->input('company_id');
+            $employee->shop_id = $request->input('shop_id');
             $employee->slug = $this->makeSlug($request);
             if ($request->has('name')) {
                 $employee->name = $request->input('name');

@@ -142,14 +142,22 @@ class EmployeeRepository extends BaseRepository
                 }
                 $data['shop_id'] = $shopId; // Assign the valid shop_id
             }
-                //dd($data);
+
                 $shop = $this->create($data);
 
+            if ($request->has('shop_id')) {
+                $shopId = $request->input('shop_id');
+                if (!Shop::where('id', $shopId)->exists()) {
+                    throw new HttpException(400, 'The specified shop does not exist.');
+                }
+                $shop->shop_id = $shopId; // Assign the valid shop_id
+                $shop->save();
+            }
 
 
 
 
-                if (isset($request['categories'])) {
+            if (isset($request['categories'])) {
                     $shop->categories()->attach($request['categories']);
                 }
 

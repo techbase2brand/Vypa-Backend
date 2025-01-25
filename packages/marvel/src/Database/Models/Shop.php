@@ -65,7 +65,7 @@ class Shop extends Model
     }
     public function employees(): HasMany
     {
-        return $this->hasMany(Employee::class, 'shop_id');
+        return $this->hasMany(Employee::class);
     }
     /**
      * @return HasMany

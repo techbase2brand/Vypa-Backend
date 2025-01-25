@@ -18,6 +18,7 @@ use Marvel\Database\Models\Employee;
 use Marvel\Database\Models\Order;
 use Marvel\Database\Models\OrderedFile;
 use Marvel\Database\Models\OrderWalletPoint;
+use Marvel\Database\Models\Shop;
 use Marvel\Database\Models\Wallet;
 use Marvel\Database\Models\Product;
 use Marvel\Database\Models\Settings;
@@ -40,6 +41,7 @@ use Marvel\Traits\PaymentTrait;
 use Marvel\Traits\WalletsTrait;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class OrderRepository extends BaseRepository
 {
@@ -211,8 +213,15 @@ class OrderRepository extends BaseRepository
         } else {
             $amount = round($request['paid_total'], 2);
         }
-        echo "order";
+
         $order = $this->createOrder($request);
+        try {
+            $employee = Employee::where('owner_id', $request['customer_id'])->get();
+            $order->shop_id = $employee->shop_id;
+            $order->save();
+        }catch (e){
+            dd("not found");
+        }
         //dd($order);
         if (($useWalletPoints || $request->isFullWalletPayment) && $user) {
             $this->storeOrderWalletPoint(round($request['paid_total'], 2) - $amount, $order->id);

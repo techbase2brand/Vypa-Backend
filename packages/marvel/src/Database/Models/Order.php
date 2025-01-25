@@ -41,7 +41,7 @@ class Order extends Model
         });
     }
 
-    protected $with = ['customer', 'products.variation_options'];
+    protected $with = ['customer', 'products.variation_options','shop'];
 
     /**
      * @return belongsToMany
@@ -115,7 +115,7 @@ class Order extends Model
     {
         return $this->hasMany(PaymentIntent::class);
     }
-    
+
     /**
      * @return HasMany
      */

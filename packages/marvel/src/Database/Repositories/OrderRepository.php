@@ -3,7 +3,7 @@
 
 namespace Marvel\Database\Repositories;
 
-use App\Models\Employee;
+use Marvel\Database\Models\Employee;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;

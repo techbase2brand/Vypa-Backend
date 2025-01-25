@@ -103,72 +103,75 @@ class EmployeeRepository extends BaseRepository
     public function storeEmployee($request)
     {
         try {
-            // $data = $request->only($this->dataArray);
+                // $data = $request->only($this->dataArray);
 
-            $data['slug'] = $this->makeSlug($request);
-            //$data['owner_id'] = $request->user()->id??6;
+                $data['slug'] = $this->makeSlug($request);
+                //$data['owner_id'] = $request->user()->id??6;
 
 
-            if ($request->has('name')) {
-                $data['name'] = ($request->input('name'));
-            }
-            if ($request->has('tag')) {
-                $data['tag'] = ($request->input('tag'));
-            }
-            if ($request->has('Employee_email')) {
-                $data['email'] = ($request->input('Employee_email'));
-            }
-            if ($request->has('logo')) {
-                $data['logo'] = ($request->input('logo'));
-            }
+                if ($request->has('name')) {
+                    $data['name'] = ($request->input('name'));
+                }
+                if ($request->has('tag')) {
+                    $data['tag'] = ($request->input('tag'));
+                }
+                if ($request->has('Employee_email')) {
+                    $data['email'] = ($request->input('Employee_email'));
+                }
+                if ($request->has('logo')) {
+                    $data['logo'] = ($request->input('logo'));
+                }
 
-            if ($request->has('contact_no')) {
-                $data['contact_no'] = $request->input('contact_no');
-            }
+                if ($request->has('contact_no')) {
+                    $data['contact_no'] = $request->input('contact_no');
+                }
 
-            if ($request->has('job_title')) {
-                $data['job_title'] = $request->input('job_title');
-            }
-            if ($request->has('joining_date')) {
-                $data['joining_date'] = $request->input('joining_date');
-            }
-            if ($request->has('gender')) {
-                $data['gender'] = $request->input('gender');
-            }
-
-            $shop = $this->create($data);
-
+                if ($request->has('job_title')) {
+                    $data['job_title'] = $request->input('job_title');
+                }
+                if ($request->has('joining_date')) {
+                    $data['joining_date'] = $request->input('joining_date');
+                }
+                if ($request->has('gender')) {
+                    $data['gender'] = $request->input('gender');
+                }
             if ($request->has('shop_id')) {
-                $shopExists = Shop::where('id', $request->input('shop_id'))->exists();
-                $shop->shop_id = $shopExists->id;
-                $shop->save();
+                $shopId = $request->input('shop_id');
+                if (!Shop::where('id', $shopId)->exists()) {
+                    throw new HttpException(400, 'The specified shop does not exist.');
+                }
+                $data['shop_id'] = $shopId; // Assign the valid shop_id
             }
-
-
-
-            if (isset($request['categories'])) {
-                $shop->categories()->attach($request['categories']);
-            }
-
-            if (isset($request['balance']['payment_info'])) {
-                $shop->balance()->create($request['balance']);
-            }
+                //dd($data);
+                $shop = $this->create($data);
 
 
 
 
-                $user = User::create([
-                    'name' => $request->input('name'),
-                    'email' => $request->input('Employee_email'),
-                    'password' => bcrypt($request->input('password')),
-                ]);
-            $user->givePermissionTo(Permission::CUSTOMER);
-            $user->assignRole(Permission::CUSTOMER);
-                $shop->owner_id = $user->id;
-                $shop->save();
+
+                if (isset($request['categories'])) {
+                    $shop->categories()->attach($request['categories']);
+                }
+
+                if (isset($request['balance']['payment_info'])) {
+                    $shop->balance()->create($request['balance']);
+                }
 
 
-            return $shop;
+
+
+                    $user = User::create([
+                        'name' => $request->input('name'),
+                        'email' => $request->input('Employee_email'),
+                        'password' => bcrypt($request->input('password')),
+                    ]);
+                $user->givePermissionTo(Permission::CUSTOMER);
+                $user->assignRole(Permission::CUSTOMER);
+                    $shop->owner_id = $user->id;
+                    $shop->save();
+
+
+                return $shop;
 
         } catch (Exception $e) {
             throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_EMPLOYEE-".$e,);

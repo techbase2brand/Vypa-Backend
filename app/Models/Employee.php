@@ -11,15 +11,9 @@ class Employee extends Model
 
     protected $hidden = ['password'];
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'company_name',
-        'gender',
-        'contact_no',
-        'joining_date',
-        'tag',
-        'job_title',
-        'logo'
     ];
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class);
+    }
 }

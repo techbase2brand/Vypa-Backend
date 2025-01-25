@@ -240,7 +240,9 @@ class EmployeeRepository extends BaseRepository
         $employee = $this->findOrFail($id);
         try {
             $employee->shop_id = $request->input('shop_id');
+
             $employee->slug = $this->makeSlug($request);
+
             if ($request->has('name')) {
                 $employee->name = $request->input('name');
             }
@@ -273,13 +275,8 @@ class EmployeeRepository extends BaseRepository
 
             // Save shop updates
             $employee->save();
-
-
-
-
             // Handle password change
             if ($request->has('password')) {
-
 
                 // Find the owner user
                 $owner = User::find($employee->owner_id);

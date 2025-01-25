@@ -210,13 +210,7 @@ class OrderRepository extends BaseRepository
         }
 
         $order = $this->createOrder($request);
-        try {
-            $employee = Employee::where('owner_id', $request['customer_id'])->get();
-            $order->shop_id = $employee->shop_id;
-            $order->save();
-        }catch (e){
-            dd("not found");
-        }
+
         //dd($order);
         if (($useWalletPoints || $request->isFullWalletPayment) && $user) {
             $this->storeOrderWalletPoint(round($request['paid_total'], 2) - $amount, $order->id);

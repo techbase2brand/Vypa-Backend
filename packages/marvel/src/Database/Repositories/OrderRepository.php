@@ -153,7 +153,6 @@ class OrderRepository extends BaseRepository
         $employee = Employee::where('owner_id', $request['customer_id'])->get();
 
         if ($employee) {
-            $request['customer_name'] = $employee->name;
             $request['shop_id'] = $employee->shop_id;
         }
         try {

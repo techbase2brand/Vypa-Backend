@@ -63,7 +63,10 @@ class Shop extends Model
     {
         return $this->hasMany(Order::class, 'shop_id');
     }
-
+    public function employees(): HasMany
+    {
+        return $this->hasMany(Employee::class, 'company_id');
+    }
     /**
      * @return HasMany
      */

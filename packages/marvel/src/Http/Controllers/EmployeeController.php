@@ -43,7 +43,7 @@ class EmployeeController extends CoreController
     }
     public function fetchEmployee(Request $request)
     {
-        return $this->repository->with(['owner.profile'])->where('id', '!=', null);
+        return $this->repository->with('company')->with(['owner.profile'])->where('id', '!=', null);
     }
     public function store(EmployeeCreateRequest $request)
     {

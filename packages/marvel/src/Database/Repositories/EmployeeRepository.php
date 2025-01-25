@@ -106,7 +106,7 @@ class EmployeeRepository extends BaseRepository
 
             $data['slug'] = $this->makeSlug($request);
             //$data['owner_id'] = $request->user()->id??6;
-            $data['company_id'] = $request->user()->id??0;
+            $data['company_id'] = $request->input('company_id');
             if ($request->has('name')) {
                 $data['name'] = ($request->input('name'));
             }

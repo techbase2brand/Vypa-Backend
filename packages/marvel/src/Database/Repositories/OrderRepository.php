@@ -150,13 +150,13 @@ class OrderRepository extends BaseRepository
 
 
             $employee = Employee::where('owner_id', $request['customer_id'])->get();
-        dd($employee);
-            $user = User::findOrFail($request['customer_id']);
+
             if ($employee) {
                 $request['customer_name'] = $employee->name;
                 $request['shop_id'] = $employee->shop_id;
             }
-
+            dd($request);
+        $user = User::findOrFail($request['customer_id']);
 
         if (!$user) {
             $settings = Settings::getData($request->language);

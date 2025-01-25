@@ -148,15 +148,22 @@ class OrderRepository extends BaseRepository
             $request['customer_id'] = $request->user()->id ?? $request['customer_id'];
         }
 
+        $employee = Employee::where('owner_id', $request['customer_id'])->get();
 
-            $employee = Employee::where('owner_id', $request['customer_id'])->get();
-
-            if ($employee) {
-                $request['customer_name'] = $employee->name;
-                $request['shop_id'] = $employee->shop_id;
+        if ($employee) {
+            $request['shop_id'] = $employee->shop_id;
+        }
+        try {
+            $user = User::findOrFail($request['customer_id']);
+            if ($user) {
+                $request['customer_name'] = $user->name;
             }
-            dd($request);
-        $user = User::findOrFail($request['customer_id']);
+        } catch (Exception $e) {
+
+            $user = null;
+            $request['customer_id'] =  $request['customer_id'];
+           // dd("check once");
+        }
 
         if (!$user) {
             $settings = Settings::getData($request->language);

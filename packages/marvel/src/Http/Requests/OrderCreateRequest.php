@@ -29,7 +29,7 @@ class OrderCreateRequest extends FormRequest
     {
         return [
             'coupon_id'               => 'nullable|exists:Marvel\Database\Models\Coupon,id',
-            'shop_id'                 => 'nullable|exists:Marvel\Database\Models\Shop,id',
+            //'shop_id'                 => 'nullable|exists:Marvel\Database\Models\Shop,id',
             'customer_id'             => 'nullable|exists:Marvel\Database\Models\User,id',
             'language'                => ['nullable', 'string'],
             'amount'                  => 'required|numeric',

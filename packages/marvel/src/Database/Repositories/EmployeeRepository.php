@@ -102,7 +102,6 @@ class EmployeeRepository extends BaseRepository
     // }
     public function storeEmployee($request)
     {
-
         try {
             // $data = $request->only($this->dataArray);
 
@@ -120,7 +119,7 @@ class EmployeeRepository extends BaseRepository
                 $data['email'] = ($request->input('Employee_email'));
             }
             if ($request->has('logo')) {
-                $data['logo'] = json_encode($request->input('logo'));
+                $data['logo'] = ($request->input('logo'));
             }
 
             if ($request->has('contact_no')) {
@@ -136,33 +135,37 @@ class EmployeeRepository extends BaseRepository
             if ($request->has('gender')) {
                 $data['gender'] = $request->input('gender');
             }
-            if ($request->has('shop_id')) {
-                $shopExists = Shop::where('id', $request->input('shop_id'))->first();
-                $data['shop_id'] = $shopExists->id;
 
-                //$shop->save();
+            $shop = $this->create($data);
+
+            if ($request->has('shop_id')) {
+                $shopExists = Shop::where('id', $request->input('shop_id'))->exists();
+                $shop->shop_id = $shopExists->id;
+                $shop->save();
             }
-            $user = User::create([
-                'name' => $request->input('name'),
-                'email' => $request->input('Employee_email'),
-                'password' => bcrypt($request->input('password')),
-            ]);
+
+
+
+            if (isset($request['categories'])) {
+                $shop->categories()->attach($request['categories']);
+            }
+
+            if (isset($request['balance']['payment_info'])) {
+                $shop->balance()->create($request['balance']);
+            }
+
+
+
+
+                $user = User::create([
+                    'name' => $request->input('name'),
+                    'email' => $request->input('Employee_email'),
+                    'password' => bcrypt($request->input('password')),
+                ]);
             $user->givePermissionTo(Permission::CUSTOMER);
             $user->assignRole(Permission::CUSTOMER);
-            $data['owner_id'] = $user->id;
-
-            $shop = Employee::insert($data);
-           // dd("her");
-
-
-
-
-
-
-
-
-
-
+                $shop->owner_id = $user->id;
+                $shop->save();
 
 
             return $shop;

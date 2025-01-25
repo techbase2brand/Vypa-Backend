@@ -9,6 +9,7 @@ use Marvel\Database\Models\Balance;
 use Marvel\Database\Models\OwnershipTransfer;
 use Marvel\Database\Models\Product;
 use Marvel\Database\Models\Employee;
+use Marvel\Database\Models\Shop;
 use Marvel\Database\Models\User;
 use Marvel\Enums\DefaultStatusType;
 use Marvel\Enums\Permission;
@@ -101,12 +102,14 @@ class EmployeeRepository extends BaseRepository
     // }
     public function storeEmployee($request)
     {
+
         try {
             // $data = $request->only($this->dataArray);
 
             $data['slug'] = $this->makeSlug($request);
             //$data['owner_id'] = $request->user()->id??6;
-            $data['company_id'] = $request->input('company_id');
+
+
             if ($request->has('name')) {
                 $data['name'] = ($request->input('name'));
             }
@@ -117,7 +120,7 @@ class EmployeeRepository extends BaseRepository
                 $data['email'] = ($request->input('Employee_email'));
             }
             if ($request->has('logo')) {
-                $data['logo'] = ($request->input('logo'));
+                $data['logo'] = json_encode($request->input('logo'));
             }
 
             if ($request->has('contact_no')) {
@@ -133,35 +136,33 @@ class EmployeeRepository extends BaseRepository
             if ($request->has('gender')) {
                 $data['gender'] = $request->input('gender');
             }
+            if ($request->has('shop_id')) {
+                $shopExists = Shop::where('id', $request->input('shop_id'))->first();
+                $data['shop_id'] = $shopExists->id;
 
-            $shop = $this->create($data);
-
-            if ($request->has('company_name')) {
-                $shop->company_name = ($request->input('company_name'));
-                $shop->save();
+                //$shop->save();
             }
-
-
-            if (isset($request['categories'])) {
-                $shop->categories()->attach($request['categories']);
-            }
-
-            if (isset($request['balance']['payment_info'])) {
-                $shop->balance()->create($request['balance']);
-            }
-
-
-
-
-                $user = User::create([
-                    'name' => $request->input('name'),
-                    'email' => $request->input('Employee_email'),
-                    'password' => bcrypt($request->input('password')),
-                ]);
+            $user = User::create([
+                'name' => $request->input('name'),
+                'email' => $request->input('Employee_email'),
+                'password' => bcrypt($request->input('password')),
+            ]);
             $user->givePermissionTo(Permission::CUSTOMER);
             $user->assignRole(Permission::CUSTOMER);
-                $shop->owner_id = $user->id;
-                $shop->save();
+            $data['owner_id'] = $user->id;
+
+            $shop = Employee::insert($data);
+            dd("her");
+
+
+
+
+
+
+
+
+
+
 
 
             return $shop;

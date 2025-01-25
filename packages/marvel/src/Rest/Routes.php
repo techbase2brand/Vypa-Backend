@@ -366,7 +366,7 @@ Route::post('groups/{group}/users', [GroupController::class, 'addUsers']);
 Route::delete('groups/{group}/users', [GroupController::class, 'removeUsers']);
 Route::get('groups/{group}/users', [GroupController::class, 'listUsers']);
 
-
+Route::post('employee/create', [EmployeeController::class, 'store']);
 Route::group(
     ['middleware' => ['permission:' . Permission::STORE_OWNER, 'auth:sanctum', 'email.verified']],
     function () {
@@ -382,7 +382,7 @@ Route::group(
         Route::post('company/approve', [ShopController::class, 'approveShop']);
         Route::post('company/disapprove', [ShopController::class, 'disApproveShop']);
 
-        Route::post('employee/create', [EmployeeController::class, 'store']);
+
         Route::get('employee', [EmployeeController::class, 'index']);
         Route::get('employee/{slug}', [EmployeeController::class, 'show']);
         Route::put('employee/update/{id}', [EmployeeController::class, 'update']);

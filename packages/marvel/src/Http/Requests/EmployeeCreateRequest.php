@@ -31,6 +31,7 @@ class EmployeeCreateRequest extends FormRequest
             'Employee_email'         => ['required', 'string', 'max:255', 'unique:users,email'],
             'categories'             => ['array'],
             'company_name'           => ['nullable', 'string', 'max:255'],
+            'shop_id'                => ['required','exists:shops,id'],
             'gender'                 => ['nullable', 'string', 'max:255'],
             'contact_no'             => ['nullable', 'string', 'max:255'],
             'is_active'              => ['boolean'],

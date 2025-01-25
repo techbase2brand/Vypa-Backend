@@ -57,9 +57,9 @@ class Employee extends Model
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
-    public function company(): BelongsTo
+    public function shop(): BelongsTo
     {
-        return $this->belongsTo(Shop::class, 'company_id');
+        return $this->belongsTo(Shop::class, 'shop_id');
     }
 
 }

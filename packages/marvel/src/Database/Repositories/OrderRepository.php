@@ -150,13 +150,7 @@ class OrderRepository extends BaseRepository
             $request['customer_id'] = $request->user()->id ?? $request['customer_id'];
         }
 
-        $employee = Employee::where('owner_id', $request['customer_id'])->get();
 
-        if ($employee) {
-            $request->merge([
-            'shop_id' => $employee->shop_id
-                ]);
-        }
         try {
             $user = User::findOrFail($request['customer_id']);
             if ($user) {

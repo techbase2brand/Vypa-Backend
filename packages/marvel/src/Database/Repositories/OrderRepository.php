@@ -148,7 +148,7 @@ class OrderRepository extends BaseRepository
             $request['customer_id'] = $request->user()->id ?? $request['customer_id'];
         }
 
-
+            dd($request);
             $user = Employee::findOrFail($request['customer_id']);
             if ($user) {
                 $request['customer_name'] = $user->name;

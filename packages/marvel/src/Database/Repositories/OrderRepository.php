@@ -3,6 +3,7 @@
 
 namespace Marvel\Database\Repositories;
 
+use App\Models\Employee;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -148,7 +149,7 @@ class OrderRepository extends BaseRepository
         }
 
         try {
-            $user = User::findOrFail($request['customer_id']);
+            $user = Employee::findOrFail($request['customer_id']);
             if ($user) {
                 $request['customer_name'] = $user->name;
                 $request['shop_id'] = $user->shop_id;

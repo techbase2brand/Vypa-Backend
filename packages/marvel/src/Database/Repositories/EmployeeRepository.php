@@ -152,7 +152,7 @@ class EmployeeRepository extends BaseRepository
             $data['owner_id'] = $user->id;
 
             $shop = Employee::insert($data);
-            dd("her");
+           // dd("her");
 
 
 

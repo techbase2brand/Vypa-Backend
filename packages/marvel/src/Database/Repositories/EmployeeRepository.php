@@ -269,9 +269,9 @@ class EmployeeRepository extends BaseRepository
             if ($request->has('gender')) {
                 $employee->gender = $request->input('gender');
             }
-            if ($request->has('company_name')) {
-                $employee->company_name = ($request->input('company_name'));
-            }
+//            if ($request->has('company_name')) {
+//                $employee->company_name = ($request->input('company_name'));
+//            }
 
             // Save shop updates
             $employee->save();

@@ -3,7 +3,6 @@
 
 namespace Marvel\Database\Repositories;
 
-use Marvel\Database\Models\Employee;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -15,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Marvel\Database\Models\Balance;
 use Marvel\Database\Models\Coupon;
+use Marvel\Database\Models\Employee;
 use Marvel\Database\Models\Order;
 use Marvel\Database\Models\OrderedFile;
 use Marvel\Database\Models\OrderWalletPoint;
@@ -145,17 +145,22 @@ class OrderRepository extends BaseRepository
         if ($request->user() && $request->user()->hasPermissionTo(Permission::SUPER_ADMIN) && isset($request['customer_id'])) {
             $request['customer_id'] =  $request['customer_id'];
         } else {
-            $request['customer_id'] =  $request['customer_id'];
+            $request['customer_id'] = $request->user()->id ?? $request['customer_id'];
         }
-            echo $request['customer_id'];
-          //  print_r($request);
-            $user = Employee::findOrFail($request['customer_id']);
-        dd($user);
-            if ($user) {
-                $request['customer_name'] = $user->name;
-                $request['shop_id'] = $user->shop_id;
-            }
 
+        try {
+            $employee = Employee::where('owner_id', $request['customer_id'])->get();
+            $user = User::findOrFail($request['customer_id']);
+            if ($employee) {
+                $request['customer_name'] = $employee->name;
+                $request['shop_id'] = $employee->shop_id;
+            }
+        } catch (Exception $e) {
+
+            $user = null;
+            $request['customer_id'] =  $request['customer_id'];
+           // dd("check once");
+        }
 
         if (!$user) {
             $settings = Settings::getData($request->language);

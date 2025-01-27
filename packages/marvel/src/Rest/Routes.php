@@ -390,7 +390,7 @@ Route::group(
         Route::delete('employee/{id}', [EmployeeController::class, 'destroy']);
         Route::post('employee/approve', [ShopController::class, 'approveShop']);
         Route::post('employee/disapprove', [ShopController::class, 'disApproveShop']);
-
+        Route::post('employee/filter', [EmployeeController::class, 'filter']);
 
 
 

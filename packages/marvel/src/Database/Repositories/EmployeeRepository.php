@@ -5,6 +5,7 @@ namespace Marvel\Database\Repositories;
 
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Auth;
 use Marvel\Database\Models\Balance;
 use Marvel\Database\Models\OwnershipTransfer;
 use Marvel\Database\Models\Product;
@@ -102,12 +103,19 @@ class EmployeeRepository extends BaseRepository
     // }
     public function storeEmployee($request)
     {
+        $user = Auth::user();
+        if($user->roles()->whereIn('name', ['super_admin'])->exists())
+        {
+            $created_by="admin";
+        }else{
+            $created_by="company";
+        }
         try {
                 // $data = $request->only($this->dataArray);
 
                 $data['slug'] = $this->makeSlug($request);
                 //$data['owner_id'] = $request->user()->id??6;
-
+                $data['created_by'] =$created_by;
 
                 if ($request->has('name')) {
                     $data['name'] = ($request->input('name'));

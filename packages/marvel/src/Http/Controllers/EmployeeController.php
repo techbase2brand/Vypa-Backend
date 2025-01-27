@@ -45,6 +45,35 @@ class EmployeeController extends CoreController
     {
         return $this->repository->with('shop')->with(['owner.profile'])->where('id', '!=', null);
     }
+    public function filter(Request $request)
+    {
+        // Validate input
+        $shopId = $request->input('shop_id');
+
+        // Build the query
+        $query = $this->repository
+            ->with('shop')
+            ->with(['owner.profile'])
+            ->where('id', '!=', null);
+
+        // Apply filters
+        if ($shopId) {
+            $query->where('shop_id', $shopId);
+        }
+
+        $query->whereHas('owner', function ($q) {
+            $q->where('is_active', 1);
+        });
+
+        $query->whereHas('shop.owner', function ($q) {
+            $q->where('is_active', 1);
+        });
+
+        // Execute and return the result
+        $result = $query->get();
+        return $result;
+    }
+
     public function store(EmployeeCreateRequest $request)
     {
         return $this->repository->storeEmployee($request);

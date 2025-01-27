@@ -195,7 +195,7 @@ class ShopController extends CoreController
             $id = $request->id;
             $admin_commission_rate = $request->admin_commission_rate;
             try {
-                $shop = $this->repository->findOrFail($id)->with('owner');
+                $shop = $this->repository->with('owner')->findOrFail($id);
             } catch (\Exception $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
@@ -231,7 +231,7 @@ class ShopController extends CoreController
             }
             $id = $request->id;
             try {
-                $shop = $this->repository->findOrFail($id)->with('owner');
+                $shop = $this->repository->with('owner')->findOrFail($id);
             } catch (\Exception $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }

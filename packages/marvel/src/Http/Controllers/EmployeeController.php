@@ -54,7 +54,9 @@ class EmployeeController extends CoreController
         }
 
         if ($request->has('created_by')) {
-            $query->where('created_by', $request->created_by);
+            $query->whereHas('owner', function ($q) use ($request) {
+                $q->where('created_by', $request->created_by);
+            });
         }
 
         if ($request->has('shop_id')) {

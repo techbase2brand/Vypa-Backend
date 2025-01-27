@@ -158,4 +158,8 @@ class ManufacturerController extends CoreController
         $language = $request->language ?? DEFAULT_LANGUAGE;
         return $this->repository->where('language', $language)->withCount('products')->orderBy('products_count', 'desc')->take($limit)->get();
     }
+    public function superdashboard()
+    {
+        $this->repository->withCount('employees','products','shops');
+    }
 }

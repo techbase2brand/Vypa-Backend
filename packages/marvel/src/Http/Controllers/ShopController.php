@@ -195,11 +195,12 @@ class ShopController extends CoreController
             $id = $request->id;
             $admin_commission_rate = $request->admin_commission_rate;
             try {
-                $shop = $this->repository->findOrFail($id);
+                $shop = $this->repository->findOrFail($id)->with('owner');
             } catch (\Exception $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
             $shop->is_active = true;
+            $shop->owner->is_active=true;
             $shop->save();
 
 //            if (Product::count() > 0) {
@@ -230,12 +231,13 @@ class ShopController extends CoreController
             }
             $id = $request->id;
             try {
-                $shop = $this->repository->findOrFail($id);
+                $shop = $this->repository->findOrFail($id)->with('owner');
             } catch (\Exception $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
 
             $shop->is_active = false;
+            $shop->owner->is_active=false;
             $shop->save();
 
            // Product::where('shop_id', '=', $id)->update(['status' => 'draft']);
@@ -476,5 +478,11 @@ class ShopController extends CoreController
         } catch (MarvelException $th) {
             throw new MarvelException(SOMETHING_WENT_WRONG."477");
         }
+    }
+    public function dashboard(){
+
+        $data= $this->repository->withCount(['orders', 'products','employees']);
+        dd($data->get());
+       // return  $this->repository->withCount(['orders', 'products','employees','owner']);
     }
 }

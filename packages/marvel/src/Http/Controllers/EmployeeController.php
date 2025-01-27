@@ -62,16 +62,15 @@ class EmployeeController extends CoreController
         }
 
         if ($request->has('company_status')) {
-            $query->where('company_status', $request->company_status);
+            $query->whereHas('shop.owner', function ($q) use ($request) {
+                $q->where('is_active', $request->company_status);
+            });
         }
 
         if ($request->has('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }
 
-        if ($request->has('company_name')) {
-            $query->where('company_name', 'like', '%' . $request->company_name . '%');
-        }
 
         return $query;
     }

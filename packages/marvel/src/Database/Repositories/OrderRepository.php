@@ -155,12 +155,10 @@ class OrderRepository extends BaseRepository
             $user = User::findOrFail($request['customer_id']);
             if ($user) {
                 $request['customer_name'] = $user->name;
+                $request['shop_id'] = $user->shop_id;
             }
         } catch (Exception $e) {
-
             $user = null;
-            $request['customer_id'] =  $request['customer_id'];
-           // dd("check once");
         }
 
         if (!$user) {

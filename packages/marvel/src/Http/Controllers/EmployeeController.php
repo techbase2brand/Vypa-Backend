@@ -43,36 +43,40 @@ class EmployeeController extends CoreController
     }
     public function fetchEmployee(Request $request)
     {
-        return $this->repository->with('shop')->with(['owner.profile'])->where('id', '!=', null);
-    }
-    public function filter(Request $request)
-    {
-        // Validate input
-        $shopId = $request->input('shop_id');
+        // Start building the query
+        $query = $this->repository->with('shop')->with(['owner.profile']);
 
-        // Build the query
-        $query = $this->repository
-            ->with('shop')
-            ->with(['owner.profile'])
-            ->where('id', '!=', null);
-
-        // Apply filters
-        if ($shopId) {
-            $query->where('shop_id', $shopId);
+        // Apply filters from the request
+        if ($request->has('Employee_status')) {
+            $query->whereHas('owner', function ($q) use ($request) {
+                $q->where('is_active', $request->Employee_status == 1 ? 1 : 0);
+            });
         }
 
-        $query->whereHas('owner', function ($q) {
-            $q->where('is_active', 1);
-        });
+        if ($request->has('created_by')) {
+            $query->where('created_by', $request->created_by);
+        }
 
-        $query->whereHas('shop.owner', function ($q) {
-            $q->where('is_active', 1);
-        });
+        if ($request->has('shop_id')) {
+            $query->where('shop_id', $request->shop_id);
+        }
 
-        // Execute and return the result
-        $result = $query->get();
-        return $result;
+        if ($request->has('company_status')) {
+            $query->where('company_status', $request->company_status);
+        }
+
+        if ($request->has('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->has('company_name')) {
+            $query->where('company_name', 'like', '%' . $request->company_name . '%');
+        }
+
+        return $query;
     }
+
+
 
     public function store(EmployeeCreateRequest $request)
     {

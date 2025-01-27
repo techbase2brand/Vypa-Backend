@@ -172,6 +172,7 @@ class EmployeeRepository extends BaseRepository
                         'name' => $request->input('name'),
                         'email' => $request->input('Employee_email'),
                         'password' => bcrypt($request->input('password')),
+                        'shop_id' => $request->input('shop_id')
                     ]);
                 $user->givePermissionTo(Permission::CUSTOMER);
                 $user->assignRole(Permission::CUSTOMER);

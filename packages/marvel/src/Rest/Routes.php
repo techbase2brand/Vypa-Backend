@@ -388,8 +388,8 @@ Route::group(
         Route::put('employee/update/{id}', [EmployeeController::class, 'update']);
         Route::get('employee/list', [EmployeeController::class, 'index']);
         Route::delete('employee/{id}', [EmployeeController::class, 'destroy']);
-        Route::post('employee/approve', [ShopController::class, 'approveShop']);
-        Route::post('employee/disapprove', [ShopController::class, 'disApproveShop']);
+        Route::post('employee/approve', [EmployeeController::class, 'approve']);
+        Route::post('employee/disapprove', [EmployeeController::class, 'disApprove']);
         Route::post('employee/filter', [EmployeeController::class, 'filter']);
 
 

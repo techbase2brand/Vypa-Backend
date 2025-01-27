@@ -486,8 +486,8 @@ class ShopController extends CoreController
         }
     }
     public function dashboard(){
-
-        $data= $this->repository->withCount(['orders', 'products','employees']);
+        $shop = $this->repository->with('owner');
+        $data= $this->repository->withCount(['orders', 'products','employees'])->with('owner');
         dd($data->get());
        // return  $this->repository->withCount(['orders', 'products','employees','owner']);
     }

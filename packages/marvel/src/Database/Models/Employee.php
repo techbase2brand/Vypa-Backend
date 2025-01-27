@@ -61,5 +61,8 @@ class Employee extends Model
     {
         return $this->belongsTo(Shop::class, 'shop_id');
     }
-
+    public function wallet(): HasOne
+    {
+        return $this->hasOne(Wallet::class, 'customer_id', 'owner_id');
+    }
 }

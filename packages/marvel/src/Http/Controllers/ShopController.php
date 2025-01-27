@@ -200,7 +200,10 @@ class ShopController extends CoreController
                 throw new ModelNotFoundException(NOT_FOUND);
             }
             $shop->is_active = true;
-            $shop->owner->is_active=true;
+            if ($shop->owner) {
+                $shop->owner->is_active = true;
+                $shop->owner->save(); // Save changes to the owner
+            }
             $shop->save();
 
 //            if (Product::count() > 0) {
@@ -237,7 +240,10 @@ class ShopController extends CoreController
             }
 
             $shop->is_active = false;
-            $shop->owner->is_active=false;
+            if ($shop->owner) {
+                $shop->owner->is_active = false;
+                $shop->owner->save(); // Save changes to the owner
+            }
             $shop->save();
 
            // Product::where('shop_id', '=', $id)->update(['status' => 'draft']);

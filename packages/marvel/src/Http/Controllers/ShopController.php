@@ -66,11 +66,12 @@ class ShopController extends CoreController
             });
         }
 
-        // Use select instead of selectRaw
+        // Use select to include all fields and the counts
         $query->select('shops.*') // Assuming 'shops' is the name of your table
         ->selectRaw('
             (SELECT SUM(amount) FROM orders WHERE orders.shop_id = shops.id) as total_order_amount,
-            (SELECT AVG(amount) FROM orders WHERE orders.shop_id = shops.id) as average_order_amount
+            (SELECT AVG(amount) FROM orders WHERE orders.shop_id = shops.id) as average_order_amount,
+            orders_count, products_count, employees_count
         ');
 
         return $query;

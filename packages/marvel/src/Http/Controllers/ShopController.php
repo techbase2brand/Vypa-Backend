@@ -71,7 +71,9 @@ class ShopController extends CoreController
         ->selectRaw('
             (SELECT SUM(amount) FROM orders WHERE orders.shop_id = shops.id) as total_order_amount,
             (SELECT AVG(amount) FROM orders WHERE orders.shop_id = shops.id) as average_order_amount,
-            orders_count, products_count, employees_count
+            (SELECT COUNT(id) FROM orders WHERE orders.shop_id = shops.id) as orders_count,
+            (SELECT COUNT(id) FROM employees WHERE employees.shop_id = shops.id) as employees_count,
+            (SELECT COUNT(id) FROM products WHERE products.shop_id = shops.id) as products_count,
         ');
 
         return $query;

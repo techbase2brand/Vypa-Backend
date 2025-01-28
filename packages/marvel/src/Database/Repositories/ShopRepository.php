@@ -129,6 +129,9 @@ class ShopRepository extends BaseRepository
             if ($request->has('primary_contact_detail')) {
                 $data['primary_contact_detail'] = $request->input('primary_contact_detail');
             }
+            if ($request->has('business_contact_detail')) {
+                $data['business_contact_detail'] = ($request->input('business_contact_detail'));
+            }
             if ($request->has('settings')) {
                 $data['settings'] = $request->input('settings');
             }
@@ -138,10 +141,7 @@ class ShopRepository extends BaseRepository
 
             $shop = $this->create($data);
 
-            if ($request->has('businessContactdetail')) {
-                $shop->business_contact_detail = ($request->input('businessContactdetail'));
-                $shop->save();
-            }
+
 
 
             if (isset($request['categories'])) {
@@ -204,8 +204,8 @@ class ShopRepository extends BaseRepository
 
             $shop = Employee::create($data);
 
-            if ($request->has('businessContactdetail')) {
-                $shop->business_contact_detail = ($request->input('businessContactdetail'));
+            if ($request->has('business_contact_detail')) {
+                $shop->business_contact_detail = ($request->input('business_contact_detail'));
                 $shop->save();
             }
 
@@ -334,8 +334,8 @@ class ShopRepository extends BaseRepository
         }
 
         // Handle business contact details
-        if ($request->has('businessContactdetail')) {
-            $shop->business_contact_detail = $request->input('businessContactdetail');
+        if ($request->has('business_contact_detail')) {
+            $shop->business_contact_detail = $request->input('business_contact_detail');
             $shop->save();
         }
 

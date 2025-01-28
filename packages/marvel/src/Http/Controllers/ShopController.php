@@ -49,7 +49,10 @@ class ShopController extends CoreController
 
     public function fetchShops(Request $request)
     {
-        $query= $this->repository->withCount(['orders', 'products','employees'])->with(['owner.profile', 'ownership_history','orders'])->where('id', '!=', null);
+        $query = $this->repository
+            ->withCount(['orders', 'products', 'employees'])
+            ->with(['owner.profile', 'ownership_history', 'orders'])
+            ->where('id', '!=', null);
 
         if ($request->has('company_status')) {
             $query->where('is_active', $request->company_status);
@@ -62,9 +65,14 @@ class ShopController extends CoreController
                 $q->where('created_by', $request->created_by);
             });
         }
-        $query->selectRaw('*,
-        (SELECT SUM(amount) FROM orders WHERE orders.shop_id = shops.id) as total_order_amount,
-        (SELECT AVG(amount) FROM orders WHERE orders.shop_id = shops.id) as average_order_amount');
+
+        // Use select instead of selectRaw
+        $query->select('shops.*') // Assuming 'shops' is the name of your table
+        ->selectRaw('
+            (SELECT SUM(amount) FROM orders WHERE orders.shop_id = shops.id) as total_order_amount,
+            (SELECT AVG(amount) FROM orders WHERE orders.shop_id = shops.id) as average_order_amount
+        ');
+
         return $query;
     }
 

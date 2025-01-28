@@ -43,37 +43,39 @@ class ShopController extends CoreController
      */
     public function index(Request $request)
     {
-        $limit = $request->limit ? $request->limit : 15;
+        $limit = $request->limit ?? 15; // Default to 15 if no limit is provided
         return $this->fetchShops($request)->paginate($limit)->withQueryString();
     }
 
     public function fetchShops(Request $request)
     {
-
-// Retrieve the company and calculate total and average order amounts
         return $this->repository
             ->withCount(['orders', 'products', 'employees'])
             ->with(['owner.profile', 'ownership_history'])
             ->where('id', '!=', null)
             ->with([
                 'orders' => function ($query) {
-                    $query->orderBy('created_at', 'desc') // Adjust 'created_at' to your timestamp column
+                    $query->orderBy('created_at', 'desc') // Adjust to your timestamp column
                     ->take(5)
-                        ->select('id', 'amount'); // Ensure the 'amount' column exists
+                        ->select('id', 'amount', 'company_id'); // Adjust as per your table structure
                 }
             ])
             ->get()
             ->map(function ($company) {
                 $recentOrders = $company->orders;
+
+                // Calculate the total and average amounts
                 $totalAmount = $recentOrders->sum('amount');
                 $averageAmount = $recentOrders->avg('amount');
-                return [
-                    'company' => $company,
-                    'total_order_amount' => $totalAmount,
-                    'average_order_amount' => $averageAmount,
-                ];
+
+                // Add custom fields to the company object
+                $company->total_order_amount = $totalAmount;
+                $company->average_order_amount = $averageAmount;
+
+                return $company;
             });
     }
+
 
     /**
      * Store a newly created resource in storage.

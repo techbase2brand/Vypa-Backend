@@ -82,6 +82,7 @@ class OrderRepository extends BaseRepository
         'customer_contact',
         'customer_name',
         'note',
+        'shop_id'
     ];
 
     public function boot()
@@ -209,7 +210,7 @@ class OrderRepository extends BaseRepository
         } else {
             $amount = round($request['paid_total'], 2);
         }
-        dd($request);
+        //dd($request);
         $order = $this->createOrder($request);
 
         //dd($order);

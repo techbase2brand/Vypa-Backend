@@ -51,6 +51,8 @@ class ShopController extends CoreController
     {
         $query = $this->repository
             ->withCount(['orders', 'products', 'employees'])
+            ->withSum('orders', 'amount')
+            ->withAvg('orders', 'amount')
             ->with(['owner.profile', 'ownership_history', 'orders'])
             ->where('id', '!=', null);
 

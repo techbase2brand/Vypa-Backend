@@ -57,7 +57,7 @@ class ShopController extends CoreController
                 'orders' => function ($query) {
                     $query->orderBy('created_at', 'desc') // Adjust to your timestamp column
                     ->take(5)
-                        ->select('id', 'amount', 'company_id'); // Adjust as per your table structure
+                        ->select('id', 'amount', 'shop_id'); // Adjust as per your table structure
                 }
             ])
             ->get()

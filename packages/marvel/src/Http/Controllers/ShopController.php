@@ -43,41 +43,14 @@ class ShopController extends CoreController
      */
     public function index(Request $request)
     {
-        $limit = $request->limit ?? 15; // Default to 15 if no limit is provided
-        return $this->fetchShops($request, $limit);
+        $limit = $request->limit ? $request->limit : 15;
+        return $this->fetchShops($request)->paginate($limit)->withQueryString();
     }
 
-    public function fetchShops(Request $request, $limit)
+    public function fetchShops(Request $request)
     {
-        return $this->repository
-            ->withCount(['orders', 'products', 'employees'])
-            ->with(['owner.profile', 'ownership_history'])
-            ->where('id', '!=', null)
-            ->with([
-                'orders' => function ($query) {
-                    $query->orderBy('created_at', 'desc')
-                        ->take(5)
-                        ->select('id', 'amount', 'company_id'); // Adjust as per your table structure
-                }
-            ])
-            ->paginate($limit)
-            ->withQueryString()
-            ->through(function ($company) {
-                $recentOrders = $company->orders;
-
-                // Calculate the total and average amounts
-                $totalAmount = $recentOrders->sum('amount');
-                $averageAmount = $recentOrders->avg('amount');
-
-                // Add custom fields to the company object
-                $company->total_order_amount = $totalAmount;
-                $company->average_order_amount = $averageAmount;
-
-                return $company;
-            });
+        return $this->repository->withCount(['orders', 'products','employees'])->with(['owner.profile', 'ownership_history','orders'])->where('id', '!=', null);
     }
-
-
 
     /**
      * Store a newly created resource in storage.

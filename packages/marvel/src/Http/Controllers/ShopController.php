@@ -49,7 +49,23 @@ class ShopController extends CoreController
 
     public function fetchShops(Request $request)
     {
-        return $this->repository->withCount(['orders', 'products','employees'])->with(['owner.profile', 'ownership_history','orders'])->where('id', '!=', null);
+        $query= $this->repository->withCount(['orders', 'products','employees'])->with(['owner.profile', 'ownership_history','orders'])->where('id', '!=', null);
+
+        if ($request->has('company_status')) {
+            $query->where('is_active', $request->company_status);
+        }
+        if ($request->has('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+        if ($request->has('created_by')) {
+            $query->whereHas('owner', function ($q) use ($request) {
+                $q->where('created_by', $request->created_by);
+            });
+        }
+        $query->selectRaw('*,
+        (SELECT SUM(amount) FROM orders WHERE orders.shop_id = shops.id) as total_order_amount,
+        (SELECT AVG(amount) FROM orders WHERE orders.shop_id = shops.id) as average_order_amount');
+        return $query;
     }
 
     /**

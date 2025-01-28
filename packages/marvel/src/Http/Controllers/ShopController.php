@@ -49,7 +49,30 @@ class ShopController extends CoreController
 
     public function fetchShops(Request $request)
     {
-        return $this->repository->withCount(['orders', 'products','employees'])->with(['owner.profile', 'ownership_history'])->where('id', '!=', null);
+
+// Retrieve the company and calculate total and average order amounts
+        return $this->repository
+            ->withCount(['orders', 'products', 'employees'])
+            ->with(['owner.profile', 'ownership_history'])
+            ->where('id', '!=', null)
+            ->with([
+                'orders' => function ($query) {
+                    $query->orderBy('created_at', 'desc') // Adjust 'created_at' to your timestamp column
+                    ->take(5)
+                        ->select('id', 'amount'); // Ensure the 'amount' column exists
+                }
+            ])
+            ->get()
+            ->map(function ($company) {
+                $recentOrders = $company->orders;
+                $totalAmount = $recentOrders->sum('amount');
+                $averageAmount = $recentOrders->avg('amount');
+                return [
+                    'company' => $company,
+                    'total_order_amount' => $totalAmount,
+                    'average_order_amount' => $averageAmount,
+                ];
+            });
     }
 
     /**

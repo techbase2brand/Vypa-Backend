@@ -44,10 +44,10 @@ class ShopController extends CoreController
     public function index(Request $request)
     {
         $limit = $request->limit ?? 15; // Default to 15 if no limit is provided
-        return $this->fetchShops($request)->paginate($limit)->withQueryString();
+        return $this->fetchShops($request, $limit);
     }
 
-    public function fetchShops(Request $request)
+    public function fetchShops(Request $request, $limit)
     {
         return $this->repository
             ->withCount(['orders', 'products', 'employees'])
@@ -55,13 +55,14 @@ class ShopController extends CoreController
             ->where('id', '!=', null)
             ->with([
                 'orders' => function ($query) {
-                    $query->orderBy('created_at', 'desc') // Adjust to your timestamp column
-                    ->take(5)
-                        ->select('id', 'amount', 'shop_id'); // Adjust as per your table structure
+                    $query->orderBy('created_at', 'desc')
+                        ->take(5)
+                        ->select('id', 'amount', 'company_id'); // Adjust as per your table structure
                 }
             ])
-            ->get()
-            ->map(function ($company) {
+            ->paginate($limit)
+            ->withQueryString()
+            ->through(function ($company) {
                 $recentOrders = $company->orders;
 
                 // Calculate the total and average amounts
@@ -75,6 +76,7 @@ class ShopController extends CoreController
                 return $company;
             });
     }
+
 
 
     /**

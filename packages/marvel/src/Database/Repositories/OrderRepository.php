@@ -155,6 +155,9 @@ class OrderRepository extends BaseRepository
             $user = User::findOrFail($request['customer_id']);
             if ($user) {
                 $request['customer_name'] = $user->name;
+                $request->merge([
+                    'shop_id'         => $user->shop_id,
+                ]);
                 $request['shop_id'] = $user->shop_id;
             }
         } catch (Exception $e) {

@@ -52,8 +52,10 @@ class ProductController extends CoreController
      */
     public function index(Request $request)
     {
+
         $limit = $request->limit ?   $request->limit : 15;
         $products = $this->fetchProducts($request)->paginate($limit)->withQueryString();
+        return $products;
         $data = ProductResource::collection($products)->response()->getData(true);
         return formatAPIResourcePaginate($data);
     }
@@ -70,7 +72,8 @@ class ProductController extends CoreController
     {
         $unavailableProducts = [];
         $language = $request->language ? $request->language : DEFAULT_LANGUAGE;
-        $products_query = $this->repository->with(['categories','manufacturer'])->where('language', $language);
+
+        $products_query = $this->repository->where('language', $language);
 
         if (isset($request->date_range)) {
             $dateRange = explode('//', $request->date_range);
@@ -84,7 +87,7 @@ class ProductController extends CoreController
         if ($request->flash_sale_builder) {
             $products_query = $this->repository->processFlashSaleProducts($request, $products_query);
         }
-
+        $products_query->with(['categories', 'manufacturer']);
         return $products_query;
     }
 

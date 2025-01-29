@@ -116,7 +116,7 @@ class EmployeeRepository extends BaseRepository
 
                 $data['slug'] = $this->makeSlug($request);
                 //$data['owner_id'] = $request->user()->id??6;
-                $data['created_by'] =$created_by;
+
 
                 if ($request->has('name')) {
                     $data['name'] = ($request->input('name'));
@@ -181,7 +181,8 @@ class EmployeeRepository extends BaseRepository
                         'name' => $request->input('name'),
                         'email' => $request->input('Employee_email'),
                         'password' => bcrypt($request->input('password')),
-                        'shop_id' => $request->input('shop_id')
+                        'shop_id' => $request->input('shop_id'),
+                        'created_by' =>$created_by
                     ]);
                 $user->givePermissionTo(Permission::CUSTOMER);
                 $user->assignRole(Permission::CUSTOMER);

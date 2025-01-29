@@ -11,6 +11,7 @@ use Marvel\Database\Models\OwnershipTransfer;
 use Marvel\Database\Models\Product;
 use Marvel\Database\Models\Employee;
 use Marvel\Database\Models\Shop;
+use Marvel\Database\Models\Wallet;
 use Marvel\Database\Models\User;
 use Marvel\Enums\DefaultStatusType;
 use Marvel\Enums\Permission;
@@ -186,8 +187,11 @@ class EmployeeRepository extends BaseRepository
                 $user->assignRole(Permission::CUSTOMER);
                     $shop->owner_id = $user->id;
                     $shop->save();
-
-
+            $dataWallet['total_points']=$request->input('assign_budget');
+            $dataWallet['points_used']=0;
+            $dataWallet['available_points']=$request->input('assign_budget');
+            $dataWallet['customer_id']=$user->id;
+            Wallet::insert($dataWallet);
                 return $shop;
 
         } catch (Exception $e) {
@@ -296,6 +300,15 @@ class EmployeeRepository extends BaseRepository
                     $owner->save();
                 }
             }
+            Wallet::updateOrInsert(
+                ['customer_id' => $employee->owner_id], // Condition to check if the record exists
+                [
+                    'total_points'      => $request->input('assign_budget'),
+                    'points_used'       => 0,
+                    'available_points'  => $request->input('assign_budget'), // Initially assign same as total_points
+                    'updated_at'        => now(), // Ensure timestamps are updated
+                ]
+            );
 
 
             return $employee;

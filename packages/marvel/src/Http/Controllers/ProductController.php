@@ -89,7 +89,7 @@ class ProductController extends CoreController
         }
 
         // Filter by Sizes
-        if ($request->has('sizes')) {
+        if ($request->has('sizes') && $request->input('sizes')!='false') {
             // Get the sizes from the request
             $sizes = explode(",", $request->input('sizes'));
 
@@ -106,7 +106,7 @@ class ProductController extends CoreController
 
 
         // Filter by Colors
-        if ($request->has('colors')) {
+        if ($request->has('colors') && $request->input('colors')!='false') {
             // Get the colors from the request
             $colors = explode(",", $request->input('colors'));
 
@@ -123,7 +123,7 @@ class ProductController extends CoreController
 
 
         // Filter by Brands (Manufacturer)
-        if ($request->has('brands')) {
+        if ($request->has('brands') && $request->input('brands')!='false') {
             $brands = explode(",",$request->input('brands'));
                 $products_query->whereHas('manufacturer', function ($q) use ($brands) {
                     $q->whereIn('name', $brands);

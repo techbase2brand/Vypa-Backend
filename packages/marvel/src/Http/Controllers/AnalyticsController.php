@@ -40,7 +40,7 @@ class AnalyticsController extends CoreController
             // Total revenue
             $totalRevenueQuery = DB::table('orders as childOrder')
                 ->whereDate('childOrder.created_at', '<=', Carbon::now())
-                ->where('childOrder.order_status', OrderStatus::COMPLETED)
+                //->where('childOrder.order_status', OrderStatus::COMPLETED)
                 ->whereNotNull('childOrder.parent_id')
                 ->join('orders as parentOrder', 'childOrder.parent_id', '=', 'parentOrder.id')
                 ->whereDate('parentOrder.created_at', '<=', Carbon::now())
@@ -71,7 +71,7 @@ class AnalyticsController extends CoreController
             // Today's revenue
             $todaysRevenueQuery =  DB::table('orders as A')
                 ->whereDate('A.created_at', '>', Carbon::now()->subDays(1))
-                ->where('A.order_status', OrderStatus::COMPLETED)
+               // ->where('A.order_status', OrderStatus::COMPLETED)
                 ->where('A.parent_id', '!=', null)
                 ->join('orders as B', 'A.parent_id', '=', 'B.id')
                 ->where('B.order_status', OrderStatus::COMPLETED)

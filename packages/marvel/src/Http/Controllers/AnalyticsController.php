@@ -132,7 +132,6 @@ class AnalyticsController extends CoreController
             $monthlyTotalOrderByStatus = $this->orderCountingByStatus($request, 30);
             $yearlyTotalOrderByStatus = $this->orderCountingByStatus($request, 365);
 
-
             return [
                 'todaysAverageRevenue'     => $todaysAverageRevenue ?? 0,
                 'totalRevenue'              => $totalRevenue ?? 0,

@@ -286,15 +286,15 @@ Route::group(['middleware' => ['can:' . Permission::CUSTOMER, 'auth:sanctum', 'e
  * Authorized Route for Staff & Store Owner
  * ******************************************
  */
-
+Route::post('products/approve', [ProductController::class, 'approve']);
+Route::post('products/disapprove', [ProductController::class, 'disApprove']);
 Route::group(
     ['middleware' => ['permission:' . Permission::STAFF . '|' . Permission::STORE_OWNER, 'auth:sanctum', 'email.verified']],
     function () {
         Route::apiResource('products', ProductController::class, [
             'only' => ['store', 'update', 'destroy'],
         ]);
-        Route::post('products/approve', [ProductController::class, 'approveShop']);
-        Route::post('products/disapprove', [ProductController::class, 'disApproveShop']);
+
         Route::apiResource('resources', ResourceController::class, [
             'only' => ['store']
         ]);

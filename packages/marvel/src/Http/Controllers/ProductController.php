@@ -849,7 +849,7 @@ class ProductController extends CoreController
 
         return $products_query;
     }
-    public function approveShop(Request $request)
+    public function approve(Request $request)
     {
 
         try {
@@ -871,7 +871,7 @@ class ProductController extends CoreController
         }
     }
 
-    public function disApproveShop(Request $request)
+    public function disApprove(Request $request)
     {
         try {
 

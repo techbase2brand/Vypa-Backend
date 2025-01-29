@@ -106,7 +106,7 @@ class ProductController extends CoreController
 
 
         // Filter by Colors
-        if ($request->has('colors')) {
+        if ($request->has('colors') && $request->input('colors')!='false') {
             // Get colors from the request (split by commas)
             $colors = explode(",", $request->input('colors'));
 

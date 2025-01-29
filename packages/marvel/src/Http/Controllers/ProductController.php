@@ -56,8 +56,8 @@ class ProductController extends CoreController
         $limit = $request->limit ?   $request->limit : 15;
         $products = $this->fetchProducts($request)->paginate($limit)->withQueryString();
         return $products;
-        $data = ProductResource::collection($products)->response()->getData(true);
-        return formatAPIResourcePaginate($data);
+//        $data = ProductResource::collection($products)->response()->getData(true);
+//        return formatAPIResourcePaginate($data);
     }
 
 
@@ -87,6 +87,50 @@ class ProductController extends CoreController
         if ($request->flash_sale_builder) {
             $products_query = $this->repository->processFlashSaleProducts($request, $products_query);
         }
+
+        // Filter by Sizes
+        if ($request->has('sizes')) {
+            // Get the sizes from the request
+            $sizes = explode(",", $request->input('sizes'));
+
+            // Apply the filter to the 'options' JSON column for sizes
+            $products_query->whereHas('variation_options', function ($q) use ($sizes) {
+                $q->whereJsonContains('options', function ($query) use ($sizes) {
+                    // Loop through each size and check if it's in the options JSON
+                    foreach ($sizes as $size) {
+                        $query->orWhere('options', 'like', '%"name":"SIZE","value":"' . $size . '"%');
+                    }
+                });
+            });
+        }
+
+
+        // Filter by Colors
+        if ($request->has('colors')) {
+            // Get the colors from the request
+            $colors = explode(",", $request->input('colors'));
+
+            // Apply the filter to the 'options' JSON column
+            $products_query->whereHas('variation_options', function ($q) use ($colors) {
+                $q->whereJsonContains('options', function ($query) use ($colors) {
+                    // Check if any of the colors are in the options JSON
+                    foreach ($colors as $color) {
+                        $query->orWhere('options', 'like', '%"name":"color","value":"' . $color . '"%');
+                    }
+                });
+            });
+        }
+
+
+        // Filter by Brands (Manufacturer)
+        if ($request->has('brands')) {
+            $brands = explode(",",$request->input('brands'));
+                $products_query->whereHas('manufacturer', function ($q) use ($brands) {
+                    $q->whereIn('name', $brands);
+                });
+
+        }
+
         $products_query->with(['categories', 'manufacturer']);
         return $products_query;
     }
@@ -804,4 +848,47 @@ class ProductController extends CoreController
 
         return $products_query;
     }
+    public function approveShop(Request $request)
+    {
+
+        try {
+
+            $id = $request->id;
+            try {
+                $product = $this->repository->findOrFail($id);
+            } catch (\Exception $e) {
+                throw new ModelNotFoundException(NOT_FOUND);
+            }
+            $product->status = 'publish';
+
+            $product->save();
+
+
+            return $product;
+        } catch (MarvelException $th) {
+            throw new MarvelException(SOMETHING_WENT_WRONG."221");
+        }
+    }
+
+    public function disApproveShop(Request $request)
+    {
+        try {
+
+            $id = $request->id;
+            try {
+                $product = $this->repository->findOrFail($id);
+            } catch (\Exception $e) {
+                throw new ModelNotFoundException(NOT_FOUND);
+            }
+            $product->status = 'unpublish';
+
+            $product->save();
+
+
+            return $product;
+        } catch (MarvelException $th) {
+            throw new MarvelException(SOMETHING_WENT_WRONG."221");
+        }
+    }
+
 }

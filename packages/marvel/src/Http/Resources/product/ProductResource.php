@@ -34,7 +34,9 @@ class ProductResource extends Resource
             'sku'                  => $this->sku,
             'sold_quantity'        => $this->sold_quantity,
             'in_flash_sale'        => $this->in_flash_sale,
-            'visibility'           => $this->visibility
+            'visibility'           => $this->visibility,
+            'categories'           => getResourceData($this->categories, []),
+            'manufacturer'         => getResourceData($this->manufacturer, [])
         ];
     }
 }

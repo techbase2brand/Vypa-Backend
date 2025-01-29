@@ -293,6 +293,8 @@ Route::group(
         Route::apiResource('products', ProductController::class, [
             'only' => ['store', 'update', 'destroy'],
         ]);
+        Route::post('products/approve', [ProductController::class, 'approveShop']);
+        Route::post('products/disapprove', [ProductController::class, 'disApproveShop']);
         Route::apiResource('resources', ResourceController::class, [
             'only' => ['store']
         ]);

@@ -93,12 +93,12 @@ class ProductController extends CoreController
             // Get the sizes from the request
             $sizes = explode(",", $request->input('sizes'));
 
-            // Apply the filter to the 'options' JSON column for sizes
+            // Apply the filter for sizes
             $products_query->whereHas('variation_options', function ($q) use ($sizes) {
-                $q->whereJsonContains('options', function ($query) use ($sizes) {
-                    // Loop through each size and check if it's in the options JSON
+                // Apply an OR condition for each color inside a single WHERE
+                $q->where(function ($q) use ($sizes) {
                     foreach ($sizes as $size) {
-                        $query->orWhere('options', 'like', '%"name":"SIZE","value":"' . $size . '"%');
+                        $q->orWhere('title', 'like', '%' . $size . '%');
                     }
                 });
             });
@@ -106,16 +106,16 @@ class ProductController extends CoreController
 
 
         // Filter by Colors
-        if ($request->has('colors') && $request->input('colors')!='false') {
-            // Get the colors from the request
+        if ($request->has('colors')) {
+            // Get colors from the request (split by commas)
             $colors = explode(",", $request->input('colors'));
 
-            // Apply the filter to the 'options' JSON column
+            // Apply color filter in the main query
             $products_query->whereHas('variation_options', function ($q) use ($colors) {
-                $q->whereJsonContains('options', function ($query) use ($colors) {
-                    // Check if any of the colors are in the options JSON
+                // Apply an OR condition for each color inside a single WHERE
+                $q->where(function ($q) use ($colors) {
                     foreach ($colors as $color) {
-                        $query->orWhere('options', 'like', '%"name":"color","value":"' . $color . '"%');
+                        $q->orWhere('title', 'like', '%' . $color . '%');
                     }
                 });
             });
@@ -131,7 +131,7 @@ class ProductController extends CoreController
 
         }
 
-        $products_query->with(['categories', 'manufacturer']);
+        $products_query->with(['categories', 'manufacturer','variation_options']);
         return $products_query;
     }
 

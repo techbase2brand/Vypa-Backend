@@ -5,6 +5,7 @@ namespace Marvel\Http\Controllers;
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Marvel\Database\Models\Type;

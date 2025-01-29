@@ -90,8 +90,12 @@ class AnalyticsController extends CoreController
                 $todaysRevenue =  $todaysRevenueQuery->sum('paid_total') +
                     $todaysRevenueQuery->unique('parent_id')->sum('delivery_fee') +
                     $todaysRevenueQuery->unique('parent_id')->sum('sales_tax');
+                $todaysAverageRevenue =  $todaysRevenueQuery->avg('paid_total') +
+                    $todaysRevenueQuery->unique('parent_id')->avg('delivery_fee') +
+                    $todaysRevenueQuery->unique('parent_id')->avg('sales_tax');
             } else {
                 $todaysRevenue = $todaysRevenueQuery->whereIn('A.shop_id', $shops)->get()->sum('paid_total');
+                $todaysAverageRevenue = $todaysRevenueQuery->whereIn('A.shop_id', $shops)->get()->avg('paid_total');
             }
 
             // total refunds
@@ -130,6 +134,7 @@ class AnalyticsController extends CoreController
 
 
             return [
+                'todaysAverageRevenue'     => $todaysAverageRevenue ?? 0,
                 'totalRevenue'              => $totalRevenue ?? 0,
                 'totalRefunds'              => $totalRefunds ?? 0,
                 'totalShops'                => $totalShops,

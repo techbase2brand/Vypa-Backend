@@ -70,8 +70,7 @@ class ProductController extends CoreController
     {
         $unavailableProducts = [];
         $language = $request->language ? $request->language : DEFAULT_LANGUAGE;
-        $this->repository->with(['categories','manufacturer']);
-        $products_query = $this->repository->where('language', $language);
+        $products_query = $this->repository->with(['categories','manufacturer'])->where('language', $language);
 
         if (isset($request->date_range)) {
             $dateRange = explode('//', $request->date_range);

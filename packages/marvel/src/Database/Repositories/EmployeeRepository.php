@@ -6,6 +6,7 @@ namespace Marvel\Database\Repositories;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Marvel\Database\Models\Balance;
 use Marvel\Database\Models\OwnershipTransfer;
 use Marvel\Database\Models\Product;
@@ -188,13 +189,17 @@ class EmployeeRepository extends BaseRepository
                 $user->assignRole(Permission::CUSTOMER);
                     $shop->owner_id = $user->id;
                     $shop->save();
+            Mail::raw('Congratulations you are successfully registered as an Employee.', function ($message,$user) {
+                $message->to($user->email)->subject('Employee Registration');
+            });
             $dataWallet['total_points']=$request->input('assign_budget');
             $dataWallet['points_used']=0;
             $dataWallet['available_points']=$request->input('assign_budget');
             $dataWallet['customer_id']=$user->id;
             Wallet::insert($dataWallet);
-                return $shop;
 
+
+            return $shop;
         } catch (Exception $e) {
             throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_EMPLOYEE-".$e,);
         }

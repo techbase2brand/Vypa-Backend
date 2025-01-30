@@ -166,7 +166,7 @@ class AnalyticsController extends CoreController
         if ($user && $user->hasPermissionTo(Permission::SUPER_ADMIN)) {
             $query->whereNull('A.parent_id')
                 ->join('orders as B', 'A.id', '=', 'B.parent_id')
-                ->where('B.order_status', OrderStatus::COMPLETED)
+                //->where('B.order_status', OrderStatus::COMPLETED)
                 ->select(
                     DB::raw("SUM(A.paid_total) as total"),
                     DB::raw("DATE_FORMAT(A.created_at, '%M') as month")

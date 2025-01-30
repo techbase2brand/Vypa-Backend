@@ -20,15 +20,6 @@ class CompanyRegisteredMail extends Mailable
         $this->company=$data;
     }
 
-    /**
-     * Get the message envelope.
-     */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Company Registered Mail',
-        );
-    }
 
     /**
      * Get the message content definition.

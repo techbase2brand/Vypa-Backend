@@ -361,6 +361,8 @@ Route::group(
  */
 Route::post('company', [ShopController::class, 'CompanyRegister']);
 Route::post('employee', [EmployeeController::class, 'store']);
+Route::post('checkEmail', [EmployeeController::class, 'checkEmail']);
+
 
 
 Route::apiResource('groups', GroupController::class);

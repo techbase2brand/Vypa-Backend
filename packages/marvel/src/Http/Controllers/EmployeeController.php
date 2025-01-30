@@ -4,6 +4,7 @@ namespace Marvel\Http\Controllers;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Marvel\Enums\Permission;
 use Marvel\Database\Models\Employee;
 use Marvel\Database\Models\User;
@@ -77,7 +78,12 @@ class EmployeeController extends CoreController
         return $query;
     }
 
-
+    public function checkEmail()
+    {
+        Mail::raw('This is a test email.', function ($message) {
+            $message->to('sandeep@saasintegrator.com')->subject('Test Email');
+        });
+    }
 
     public function store(EmployeeCreateRequest $request)
     {

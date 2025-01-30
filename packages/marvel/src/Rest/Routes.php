@@ -360,7 +360,7 @@ Route::group(
  * *****************************************
  */
 Route::post('company', [ShopController::class, 'CompanyRegister']);
-
+Route::post('employee', [EmployeeController::class, 'store']);
 
 
 Route::apiResource('groups', GroupController::class);

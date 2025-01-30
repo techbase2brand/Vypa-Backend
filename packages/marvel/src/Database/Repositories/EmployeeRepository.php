@@ -131,6 +131,9 @@ class EmployeeRepository extends BaseRepository
                 if ($request->has('address')) {
                     $data['address'] = ($request->input('address'));
                 }
+                if ($request->has('contact_info')) {
+                    $data['contact_info'] = ($request->input('contact_info'));
+                }
                 if ($request->has('tag')) {
                     $data['tag'] = ($request->input('tag'));
                 }
@@ -284,6 +287,10 @@ class EmployeeRepository extends BaseRepository
             if ($request->has('address')) {
                 $employee->address = ($request->input('address'));
             }
+            if ($request->has('contact_info')) {
+                $employee->contact_info = ($request->input('contact_info'));
+            }
+
             if ($request->has('tag')) {
                 $employee->tag = ($request->input('tag'));
             }

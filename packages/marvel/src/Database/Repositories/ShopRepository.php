@@ -21,7 +21,7 @@ use Marvel\Http\Requests\TransferShopOwnerShipRequest;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use App\Mail\CompanyRegisteredMail;
+use Marvel\Mail\CompanyRegisteredMail;
 
 class ShopRepository extends BaseRepository
 {

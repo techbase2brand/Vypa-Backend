@@ -17,6 +17,7 @@ class Employee extends Model
     protected $hidden = ['password'];
     protected $fillable = [
         'name',
+        'last_name',
         'email',
         'password',
         'company_name',
@@ -25,13 +26,15 @@ class Employee extends Model
         'joining_date',
         'tag',
         'job_title',
-        'logo'
+        'logo',
+        'address'
     ];
 
     public $guarded = [];
 
     protected $casts = [
         'logo' => 'json',
+        'address' => 'json'
     ];
 
     /**

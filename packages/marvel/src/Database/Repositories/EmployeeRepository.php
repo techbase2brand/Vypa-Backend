@@ -122,6 +122,15 @@ class EmployeeRepository extends BaseRepository
                 if ($request->has('name')) {
                     $data['name'] = ($request->input('name'));
                 }
+                if ($request->has('last_name')) {
+                    $data['last_name'] = ($request->input('last_name'));
+                }
+                if ($request->has('web')) {
+                    $data['web'] = ($request->input('web'));
+                }
+                if ($request->has('address')) {
+                    $data['address'] = ($request->input('address'));
+                }
                 if ($request->has('tag')) {
                     $data['tag'] = ($request->input('tag'));
                 }

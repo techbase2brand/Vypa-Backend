@@ -36,7 +36,7 @@ class CompanyRegisteredMail extends Mailable
 
     public function build()
     {
-        return $this->markdown('emails.company_registered');
+        return $this->markdown('emails.company_registered',['company'=>$this->company]);
     }
 
 

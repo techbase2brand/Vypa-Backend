@@ -105,7 +105,7 @@ class EmployeeRepository extends BaseRepository
     public function storeEmployee($request)
     {
         $user = Auth::user();
-        if($user->roles()->whereIn('name', ['super_admin'])->exists())
+        if($user!=null && $user->roles()->whereIn('name', ['super_admin'])->exists())
         {
             $created_by="admin";
         }else{

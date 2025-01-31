@@ -41,6 +41,7 @@ class EmployeeCreateRequest extends FormRequest
             'image'                  => ['nullable', 'array'],
             'address'                => ['array'],
             'contact_info'           => ['array'],
+            'shipping_address'       => ['nullable','array'],
             'password'               => ['required', 'string', 'min:8', 'confirmed'], // Use 'confirmed' here
             'confirmpassword'        => ['required', 'string', 'same:password'], // This line can be removed
         ];

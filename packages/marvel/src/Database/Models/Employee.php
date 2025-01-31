@@ -30,7 +30,8 @@ class Employee extends Model
         'address',
         'contact_info',
         'web',
-        'date_of_birth'
+        'date_of_birth',
+        'shipping_address'
     ];
 
     public $guarded = [];
@@ -38,7 +39,8 @@ class Employee extends Model
     protected $casts = [
         'logo' => 'json',
         'address' => 'json',
-        'contact_info' => 'json'
+        'contact_info' => 'json',
+        'shipping_address' => 'json'
     ];
 
     /**

@@ -284,6 +284,9 @@ class EmployeeRepository extends BaseRepository
             if ($request->has('last_name')) {
                 $employee->last_name = ($request->input('last_name'));
             }
+            if($request->has('shipping_address')){
+                $employee->shipping_address= $request->input('shipping_address');
+            }
             if ($request->has('web')) {
                 $employee->web = ($request->input('web'));
             }

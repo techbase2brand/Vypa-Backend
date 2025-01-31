@@ -4,6 +4,7 @@ namespace Marvel\Http\Controllers;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Marvel\Enums\Permission;
 use Marvel\Database\Models\Shop;
 use Marvel\Database\Models\User;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\DB;
 use Marvel\Database\Models\Settings;
 use Marvel\Database\Repositories\ShopRepository;
 use Marvel\Enums\Role;
+use Marvel\Mail\CompanyApproved;
 use Marvel\Traits\OrderStatusManagerWithPaymentTrait;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -231,7 +233,7 @@ class ShopController extends CoreController
                 $shop->owner->save(); // Save changes to the owner
             }
             $shop->save();
-
+            Mail::to($shop->email)->send(new CompanyApproved($shop-toArray()));
 //            if (Product::count() > 0) {
 //                Product::where('shop_id', '=', $id)->update(['status' => 'publish']);
 //            }

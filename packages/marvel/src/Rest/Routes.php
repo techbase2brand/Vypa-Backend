@@ -366,7 +366,7 @@ Route::post('checkEmail', [EmployeeController::class, 'checkEmail']);
 
 
 Route::apiResource('groups', GroupController::class);
-Route::post('groups/{group}/users', [GroupController::class, 'addUsers']);
+Route::put('groups/update/{group}', [GroupController::class, 'update']);
 Route::delete('groups/{group}/users', [GroupController::class, 'removeUsers']);
 Route::get('groups/{group}/users', [GroupController::class, 'listUsers']);
 

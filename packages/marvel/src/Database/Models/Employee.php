@@ -34,7 +34,8 @@ class Employee extends Model
 
     protected $casts = [
         'logo' => 'json',
-        'address' => 'json'
+        'address' => 'json',
+        'contact_info' => 'json'
     ];
 
     /**

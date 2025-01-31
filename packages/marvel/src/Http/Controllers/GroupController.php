@@ -37,10 +37,7 @@ class GroupController extends CoreController
 
     public function fetchGroups(Request $request)
     {
-        $query = $this->repository
-            ->withCount([ 'employees'])
-            ->with([ 'employees'])
-            ->where('id', '!=', null);
+        $query = $this->repository->where('id', '!=', null);
 
         if ($request->has('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');

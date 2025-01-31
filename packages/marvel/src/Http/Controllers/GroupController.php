@@ -72,9 +72,7 @@ class GroupController extends CoreController
     public function show($slug, Request $request)
     {
         $shop = $this->repository;
-        if ($request->user() && ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN) || $request->user()->shops->contains('slug', $slug))) {
-            $shop = $shop->with('balance');
-        }
+
         try {
             return match (true) {
                 is_numeric($slug) => $shop->where('id', $slug)->firstOrFail(),

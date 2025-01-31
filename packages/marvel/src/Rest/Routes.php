@@ -22,7 +22,7 @@ use Marvel\Http\Controllers\CouponController;
 use Marvel\Http\Controllers\DeliveryTimeController;
 use Marvel\Http\Controllers\DownloadController;
 use Marvel\Http\Controllers\EmployeeController;
-use App\Http\Controllers\GroupController;
+use Marvel\Http\Controllers\GroupController;
 use Marvel\Http\Controllers\FaqsController;
 use Marvel\Http\Controllers\FeedbackController;
 use Marvel\Http\Controllers\FlashSaleController;

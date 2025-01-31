@@ -9,7 +9,7 @@ use Marvel\Database\Models\Shop;
 use Illuminate\Http\JsonResponse;
 use Marvel\Exceptions\MarvelException;
 use Marvel\Http\Requests\GroupCreateRequest;
-use Marvel\Http\Requests\ShopUpdateRequest;
+use Marvel\Http\Requests\GroupUpdateRequest;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Marvel\Database\Repositories\GroupRepository;

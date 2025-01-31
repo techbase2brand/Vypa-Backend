@@ -17,9 +17,6 @@
     </div>
 
     <div class="details" style="margin-top: 30px; font-size: 14px;">
-
-        You are now ready to log in and start exploring our full range of workwear and safety products, tailored to meet the needs of your workforce. We are excited to help you keep your team safe, compliant, and well-equipped with the highest quality rail and workwear solutions.
-
         <h2>Dear {{$company['name']??null}},</h2>
         <p>Congratulations! Your account with <b>VYPA</b> has been successfully approved.</p>
         <p>You are now ready to log in and start exploring our full range of workwear and safety products, tailored to meet the needs of your workforce. We are excited to help you keep your team safe, compliant, and well-equipped with the highest quality rail and workwear solutions.</p>

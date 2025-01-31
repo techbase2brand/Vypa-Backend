@@ -27,7 +27,9 @@ class Employee extends Model
         'tag',
         'job_title',
         'logo',
-        'address'
+        'address',
+        'contact_info',
+        'web'
     ];
 
     public $guarded = [];

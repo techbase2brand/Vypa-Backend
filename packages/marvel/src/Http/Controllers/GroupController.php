@@ -126,7 +126,18 @@ class GroupController extends CoreController
             throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE);
         }
     }
-
+    public function budget(Request $request)
+    {
+//        {
+//            "budget": 200,
+//        "date": "2025-01-07",
+//        "groups": [
+//                20,
+//                18
+//            ]
+//}
+        return true;
+    }
     public function deleteGroup(Request $request)
     {
         $id = $request->id;

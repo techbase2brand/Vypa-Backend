@@ -369,6 +369,7 @@ Route::apiResource('groups', GroupController::class);
 Route::put('groups/update/{group}', [GroupController::class, 'update']);
 Route::delete('groups/{group}/users', [GroupController::class, 'removeUsers']);
 Route::get('groups/{group}/users', [GroupController::class, 'listUsers']);
+Route::post('budget', [GroupController::class, 'budget']);
 
 
 Route::group(

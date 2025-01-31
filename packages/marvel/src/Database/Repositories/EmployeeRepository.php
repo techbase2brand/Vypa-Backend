@@ -154,6 +154,9 @@ class EmployeeRepository extends BaseRepository
                 if ($request->has('joining_date')) {
                     $data['joining_date'] = $request->input('joining_date');
                 }
+                if ($request->has('date_of_birth')) {
+                $data['date_of_birth'] = $request->input('date_of_birth');
+                }
                 if ($request->has('gender')) {
                     $data['gender'] = $request->input('gender');
                 }

@@ -233,7 +233,7 @@ class ShopController extends CoreController
                 $shop->owner->save(); // Save changes to the owner
             }
             $shop->save();
-            Mail::to($shop->email)->send(new CompanyApproved($shop-toArray()));
+            Mail::to($shop->email)->send(new CompanyApproved($shop->toArray()));
 //            if (Product::count() > 0) {
 //                Product::where('shop_id', '=', $id)->update(['status' => 'publish']);
 //            }

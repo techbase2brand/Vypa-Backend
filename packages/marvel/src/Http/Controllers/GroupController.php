@@ -71,9 +71,7 @@ class GroupController extends CoreController
      */
     public function show($slug, Request $request)
     {
-        $shop = $this->repository
-            ->with(['categories', 'owner', 'ownership_history'])
-            ->withCount(['orders', 'products']);
+        $shop = $this->repository;
         if ($request->user() && ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN) || $request->user()->shops->contains('slug', $slug))) {
             $shop = $shop->with('balance');
         }
@@ -94,11 +92,11 @@ class GroupController extends CoreController
      * @param int $id
      * @return array
      */
-    public function update(ShopUpdateRequest $request, $id)
+    public function update(GroupUpdateRequest $request, $id)
     {
         try {
             $request->id = $id;
-            return $this->updateShop($request);
+            return $this->updateGroup($request);
         } catch (MarvelException $th) {
             throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE);
         }

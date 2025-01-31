@@ -27,14 +27,9 @@ class ShopUpdateRequest extends FormRequest
     {
         return [
             'name'                   => ['required', 'string', 'max:255'],
-            'categories'             => ['array'],
-            'is_active'              => ['boolean'],
-            'description'            => ['nullable', 'string', 'max:10000'],
-            'balance'                => ['array'],
-            'image'                  => ['nullable', 'array'],
-            'cover_image'            => ['nullable', 'array'],
-            'settings'               => ['array'],
-            'address'                => ['array'],
+            'tag'                    => ['nullable', 'string', 'max:10000'],
+            'selectedTags'           => ['nullable', 'array'],
+            'selectedEmployees'      => ['nullable', 'array'],
         ];
     }
 

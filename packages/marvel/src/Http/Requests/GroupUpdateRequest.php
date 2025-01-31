@@ -6,8 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-
-class GroupCreateRequest extends FormRequest
+class ShopUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,9 +27,14 @@ class GroupCreateRequest extends FormRequest
     {
         return [
             'name'                   => ['required', 'string', 'max:255'],
-            'tag'                    => ['nullable', 'string', 'max:10000'],
-            'selectedTags'           => ['nullable', 'array'],
-            'selectedEmployees'      => ['nullable', 'array'],
+            'categories'             => ['array'],
+            'is_active'              => ['boolean'],
+            'description'            => ['nullable', 'string', 'max:10000'],
+            'balance'                => ['array'],
+            'image'                  => ['nullable', 'array'],
+            'cover_image'            => ['nullable', 'array'],
+            'settings'               => ['array'],
+            'address'                => ['array'],
         ];
     }
 

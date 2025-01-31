@@ -24,6 +24,7 @@ use Marvel\Database\Models\Settings;
 use Marvel\Database\Repositories\ShopRepository;
 use Marvel\Enums\Role;
 use Marvel\Mail\CompanyApproved;
+use Marvel\Mail\CompanyDisapproved;
 use Marvel\Traits\OrderStatusManagerWithPaymentTrait;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -273,7 +274,7 @@ class ShopController extends CoreController
                 $shop->owner->save(); // Save changes to the owner
             }
             $shop->save();
-
+            Mail::to($shop->owner->email)->send(new CompanyDisapproved($shop->toArray()));
            // Product::where('shop_id', '=', $id)->update(['status' => 'draft']);
 
             return $shop;

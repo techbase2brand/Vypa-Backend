@@ -211,6 +211,7 @@ class EmployeeRepository extends BaseRepository
             $dataWallet['total_points']=$request->input('assign_budget');
             $dataWallet['points_used']=0;
             $dataWallet['available_points']=$request->input('assign_budget');
+            $dataWallet['expiry_date']=$request->input('expiry_date')??null;
             $dataWallet['customer_id']=$user->id;
             Wallet::insert($dataWallet);
 
@@ -344,6 +345,7 @@ class EmployeeRepository extends BaseRepository
                     'total_points'      => $request->input('assign_budget'),
                     'points_used'       => 0,
                     'available_points'  => $request->input('assign_budget'), // Initially assign same as total_points
+                    'expiry_date'       => $request->input('expiry_date')??null,
                     'updated_at'        => now(), // Ensure timestamps are updated
                 ]
             );

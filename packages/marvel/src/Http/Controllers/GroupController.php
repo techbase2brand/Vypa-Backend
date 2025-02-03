@@ -6,6 +6,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Marvel\Enums\Permission;
 use Marvel\Database\Models\Shop;
+use Marvel\Database\Models\Group;
 use Illuminate\Http\JsonResponse;
 use Marvel\Exceptions\MarvelException;
 use Marvel\Http\Requests\GroupCreateRequest;
@@ -130,7 +131,9 @@ class GroupController extends CoreController
     {
         //dd($request->budget);
         //dd($request->date);
-        dd($request->groups);
+        //dd($request->groups);
+        $result=Group::find($request->groups);
+        dd($result);
 //        {
 //            "budget": 200,
 //        "date": "2025-01-07",

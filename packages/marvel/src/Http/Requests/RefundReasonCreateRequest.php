@@ -28,8 +28,13 @@ class RefundReasonCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'        => ['required', 'string'],
-            'slug'        => ['nullable', 'string'],
+            'name'              => ['required', 'string'],
+            'slug'              => ['nullable', 'string'],
+            'email'             => ['nullable','string'],
+            'invoice_number'    => ['required','string'],
+            'goods_issue'       => ['nullable','string'],
+            'invoicing_issue'   => ['nullable','string'],
+            'comment'           => ['nullable','string']
         ];
     }
 

@@ -22,6 +22,11 @@ class RefundReasonRepository extends BaseRepository
     protected $dataArray = [
         'name',
         'slug',
+        'email',
+        'invoice_number',
+        'goods_issue',
+        'invoicing_issue',
+        'comment',
         'language',
     ];
 

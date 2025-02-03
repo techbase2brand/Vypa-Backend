@@ -128,8 +128,8 @@ class GroupController extends CoreController
     }
     public function budget(Request $request)
     {
-        dd($request->budget);
-        dd($request->date);
+        //dd($request->budget);
+        //dd($request->date);
         dd($request->groups);
 //        {
 //            "budget": 200,

@@ -181,7 +181,7 @@ class GroupController extends CoreController
                 }
             }
         }
-
+        dd($walletData);
         // Insert all wallet data in one go
         if (!empty($walletData)) {
             // Insert or update wallet data

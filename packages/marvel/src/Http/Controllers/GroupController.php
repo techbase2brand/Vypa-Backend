@@ -132,12 +132,12 @@ class GroupController extends CoreController
     public function budget(Request $request)
     {
         // Validate the incoming request
-        $request->validate([
-            'budget' => 'required|numeric|min:0',
-            'date' => 'required|date',
-            'groups' => 'required|array',
-            'groups.*' => 'exists:groups,id', // Ensure each group ID exists
-        ]);
+//        $request->validate([
+//            'budget' => 'required|numeric|min:0',
+//            'date' => 'required|date',
+//            'groups' => 'required|array',
+//            'groups.*' => 'exists:groups,id', // Ensure each group ID exists
+//        ]);
 
         // Find the groups based on the provided IDs
         $groups = Group::find($request->groups);
@@ -148,13 +148,13 @@ class GroupController extends CoreController
         foreach ($groups as $group) {
             // Decode selected employees
             if(!empty($group->selectedEmployees)){
-                $employees = json_decode($group->selectedEmployees);
+                $employees = $group->selectedEmployees;
                 foreach ($employees as $employee) {
                     $walletData[] = [
                         'total_points' => $request->budget,
                         'points_used' => 0,
                         'available_points' => $request->budget,
-                        'customer_id' => $employee->id,
+                        'customer_id' => $employee['id'],
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
@@ -163,10 +163,10 @@ class GroupController extends CoreController
 
             // Decode selected tags
             if(!empty($group->selectedTags)) {
-                $tags = json_decode($group->selectedTags);
+                $tags = $group->selectedTags;
                 foreach ($tags as $tag) {
                     // Get employee IDs associated with the tag
-                    $employeeIds = Employee::where('tag', $tag->name)->pluck('id');
+                    $employeeIds = Employee::where('tag', $tag['name'])->pluck('id');
                     foreach ($employeeIds as $employeeId) {
                         $walletData[] = [
                             'total_points' => $request->budget,

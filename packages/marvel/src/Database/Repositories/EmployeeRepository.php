@@ -339,13 +339,21 @@ class EmployeeRepository extends BaseRepository
                     $owner->save();
                 }
             }
+            // Fetch the current wallet record (if it exists)
+            $wallet = Wallet::where('customer_id', $employee->owner_id)->first();
+
+// Calculate available_points dynamically
+            $pointsUsed = $wallet ? $wallet->points_used : 0;
+            $availablePoints = $request->input('assign_budget') - $pointsUsed;
+
+// Update or insert the wallet record
             Wallet::updateOrInsert(
                 ['customer_id' => $employee->owner_id], // Condition to check if the record exists
                 [
                     'total_points'      => $request->input('assign_budget'),
-                    'points_used'       => 0,
-                    'available_points'  => $request->input('assign_budget'), // Initially assign same as total_points
-                    'expiry_date'       => $request->input('expiry_date')??null,
+                    'points_used'       => $pointsUsed,
+                    'available_points'  => $availablePoints, // Use the calculated value
+                    'expiry_date'       => $request->input('expiry_date') ?? null,
                     'updated_at'        => now(), // Ensure timestamps are updated
                 ]
             );

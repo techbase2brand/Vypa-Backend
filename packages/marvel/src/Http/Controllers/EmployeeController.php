@@ -161,7 +161,7 @@ class EmployeeController extends CoreController
     public function show($slug, Request $request)
     {
         $shop = $this->repository
-            ->with(['owner']);
+            ->with(['owner','wallet','shop']);
 
         try {
             $shopData = match (true) {

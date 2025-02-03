@@ -318,7 +318,7 @@ class ProductController extends CoreController
      * @param  mixed $shop_id
      * @return void
      */
-    public function exportProducts(Request $request, $shop_id)
+    public function exportProducts(Request $request, $shop_id):mixed
     {
 
         $filename = 'products-for-shop-id-' . $shop_id . '.csv';
@@ -333,7 +333,7 @@ class ProductController extends CoreController
         $list = $this->repository->with([
             'categories',
             'tags',
-        ])->where('shop_id', $shop_id)->get()->toArray();
+        ])->get()->toArray();
 
         if (!count($list)) {
             return response()->stream(function () {
@@ -459,8 +459,8 @@ class ProductController extends CoreController
     public function importProducts(Request $request)
     {
         $requestFile = $request->file();
-        $user = $request->user();
-        $shop_id = $request->shop_id;
+        //$user = $request->user();
+       // $shop_id = $request->shop_id;
 
         if (count($requestFile)) {
             if (isset($requestFile['csv'])) {
@@ -470,9 +470,9 @@ class ProductController extends CoreController
             }
         }
 
-        if (!$this->repository->hasPermission($user, $shop_id)) {
-            throw new AuthorizationException(NOT_AUTHORIZED);
-        }
+//        if (!$this->repository->hasPermission($user, $shop_id)) {
+//            throw new AuthorizationException(NOT_AUTHORIZED);
+//        }
         if (isset($shop_id)) {
             $file = $uploadedCsv->storePubliclyAs('csv-files', 'products-' . $shop_id . '.' . $uploadedCsv->getClientOriginalExtension(), 'public');
 
@@ -483,7 +483,7 @@ class ProductController extends CoreController
                     throw new MarvelException("MARVEL_ERROR.WRONG_CSV");
                 }
                 unset($product['id']);
-                $product['shop_id'] = $shop_id;
+                //$product['shop_id'] = $shop_id;
                 $product['image'] = json_decode($product['image'], true);
                 $product['gallery'] = json_decode($product['gallery'], true);
                 $product['video'] = json_decode($product['video'], true);

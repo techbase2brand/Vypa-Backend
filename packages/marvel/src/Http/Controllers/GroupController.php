@@ -136,7 +136,7 @@ class GroupController extends CoreController
             'budget' => 'required|numeric|min:0',
             'date' => 'required|date',
             'groups' => 'required|array',
-            'groups.*' => 'exists:groups,id', // Ensure each group ID exists
+            'groups.*' => 'exists:groups,id',
         ]);
 
         // Find the groups based on the provided IDs
@@ -154,9 +154,8 @@ class GroupController extends CoreController
                     if ($employeeId) {
                         $walletData[] = [
                             'total_points' => $request->budget,
-                            'points_used' => 0,
-                            'available_points' => $request->budget,
                             'customer_id' => $employeeId,
+                            'expiry_date' => $request->date,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ];
@@ -173,9 +172,8 @@ class GroupController extends CoreController
                     foreach ($employeeIds as $employeeId) {
                         $walletData[] = [
                             'total_points' => $request->budget,
-                            'points_used' => 0,
-                            'available_points' => $request->budget,
                             'customer_id' => $employeeId,
+                            'expiry_date' => $request->date,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ];
@@ -186,16 +184,44 @@ class GroupController extends CoreController
 
         // Insert or update wallet data
         if (!empty($walletData)) {
+            // Get all customer IDs from the wallet data
+            $customerIds = array_column($walletData, 'customer_id');
+
+            // Fetch existing wallets to get current points_used
+            $existingWallets = Wallet::whereIn('customer_id', $customerIds)
+                ->get()
+                ->keyBy('customer_id');
+
             foreach ($walletData as $data) {
-                Wallet::updateOrCreate(
-                    ['customer_id' => $data['customer_id']],
-                    [
-                        'total_points' => $data['total_points'],
-                        'points_used' => $data['points_used'],
-                        'available_points' => $data['available_points'],
+                $customerId = $data['customer_id'];
+                $totalPoints = $data['total_points'];
+                $expiryDate = $data['expiry_date'];
+
+                // Check if the wallet exists
+                if (isset($existingWallets[$customerId])) {
+                    // Existing wallet: calculate available_points based on current points_used
+                    $currentPointsUsed = $existingWallets[$customerId]->points_used;
+                    $availablePoints = $totalPoints - $currentPointsUsed;
+
+                    // Update the existing wallet
+                    Wallet::where('customer_id', $customerId)->update([
+                        'total_points' => $totalPoints,
+                        'available_points' => $availablePoints,
+                        'expiry_date' => $expiryDate,
                         'updated_at' => now(),
-                    ]
-                );
+                    ]);
+                } else {
+                    // New wallet: set points_used to 0 and available_points = total_points
+                    Wallet::create([
+                        'customer_id' => $customerId,
+                        'total_points' => $totalPoints,
+                        'points_used' => 0,
+                        'available_points' => $totalPoints,
+                        'expiry_date' => $expiryDate,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
             }
         }
 

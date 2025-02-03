@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Marvel\Enums\Permission;
 use Marvel\Database\Models\Shop;
 use Marvel\Database\Models\Group;
+use Marvel\Database\Models\Employee;
+use Marvel\Database\Models\Wallet;
 use Illuminate\Http\JsonResponse;
 use Marvel\Exceptions\MarvelException;
 use Marvel\Http\Requests\GroupCreateRequest;
@@ -129,20 +131,62 @@ class GroupController extends CoreController
     }
     public function budget(Request $request)
     {
-        //dd($request->budget);
-        //dd($request->date);
-        //dd($request->groups);
-        $result=Group::find($request->groups);
-        dd($result);
-//        {
-//            "budget": 200,
-//        "date": "2025-01-07",
-//        "groups": [
-//                20,
-//                18
-//            ]
-//}
-        return true;
+        // Validate the incoming request
+        $request->validate([
+            'budget' => 'required|numeric|min:0',
+            'date' => 'required|date',
+            'groups' => 'required|array',
+            'groups.*' => 'exists:groups,id', // Ensure each group ID exists
+        ]);
+
+        // Find the groups based on the provided IDs
+        $groups = Group::find($request->groups);
+
+        // Prepare an array to hold wallet data for batch insertion
+        $walletData = [];
+
+        foreach ($groups as $group) {
+            // Decode selected employees
+            if(!empty($group->selectedEmployees)){
+                $employees = json_decode($group->selectedEmployees);
+                foreach ($employees as $employee) {
+                    $walletData[] = [
+                        'total_points' => $request->budget,
+                        'points_used' => 0,
+                        'available_points' => $request->budget,
+                        'customer_id' => $employee->id,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+            }
+
+            // Decode selected tags
+            if(!empty($group->selectedTags)) {
+                $tags = json_decode($group->selectedTags);
+                foreach ($tags as $tag) {
+                    // Get employee IDs associated with the tag
+                    $employeeIds = Employee::where('tag', $tag->name)->pluck('id');
+                    foreach ($employeeIds as $employeeId) {
+                        $walletData[] = [
+                            'total_points' => $request->budget,
+                            'points_used' => 0,
+                            'available_points' => $request->budget,
+                            'customer_id' => $employeeId,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+                }
+            }
+        }
+
+        // Insert all wallet data in one go
+        if (!empty($walletData)) {
+            Wallet::insert($walletData);
+        }
+
+        return response()->json(['message' => 'Wallets updated successfully.'], 200);
     }
     public function deleteGroup(Request $request)
     {

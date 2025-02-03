@@ -147,23 +147,25 @@ class GroupController extends CoreController
 
         foreach ($groups as $group) {
             // Decode selected employees
-            if(!empty($group->selectedEmployees)){
+            if (!empty($group->selectedEmployees)) {
                 $employees = $group->selectedEmployees;
                 foreach ($employees as $employee) {
-                    $employeeId = Employee::find($employee['id'])->pluck('owner_id');
-                    $walletData[] = [
-                        'total_points' => $request->budget,
-                        'points_used' => 0,
-                        'available_points' => $request->budget,
-                        'customer_id' => $employeeId,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ];
+                    $employeeId = Employee::where('id', $employee['id'])->value('owner_id');
+                    if ($employeeId) {
+                        $walletData[] = [
+                            'total_points' => $request->budget,
+                            'points_used' => 0,
+                            'available_points' => $request->budget,
+                            'customer_id' => $employeeId,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
                 }
             }
 
             // Decode selected tags
-            if(!empty($group->selectedTags)) {
+            if (!empty($group->selectedTags)) {
                 $tags = $group->selectedTags;
                 foreach ($tags as $tag) {
                     // Get employee IDs associated with the tag
@@ -181,18 +183,14 @@ class GroupController extends CoreController
                 }
             }
         }
-        dd($walletData);
-        // Insert all wallet data in one go
+
+        // Insert or update wallet data
         if (!empty($walletData)) {
-            // Insert or update wallet data
             foreach ($walletData as $data) {
-                Wallet::updateOrInsert(
+                Wallet::updateOrCreate(
+                    ['customer_id' => $data['customer_id']],
                     [
-                        'customer_id' => $data['customer_id'],
                         'total_points' => $data['total_points'],
-                        'available_points' => $data['available_points'],
-                    ],
-                    [
                         'points_used' => $data['points_used'],
                         'available_points' => $data['available_points'],
                         'updated_at' => now(),

@@ -150,11 +150,12 @@ class GroupController extends CoreController
             if(!empty($group->selectedEmployees)){
                 $employees = $group->selectedEmployees;
                 foreach ($employees as $employee) {
+                    $employeeId = Employee::find($employee['id'])->pluck('owner_id');
                     $walletData[] = [
                         'total_points' => $request->budget,
                         'points_used' => 0,
                         'available_points' => $request->budget,
-                        'customer_id' => $employee['id'],
+                        'customer_id' => $employeeId,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
@@ -166,7 +167,7 @@ class GroupController extends CoreController
                 $tags = $group->selectedTags;
                 foreach ($tags as $tag) {
                     // Get employee IDs associated with the tag
-                    $employeeIds = Employee::where('tag', $tag['name'])->pluck('id');
+                    $employeeIds = Employee::where('tag', $tag['name'])->pluck('owner_id');
                     foreach ($employeeIds as $employeeId) {
                         $walletData[] = [
                             'total_points' => $request->budget,

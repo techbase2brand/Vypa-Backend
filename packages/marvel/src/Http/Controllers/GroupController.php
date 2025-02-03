@@ -132,12 +132,12 @@ class GroupController extends CoreController
     public function budget(Request $request)
     {
         // Validate the incoming request
-//        $request->validate([
-//            'budget' => 'required|numeric|min:0',
-//            'date' => 'required|date',
-//            'groups' => 'required|array',
-//            'groups.*' => 'exists:groups,id', // Ensure each group ID exists
-//        ]);
+        $request->validate([
+            'budget' => 'required|numeric|min:0',
+            'date' => 'required|date',
+            'groups' => 'required|array',
+            'groups.*' => 'exists:groups,id', // Ensure each group ID exists
+        ]);
 
         // Find the groups based on the provided IDs
         $groups = Group::find($request->groups);
@@ -183,7 +183,21 @@ class GroupController extends CoreController
 
         // Insert all wallet data in one go
         if (!empty($walletData)) {
-            Wallet::insert($walletData);
+            // Insert or update wallet data
+            foreach ($walletData as $data) {
+                Wallet::updateOrInsert(
+                    [
+                        'customer_id' => $data['customer_id'],
+                        'total_points' => $data['total_points'],
+                        'available_points' => $data['available_points'],
+                    ],
+                    [
+                        'points_used' => $data['points_used'],
+                        'available_points' => $data['available_points'],
+                        'updated_at' => now(),
+                    ]
+                );
+            }
         }
 
         return response()->json(['message' => 'Wallets updated successfully.'], 200);

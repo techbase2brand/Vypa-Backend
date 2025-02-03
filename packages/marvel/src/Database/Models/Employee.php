@@ -74,4 +74,13 @@ class Employee extends Model
     {
         return $this->hasOne(Wallet::class, 'customer_id', 'owner_id');
     }
+    /**
+     * Get orders associated with the employee's owner_id.
+     *
+     * @return HasMany
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'customer_id', 'owner_id');
+    }
 }

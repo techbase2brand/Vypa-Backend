@@ -45,7 +45,7 @@ class EmployeeController extends CoreController
     public function fetchEmployee(Request $request)
     {
         // Start building the query
-        $query = $this->repository->with(['shop','wallet'])->with(['owner.profile']);
+        $query = $this->repository->with(['shop','wallet','orders'])->with(['owner.profile']);
 
         // Apply filters from the request
         if ($request->has('Employee_status')) {

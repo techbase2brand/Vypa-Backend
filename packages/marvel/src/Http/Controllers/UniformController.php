@@ -111,8 +111,7 @@ class UniformController extends CoreController
     }
     public function show($slug, Request $request)
     {
-        $shop = $this->repository
-            ->with(['owner','wallet','shop']);
+        $shop = $this->repository;
 
         try {
             $shopData = match (true) {
@@ -122,11 +121,6 @@ class UniformController extends CoreController
             // Convert the shop data to an array
             $shopArray = $shopData->toArray();
 
-            // Replace the 'email' key with 'Employee_email'
-            if (isset($shopArray['owner']['email'])) {
-                $shopArray['Employee_email'] = $shopArray['owner']['email'];
-                unset($shopArray['email']); // Optionally remove the original email key
-            }
 
             return response()->json($shopArray);
         } catch (MarvelException $e) {

@@ -28,7 +28,7 @@ class UniformController extends CoreController
     public function fetchUniform(Request $request)
     {
         // Start building the query
-        $query = $this->repository->with(['user'])->with(['user']);
+        $query = $this->repository;
         if ($request->has('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }

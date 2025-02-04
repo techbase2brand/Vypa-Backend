@@ -54,7 +54,7 @@ class UniformRepository extends BaseRepository
             // $data = $request->only($this->dataArray);
 
 
-            //$data['id_user'] = $request->user()->id;
+            $data['id_user'] = $request->user()->id;
 
 
             if ($request->has('name')) {

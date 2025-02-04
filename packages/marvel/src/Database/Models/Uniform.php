@@ -14,7 +14,7 @@ class Uniform extends Model
 {
     use Sluggable;
 
-    protected $table = 'groups';
+    protected $table = 'uniforms';
 
     public $guarded = [];
 
@@ -35,13 +35,7 @@ class Uniform extends Model
         ];
     }
 
-    /**
-     * @return HasMany
-     */
-    public function employees(): HasMany
-    {
-        return $this->hasMany(Employee::class);
-    }
+
     public function users()
     {
         return $this->belongsToMany(User::class );

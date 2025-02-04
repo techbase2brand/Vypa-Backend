@@ -4,12 +4,9 @@ namespace Marvel\Http\Controllers;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Marvel\Database\Repositories\UniformRepository;
 use Marvel\Enums\Permission;
 use Marvel\Exceptions\MarvelException;
-use Marvel\Http\Requests\EmployeeCreateRequest;
-use Marvel\Http\Requests\EmployeeUpdateRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Marvel\Http\Requests\UniformCreateRequest;
 use Marvel\Http\Requests\UniformUpdateRequest;

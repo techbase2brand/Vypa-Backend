@@ -367,7 +367,7 @@ Route::post('checkEmail', [EmployeeController::class, 'checkEmail']);
 
 
 Route::apiResource('groups', GroupController::class);
-Route::apiResource('uniforms', UniformController::class);
+
 Route::put('groups/update/{group}', [GroupController::class, 'update']);
 Route::put('uniforms/update/{group}', [UniformController::class, 'update']);
 Route::delete('groups/{group}/users', [GroupController::class, 'removeUsers']);
@@ -381,6 +381,8 @@ Route::group(
         Route::apiResource('shops', ShopController::class, [
             'only' => ['store', 'update', 'destroy'],
         ]);
+
+        Route::apiResource('uniforms', UniformController::class);
         Route::post('company/create', [ShopController::class, 'createCompany']);
         Route::put('company/update/{id}', [ShopController::class, 'update']);
         Route::get('company/list', [ShopController::class, 'index']);

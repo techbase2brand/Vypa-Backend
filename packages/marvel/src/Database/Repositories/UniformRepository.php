@@ -49,17 +49,12 @@ class UniformRepository extends BaseRepository
     public function storeUniform($request)
     {
         $user = Auth::user();
-        if($user!=null && $user->roles()->whereIn('name', ['super_admin'])->exists())
-        {
-            $created_by="admin";
-        }else{
-            $created_by="company";
-        }
+
         try {
             // $data = $request->only($this->dataArray);
 
 
-            $data['id_user'] = $request->user()->id;
+            //$data['id_user'] = $request->user()->id;
 
 
             if ($request->has('name')) {
@@ -71,7 +66,7 @@ class UniformRepository extends BaseRepository
 
             return $uniform;
         } catch (Exception $e) {
-            throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_EMPLOYEE-".$e,);
+            throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_Uniform-".$e,);
         }
     }
 
@@ -92,7 +87,7 @@ class UniformRepository extends BaseRepository
 
             return $uniform;
         } catch (Exception $e) {
-            throw new HttpException(400, COULD_NOT_UPDATE_THE_RESOURCE."_Shop-".$e);
+            throw new HttpException(400, COULD_NOT_UPDATE_THE_RESOURCE."_Uniform-".$e);
         }
     }
 }

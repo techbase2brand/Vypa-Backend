@@ -23,6 +23,7 @@ use Marvel\Http\Controllers\DeliveryTimeController;
 use Marvel\Http\Controllers\DownloadController;
 use Marvel\Http\Controllers\EmployeeController;
 use Marvel\Http\Controllers\GroupController;
+use Marvel\Http\Controllers\UniformController;
 use Marvel\Http\Controllers\FaqsController;
 use Marvel\Http\Controllers\FeedbackController;
 use Marvel\Http\Controllers\FlashSaleController;
@@ -366,7 +367,9 @@ Route::post('checkEmail', [EmployeeController::class, 'checkEmail']);
 
 
 Route::apiResource('groups', GroupController::class);
+Route::apiResource('uniforms', UniformController::class);
 Route::put('groups/update/{group}', [GroupController::class, 'update']);
+Route::put('uniforms/update/{group}', [UniformController::class, 'update']);
 Route::delete('groups/{group}/users', [GroupController::class, 'removeUsers']);
 Route::get('groups/{group}/users', [GroupController::class, 'listUsers']);
 Route::post('budget', [GroupController::class, 'budget']);

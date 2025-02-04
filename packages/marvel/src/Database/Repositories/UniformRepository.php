@@ -4,22 +4,8 @@
 namespace Marvel\Database\Repositories;
 
 use Exception;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Marvel\Database\Models\Balance;
-use Marvel\Database\Models\OwnershipTransfer;
-use Marvel\Database\Models\Product;
-use Marvel\Database\Models\Employee;
-use Marvel\Database\Models\Shop;
-use Marvel\Database\Models\Wallet;
-use Marvel\Database\Models\User;
-use Marvel\Enums\DefaultStatusType;
-use Marvel\Enums\Permission;
-use Marvel\Enums\ProductVisibilityStatus;
-use Marvel\Events\ProcessOwnershipTransition;
-use Marvel\Events\ShopMaintenance;
-use Marvel\Http\Requests\TransferShopOwnerShipRequest;
+use Marvel\Database\Models\Uniform;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -57,7 +43,7 @@ class UniformRepository extends BaseRepository
      **/
     public function model()
     {
-        return Employee::class;
+        return Uniform::class;
     }
 
     public function storeUniform($request)

@@ -270,7 +270,7 @@ class UserController extends CoreController
         return [
             "token" => $user->createToken('auth_token')->plainTextToken,
             "permissions" => $user->getPermissionNames(),
-            "email_verified" => $email_verified,
+            "email_verified" => true,
             "role" => $user->getRoleNames()->first()
         ];
     }

@@ -163,6 +163,8 @@ class ShopRepository extends BaseRepository
                     'email' => $loginDetails['username or email'],
                     'password' => bcrypt($loginDetails['password']),
                 ]);
+                $user->givePermissionTo(Permission::STORE_OWNER);
+                $user->assignRole(Permission::STORE_OWNER);
                 $shop->owner_id = $user->id;
                 $shop->save();
             }
@@ -173,121 +175,7 @@ class ShopRepository extends BaseRepository
             throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_SHOP-".$e,);
         }
     }
-    public function storeEmployee($request)
-    {
-        try {
-            // $data = $request->only($this->dataArray);
 
-            $data['slug'] = $this->makeSlug($request);
-            $data['owner_id'] = $request->user()->id??6;
-            if ($request->has('name')) {
-                $data['name'] = ($request->input('name'));
-            }
-            if ($request->has('cover_image')) {
-                $data['cover_image'] = ($request->input('cover_image'));
-            }
-            if ($request->has('logo')) {
-                $data['logo'] = ($request->input('logo'));
-            }
-
-            if ($request->has('address')) {
-                $data['address'] = $request->input('address');
-            }
-
-            if ($request->has('primary_contact_detail')) {
-                $data['primary_contact_detail'] = $request->input('primary_contact_detail');
-            }
-            if ($request->has('settings')) {
-                $data['settings'] = $request->input('settings');
-            }
-            if ($request->has('description')) {
-                $data['description'] = $request->input('description');
-            }
-
-            $shop = Employee::create($data);
-
-            if ($request->has('business_contact_detail')) {
-                $shop->business_contact_detail = ($request->input('business_contact_detail'));
-                $shop->save();
-            }
-
-
-            if (isset($request['categories'])) {
-                $shop->categories()->attach($request['categories']);
-            }
-
-            if (isset($request['balance']['payment_info'])) {
-                $shop->balance()->create($request['balance']);
-            }
-
-
-            if ($request->has('Employee_email')) {
-                $loginDetails = $request->input('loginDetails');
-
-                $user = User::create([
-                    'name' => $request->input('name'),
-                    'email' => $request->input('Employee_email'),
-                    'password' => bcrypt($request->input('password')),
-                ]);
-                $shop->owner_id = $user->id;
-                $shop->save();
-            }
-
-            return $shop;
-
-        } catch (Exception $e) {
-            throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_SHOP-".$e,);
-        }
-    }
-
-
-
-    // public function updateShop($request, $id)
-    // {
-    //     try {
-    //         $shop = $this->findOrFail($id);
-    //         if (isset($request['categories'])) {
-    //             $shop->categories()->sync($request['categories']);
-    //         }
-    //         if (isset($request['balance'])) {
-    //             if (isset($request['balance']['admin_commission_rate']) && $shop->balance->admin_commission_rate !== $request['balance']['admin_commission_rate']) {
-    //                 if ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
-    //                     $this->updateBalance($request['balance'], $id);
-    //                 }
-    //             } else {
-    //                 $this->updateBalance($request['balance'], $id);
-    //             }
-    //         }
-    //         $data = $request->only($this->dataArray);
-    //         if (!empty($request->slug) &&  $request->slug != $shop['slug']) {
-    //             $data['slug'] = $this->makeSlug($request);
-    //         }
-    //         $shop->update($data);
-
-    //         // TODO : why this code is needed
-    //         // $shop->categories = $shop->categories;
-    //         // $shop->staffs = $shop->staffs;
-    //         // $shop->balance = $shop->balance;
-
-
-    //         // 1. Shop owner maintenance time set korbe.. then ekta event fire hobe jeita shop notifications (email, sms) send korbe super-admin, vendor, staff, oi specific shop er front-end a ekta notice dekhabe with countdown.
-    //         // 2. countDown start er 1 day ago or 6 hours ago ekta final email/sms dibe vendor, staff k
-    //         // 3. countdown onStart a sob product private
-    //         // 4. countdown onComplete a sob product public
-
-    //         if (isset($request['settings']['isShopUnderMaintenance'])) {
-    //             if ($request['settings']['isShopUnderMaintenance']) {
-    //                 event(new ShopMaintenance($shop, 'enable'));
-    //             } else {
-    //                 event(new ShopMaintenance($shop, 'disable'));
-    //             }
-    //         }
-
-    //         return $shop;
-    //     } catch (Exception $e) {
-    //         throw new HttpException(400, COULD_NOT_UPDATE_THE_RESOURCE);
-    //     }
-    // }
     public function updateShop($request, $id)
 {
     try {
@@ -353,6 +241,8 @@ class ShopRepository extends BaseRepository
                 $owner->password = bcrypt($loginDetails['password']);
                 $owner->save();
             }
+            $owner->givePermissionTo(Permission::STORE_OWNER);
+            $owner->assignRole(Permission::STORE_OWNER);
         }
 
         // Handle shop maintenance event

@@ -265,7 +265,7 @@ class UserController extends CoreController
         // if (!$user || !Hash::check($request->password, $user->password) || !$this->applicationIsValid) {
         //     return ["token" => null, "permissions" => []];
         // }
-        $email_verified = $user->hasVerifiedEmail();
+        //$email_verified = $user->hasVerifiedEmail();
         event(new ProcessUserData());
         return [
             "token" => $user->createToken('auth_token')->plainTextToken,

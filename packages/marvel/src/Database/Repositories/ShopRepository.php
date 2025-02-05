@@ -160,7 +160,7 @@ class ShopRepository extends BaseRepository
 
                 $user = User::create([
                     'name' => $request->input('name'),
-                    'email' => $loginDetails['username or email'],
+                    'email' => $loginDetails['email'],
                     'password' => bcrypt($loginDetails['password']),
                 ]);
                 $user->givePermissionTo(Permission::STORE_OWNER);

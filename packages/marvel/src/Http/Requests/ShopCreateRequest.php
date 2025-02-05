@@ -41,7 +41,7 @@ class ShopCreateRequest extends FormRequest
             'address'                => ['array'],
 
             'loginDetails'                  => ['nullable', 'array'],
-            'loginDetails.username or email' => [
+            'loginDetails.email' => [
                 'required_with:loginDetails',
                 'email',
                 'max:255',

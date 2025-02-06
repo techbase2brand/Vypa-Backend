@@ -391,6 +391,7 @@ Route::group(
         Route::get('company/info/{slug}', [ShopController::class, 'show']);
         Route::post('company/approve', [ShopController::class, 'approveShop']);
         Route::post('company/disapprove', [ShopController::class, 'disApproveShop']);
+        Route::post('company/deleteAll', [ShopController::class, 'destroyAll']);
 
         Route::post('employee/create', [EmployeeController::class, 'store']);
         Route::get('employee', [EmployeeController::class, 'index']);

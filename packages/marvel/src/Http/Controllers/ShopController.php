@@ -198,7 +198,32 @@ class ShopController extends CoreController
             throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE);
         }
     }
+    public function destroyAll(Request $request)
+    {
+        try {
+            // Decode the raw JSON body to get the array of IDs
+            $ids = $request->all();
 
+            // Validate the input to ensure it's an array
+            if (!is_array($ids) || empty($ids)) {
+                return response()->json([
+                    'error' => 'Invalid input. An array of IDs is required.',
+                ], 400);
+            }
+
+            // Delete employees with the provided IDs
+            $this->repository->whereIn('id', $ids)->delete();
+
+            return response()->json([
+                'message' => 'Company deleted successfully.',
+                'deleted_ids' => $ids,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Could not delete the resources.',
+            ], 500);
+        }
+    }
     public function deleteShop(Request $request)
     {
         $id = $request->id;

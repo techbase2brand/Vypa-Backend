@@ -36,10 +36,9 @@ class AnalyticsController extends CoreController
             // if (!$user || !$user->hasPermissionTo(Permission::STORE_OWNER)) {
             //     throw new AuthenticationException();
             // }
-//            dd($user);
-//            $shops = $user?->shops->pluck('id') ?? [];
-//            dd($shops);
-            $shops=[$user->id];
+
+            $shops = $user?->shops->pluck('id') ?? [];
+
             // Total revenue
             $totalRevenueQuery = DB::table('orders as childOrder')
                 ->whereDate('childOrder.created_at', '<=', Carbon::now())
@@ -66,7 +65,7 @@ class AnalyticsController extends CoreController
                     + $totalRevenueQuery->unique('parent_id')->sum('delivery_fee')
                     + $totalRevenueQuery->unique('parent_id')->sum('sales_tax');
             } else {
-                $totalEmployees=Employee::where('shop_id',$shops)->count();
+                $totalEmployees=Employee::where('shop_id',$shops[0])->count();
                 $totalRevenue = $totalRevenueQuery
                     ->whereIn('childOrder.shop_id', $shops)
                     ->get()

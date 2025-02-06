@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Marvel\Database\Models\Category;
 use Marvel\Database\Models\Product;
 use Marvel\Database\Models\Shop;
+use Marvel\Database\Models\Employee;
 use Marvel\Database\Models\Type;
 use Marvel\Database\Models\User;
 use Marvel\Database\Repositories\AddressRepository;
@@ -59,11 +60,13 @@ class AnalyticsController extends CoreController
 
             // Revenue section : Total
             if ($user && $user->hasPermissionTo(Permission::SUPER_ADMIN)) {
+                $totalEmployees=Employee::count();
                 $totalRevenueQuery = $totalRevenueQuery->get();
                 $totalRevenue = $totalRevenueQuery->sum('paid_total')
                     + $totalRevenueQuery->unique('parent_id')->sum('delivery_fee')
                     + $totalRevenueQuery->unique('parent_id')->sum('sales_tax');
             } else {
+                $totalEmployees=Employee::where('shop_id',$shops)->count();
                 $totalRevenue = $totalRevenueQuery
                     ->whereIn('childOrder.shop_id', $shops)
                     ->get()
@@ -143,6 +146,7 @@ class AnalyticsController extends CoreController
                 'todaysRevenue'             => $todaysRevenue,
                 'totalOrders'               => $totalOrders,
                 'newCustomers'              => $newCustomers,
+                'totalEmployees'            => $totalEmployees,
                 'totalYearSaleByMonth'      => $totalYearSaleByMonth,
                 'todayTotalOrderByStatus'   => $todayTotalOrderByStatus,
                 'weeklyTotalOrderByStatus'  => $weeklyDaysTotalOrderByStatus,

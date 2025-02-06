@@ -114,7 +114,7 @@ class GroupRepository extends BaseRepository
                         }
                 }
             }
-
+            $data['shop_id']=$request->input('shop_id');
             $group = $this->create($data);
             if(isset($users)) {
                 $this->addUsers($group, $users);

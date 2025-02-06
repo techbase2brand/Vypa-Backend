@@ -102,7 +102,7 @@ class EmployeeController extends CoreController
     public function updateEmployee(Request $request)
     {
         $id = $request->id;
-        if ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN) || ($request->user()->hasPermissionTo(Permission::STORE_OWNER) && ($request->user()->shops->contains($id)))) {
+        if ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN) || $request->user()->hasPermissionTo(Permission::STORE_OWNER)) {
             return $this->repository->updateEmployee($request, $id);
         }
         throw new AuthorizationException(NOT_AUTHORIZED);
@@ -147,7 +147,7 @@ class EmployeeController extends CoreController
     public function deleteEmployee(Request $request)
     {
         $id = $request->id;
-        if ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN) || ($request->user()->hasPermissionTo(Permission::STORE_OWNER) && ($request->user()->shops->contains($id)))) {
+        if ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN) || $request->user()->hasPermissionTo(Permission::STORE_OWNER)) {
             try {
                 $employee = $this->repository->findOrFail($id);
             } catch (\Exception $e) {

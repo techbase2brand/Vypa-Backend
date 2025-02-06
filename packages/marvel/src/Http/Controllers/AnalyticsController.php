@@ -106,6 +106,7 @@ class AnalyticsController extends CoreController
             $totalRefundQuery = DB::table('refunds')->whereDate('created_at', '<', Carbon::now());
             if ($user && $user->hasPermissionTo(Permission::SUPER_ADMIN)) {
                 $totalRefunds = $totalRefundQuery->where('shop_id', null)->sum('amount');
+
             } else {
                 $totalRefunds = $totalRefundQuery->whereIn('shop_id', $shops)->sum('amount');
             }
@@ -114,8 +115,14 @@ class AnalyticsController extends CoreController
             $totalOrdersQuery = DB::table('orders')->whereDate('created_at', '<=', Carbon::now());
             if ($user && $user->hasPermissionTo(Permission::SUPER_ADMIN)) {
                 $totalOrders = $totalOrdersQuery->where('parent_id', null)->count();
+                $totalOrderCompleted = $totalOrdersQuery->where('order_status', OrderStatus::COMPLETED)->count();
+                $totalOrderPending = $totalOrdersQuery->where('order_status', OrderStatus::PENDING)->count();
+                $totalOrdersProcessing = $totalOrdersQuery->where('order_status', OrderStatus::PROCESSING)->count();
             } else {
                 $totalOrders = $totalOrdersQuery->whereIn('shop_id', $shops)->count();
+                $totalOrderCompleted = $totalOrdersQuery->where('order_status', OrderStatus::COMPLETED)->where('shop_id',$shops[0])->count();
+                $totalOrderPending = $totalOrdersQuery->where('order_status', OrderStatus::PENDING)->where('shop_id',$shops[0])->count();
+                $totalOrdersProcessing = $totalOrdersQuery->where('order_status',OrderStatus::PROCESSING)->where('shop_id',$shops[0])->count();
             }
 
             // total shops
@@ -151,6 +158,9 @@ class AnalyticsController extends CoreController
                 'weeklyTotalOrderByStatus'  => $weeklyDaysTotalOrderByStatus,
                 'monthlyTotalOrderByStatus' => $monthlyTotalOrderByStatus,
                 'yearlyTotalOrderByStatus'  => $yearlyTotalOrderByStatus,
+                'totalOrdersProcessing'    => $totalOrdersProcessing,
+                'totalOrderPending'        => $totalOrderPending,
+                'totalOrderCompleted'      => $totalOrderCompleted
             ];
         } catch (MarvelException $e) {
             throw new MarvelException(SOMETHING_WENT_WRONG."analytics", $e->getMessage());

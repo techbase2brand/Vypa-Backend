@@ -170,9 +170,9 @@ class EmployeeController extends CoreController
     {
 
         try {
-            if (!$request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
-                throw new MarvelException(NOT_AUTHORIZED);
-            }
+//            if (!$request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
+//                throw new MarvelException(NOT_AUTHORIZED);
+//            }
             $id = $request->id;
             try {
                 $shop = $this->repository->with('owner')->findOrFail($id);
@@ -186,20 +186,6 @@ class EmployeeController extends CoreController
             }
             $shop->save();
 
-//            if (Product::count() > 0) {
-//                Product::where('shop_id', '=', $id)->update(['status' => 'publish']);
-//            }
-//
-//            $balance = Balance::firstOrNew(['shop_id' => $id]);
-//
-//            if (!$request->isCustomCommission) {
-//                $adminCommissionDefaultRate = $this->getCommissionRate($balance->total_earnings);
-//                $balance->admin_commission_rate = $adminCommissionDefaultRate;
-//            }else{
-//                $balance->admin_commission_rate = $admin_commission_rate;
-//            }
-//            $balance->is_custom_commission = $request->isCustomCommission;
-//            $balance->save();
             return $shop;
         } catch (MarvelException $th) {
             throw new MarvelException(SOMETHING_WENT_WRONG."221");
@@ -209,9 +195,9 @@ class EmployeeController extends CoreController
     public function disApprove(Request $request)
     {
         try {
-            if (!$request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
-                throw new MarvelException(NOT_AUTHORIZED);
-            }
+//            if (!$request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
+//                throw new MarvelException(NOT_AUTHORIZED);
+//            }
             $id = $request->id;
             try {
                 $shop = $this->repository->with('owner')->findOrFail($id);

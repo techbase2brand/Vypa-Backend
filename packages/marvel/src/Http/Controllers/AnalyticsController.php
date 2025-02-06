@@ -36,7 +36,7 @@ class AnalyticsController extends CoreController
             //     throw new AuthenticationException();
             // }
             $shops = $user?->shops->pluck('id') ?? [];
-
+            dd($shops);
             // Total revenue
             $totalRevenueQuery = DB::table('orders as childOrder')
                 ->whereDate('childOrder.created_at', '<=', Carbon::now())

@@ -224,7 +224,7 @@ class ShopController extends CoreController
             $id = $request->id;
             $admin_commission_rate = $request->admin_commission_rate;
             try {
-                $shop = $this->repository->with('owner')->findOrFail($id);
+                $shop = $this->repository->with(['owner','employees'])->findOrFail($id);
             } catch (\Exception $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
@@ -234,21 +234,22 @@ class ShopController extends CoreController
                 $shop->owner->save(); // Save changes to the owner
             }
             $shop->save();
+
+            if ($shop->employees) {
+                // Assuming $shop->employees is a collection (e.g., has many employees)
+                foreach ($shop->employees as $employee) {
+                    $employee->is_active = true;
+
+                    // Check if the employee has an owner and update their status
+                    if ($employee->owner) {
+                        $employee->owner->is_active = true;
+                        $employee->owner->save(); // Save changes to the owner
+                    }
+
+                    $employee->save(); // Save changes to the employee
+                }
+            }
             Mail::to($shop->owner->email)->send(new CompanyApproved($shop->toArray()));
-//            if (Product::count() > 0) {
-//                Product::where('shop_id', '=', $id)->update(['status' => 'publish']);
-//            }
-//
-//            $balance = Balance::firstOrNew(['shop_id' => $id]);
-//
-//            if (!$request->isCustomCommission) {
-//                $adminCommissionDefaultRate = $this->getCommissionRate($balance->total_earnings);
-//                $balance->admin_commission_rate = $adminCommissionDefaultRate;
-//            }else{
-//                $balance->admin_commission_rate = $admin_commission_rate;
-//            }
-//            $balance->is_custom_commission = $request->isCustomCommission;
-//            $balance->save();
             return $shop;
         } catch (MarvelException $th) {
             throw new MarvelException(SOMETHING_WENT_WRONG."221");
@@ -274,6 +275,20 @@ class ShopController extends CoreController
                 $shop->owner->save(); // Save changes to the owner
             }
             $shop->save();
+            if ($shop->employees) {
+                // Assuming $shop->employees is a collection (e.g., has many employees)
+                foreach ($shop->employees as $employee) {
+                    $employee->is_active = false;
+
+                    // Check if the employee has an owner and update their status
+                    if ($employee->owner) {
+                        $employee->owner->is_active = false;
+                        $employee->owner->save(); // Save changes to the owner
+                    }
+
+                    $employee->save(); // Save changes to the employee
+                }
+            }
             Mail::to($shop->owner->email)->send(new CompanyDisapproved($shop->toArray()));
            // Product::where('shop_id', '=', $id)->update(['status' => 'draft']);
 

@@ -6,27 +6,11 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Marvel\Enums\Permission;
-use Marvel\Database\Models\Employee;
-use Marvel\Database\Models\User;
-use Illuminate\Http\JsonResponse;
-use Marvel\Database\Models\Balance;
-use Marvel\Database\Models\Product;
-use Illuminate\Support\Facades\Hash;
 use Marvel\Exceptions\MarvelException;
 use Marvel\Http\Requests\EmployeeCreateRequest;
 use Marvel\Http\Requests\EmployeeUpdateRequest;
-use Marvel\Http\Requests\TransferShopOwnerShipRequest;
-use Marvel\Http\Requests\UserCreateRequest;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\DB;
-use Marvel\Database\Models\Settings;
 use Marvel\Database\Repositories\EmployeeRepository;
-use Marvel\Enums\Role;
-use Marvel\Traits\OrderStatusManagerWithPaymentTrait;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-
-
 
 class EmployeeController extends CoreController
 {
@@ -242,7 +226,6 @@ class EmployeeController extends CoreController
             }
             $shop->save();
 
-            // Product::where('shop_id', '=', $id)->update(['status' => 'draft']);
 
             return $shop;
         } catch (MarvelException $th) {

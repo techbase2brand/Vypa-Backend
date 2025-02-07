@@ -220,7 +220,7 @@ class ShopController extends CoreController
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'Could not delete the resources.',
+                'error' => $e,
             ], 500);
         }
     }

@@ -262,11 +262,28 @@ class UserController extends CoreController
             'password' => 'required',
         ]);
 
+// Fetch the user
         $user = User::where('email', $request->email)->where('is_active', true)->first();
 
-         if (!$user || !Hash::check($request->password, $user->password) || !$this->applicationIsValid) {
-             return ["token" => null, "permissions" => []];
-         }
+// Check if the user exists and is active
+        if (!$user) {
+            return response()->json([
+                "token" => null,
+                "permissions" => [],
+                "error" => "User not found or inactive",
+            ], 401);
+        }
+
+// Verify the password
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json([
+                "token" => null,
+                "permissions" => [$request->password, $user->password],
+                "error" => "Incorrect password",
+            ], 401);
+        }
+
+
         //$email_verified = $user->hasVerifiedEmail();
         event(new ProcessUserData());
         return [

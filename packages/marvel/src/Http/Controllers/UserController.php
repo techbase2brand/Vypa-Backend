@@ -367,7 +367,7 @@ class UserController extends CoreController
             return ['message' => NOT_FOUND, 'success' => false];
         }
         if ($user->is_active==0) {
-            return ['message' => "Sorry Contact to Administrator for approval process.", 'success' => false];
+            return ['message' => "Access denied: Your account is currently inactive. Please contact the administrator for further assistance.", 'success' => false];
         }
         $tokenData = DB::table('password_resets')
             ->where('email', $request->email)->first();

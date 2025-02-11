@@ -209,14 +209,14 @@ class EmployeeRepository extends BaseRepository
             Mail::raw('Congratulations, you are successfully registered as an Employee.', function ($message) use ($user) {
                 $message->to($user->email)->subject('Employee Registration');
             });
-
-            $dataWallet['total_points']=$request->input('assign_budget');
-            $dataWallet['points_used']=0;
-            $dataWallet['available_points']=$request->input('assign_budget');
-            $dataWallet['expiry_date']=$request->input('expiry_date')??null;
-            $dataWallet['customer_id']=$user->id;
-            Wallet::insert($dataWallet);
-
+            if ($request->has('assign_budget')) {
+                $dataWallet['total_points'] = $request->input('assign_budget');
+                $dataWallet['points_used'] = 0;
+                $dataWallet['available_points'] = $request->input('assign_budget');
+                $dataWallet['expiry_date'] = $request->input('expiry_date') ?? null;
+                $dataWallet['customer_id'] = $user->id;
+                Wallet::insert($dataWallet);
+            }
 
             return $shop;
         } catch (Exception $e) {

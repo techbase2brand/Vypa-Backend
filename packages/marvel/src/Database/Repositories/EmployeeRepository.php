@@ -112,7 +112,7 @@ class EmployeeRepository extends BaseRepository
         }else{
             $created_by="company";
         }
-        $data['is_active']=isset($user->id)?1:0;
+        $data['is_active']=($user!=null)?1:0;
         try {
                 // $data = $request->only($this->dataArray);
 

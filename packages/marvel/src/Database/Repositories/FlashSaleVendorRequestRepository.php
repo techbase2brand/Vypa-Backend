@@ -106,7 +106,7 @@ class FlashSaleVendorRequestRepository extends BaseRepository
     {
         try {
             $flash_sale_request = $this->findOrFail($id);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ModelNotFoundException(NOT_FOUND);
         }
         $flash_sale_request->request_status = true;
@@ -152,7 +152,7 @@ class FlashSaleVendorRequestRepository extends BaseRepository
     {
         try {
             $flash_sale_request = $this->findOrFail($id);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ModelNotFoundException(NOT_FOUND);
         }
 

@@ -29,4 +29,4 @@ class AddColumnToOrderTable extends Migration
             $table->dropColumn('cancelled_delivery_fee');
         });
     }
-};
+}

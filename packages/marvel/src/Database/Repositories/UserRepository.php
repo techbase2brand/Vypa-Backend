@@ -2,6 +2,7 @@
 
 namespace Marvel\Database\Repositories;
 
+use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
@@ -118,7 +119,7 @@ class UserRepository extends BaseRepository
         try {
             Mail::to($email)->send(new ForgetPassword($token));
             return true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
     }

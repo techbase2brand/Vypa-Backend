@@ -38,7 +38,7 @@ class WhereConditionsServiceProvider extends ServiceProvider
         $dispatcher->listen(
             ManipulateAST::class,
             function (ManipulateAST $manipulateAST): void {
-                /** @var \Nuwave\Lighthouse\WhereConditions\Operator $operator */
+                /** @var Operator $operator */
                 $operator = $this->app->make(Operator::class);
 
                 $manipulateAST->documentAST
@@ -68,7 +68,7 @@ class WhereConditionsServiceProvider extends ServiceProvider
 
     public static function createWhereConditionsInputType(string $name, string $description, string $columnType): InputObjectTypeDefinitionNode
     {
-        /** @var \Nuwave\Lighthouse\WhereConditions\Operator $operator */
+        /** @var Operator $operator */
         $operator = app(Operator::class);
 
         $operatorName = PartialParser

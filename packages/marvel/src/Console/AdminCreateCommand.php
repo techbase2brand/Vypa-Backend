@@ -2,6 +2,7 @@
 
 namespace Marvel\Console;
 
+use Exception;
 use Illuminate\Console\Command;
 use Marvel\Database\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -86,7 +87,7 @@ class AdminCreateCommand extends Command
 
                 info('User Creation Successful!');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             error($e->getMessage());
         }
     }

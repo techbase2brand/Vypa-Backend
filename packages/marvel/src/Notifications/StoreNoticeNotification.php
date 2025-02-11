@@ -18,7 +18,7 @@ class StoreNoticeNotification extends Notification implements ShouldQueue
 
     /**
      * Create a new notification instance.
-     * @param \Marvel\Database\Models\StoreNotice $storeNotice
+     * @param StoreNotice $storeNotice
      * @param null|string $action
      * @return void
      */

@@ -6,6 +6,7 @@ use Marvel\Database\Models\Product;
 use Marvel\Database\Models\Variation;
 use Marvel\Enums\CouponType;
 use Marvel\Exceptions\MarvelException;
+use Throwable;
 
 
 trait CalculatePaymentTrait
@@ -30,7 +31,7 @@ trait CalculatePaymentTrait
                 }
             }
             return $subtotal;
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             throw new MarvelException(NOT_FOUND);
         }
     }

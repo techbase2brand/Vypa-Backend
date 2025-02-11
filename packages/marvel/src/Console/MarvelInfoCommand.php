@@ -2,6 +2,7 @@
 
 namespace Marvel\Console;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Marvel\Traits\ENVSetupTrait;
@@ -83,7 +84,7 @@ class MarvelInfoCommand extends Command
                     ['marvel:env-setup mail'],
                 ]);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->error($e->getMessage());
         }
     }

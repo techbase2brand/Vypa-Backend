@@ -13,7 +13,7 @@ class MarvelBadRequestException extends HttpException
      *
      * @param  string  $message
      * @param  int  $statusCode
-     * @param  \Throwable|null  $previous
+     * @param Throwable|null  $previous
      * @param  array  $headers
      * @param  int  $code
      * @return void

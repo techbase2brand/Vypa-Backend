@@ -9,6 +9,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -46,6 +47,7 @@ use Marvel\Traits\WalletsTrait;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Newsletter\Facades\Newsletter;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
 class UserController extends CoreController
 {
@@ -102,7 +104,7 @@ class UserController extends CoreController
     /**
      * admins
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function admins(Request $request)
     {
@@ -415,7 +417,7 @@ class UserController extends CoreController
             DB::table('password_resets')->where('email', $user->email)->delete();
 
             return ['message' => PASSWORD_RESET_SUCCESSFUL, 'success' => true];
-        } catch (\Exception $th) {
+        } catch (Exception $th) {
             return ['message' => SOMETHING_WENT_WRONG."416", 'success' => false];
         }
     }
@@ -431,7 +433,7 @@ class UserController extends CoreController
             } else {
                 return ['message' => OLD_PASSWORD_INCORRECT, 'success' => false];
             }
-        } catch (\Exception $th) {
+        } catch (Exception $th) {
             throw new MarvelException(SOMETHING_WENT_WRONG."432");
         }
     }
@@ -450,7 +452,7 @@ class UserController extends CoreController
             $emailTo = isset($request['emailTo']) ? $request['emailTo'] : $listedAdmin;
             Mail::to($emailTo)->send(new ContactAdmin($details));
             return ['message' => EMAIL_SENT_SUCCESSFUL, 'success' => true];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new MarvelException(SOMETHING_WENT_WRONG."451");
         }
     }
@@ -529,7 +531,7 @@ class UserController extends CoreController
                 "permissions" => $userCreated->getPermissionNames(),
                 "role" => $userCreated->getRoleNames()->first()
             ];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new MarvelException(INVALID_CREDENTIALS);
         }
     }
@@ -560,7 +562,7 @@ class UserController extends CoreController
                 return true;
             }
             return false;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return false;
         }
     }
@@ -598,7 +600,7 @@ class UserController extends CoreController
                 ];
             }
             throw new MarvelException(OTP_VERIFICATION_FAILED);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new MarvelException(OTP_VERIFICATION_FAILED);
         }
     }
@@ -649,7 +651,7 @@ class UserController extends CoreController
                 ];
             }
             return ['message' => OTP_VERIFICATION_FAILED, 'success' => false];
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return response()->json(['error' => INVALID_GATEWAY], 422);
         }
     }
@@ -674,7 +676,7 @@ class UserController extends CoreController
                 ];
             }
             return ['message' => CONTACT_UPDATE_FAILED, 'success' => false];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['error' => INVALID_GATEWAY], 422);
         }
     }

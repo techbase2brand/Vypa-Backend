@@ -5,6 +5,7 @@ namespace Marvel\Http\Controllers;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -90,7 +91,7 @@ class StoreNoticeController extends CoreController
     /**
      * This method will generate User list or Shop list based on requested user permission
      * @param Request $request
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @return Builder[]|\Illuminate\Database\Eloquent\Collection
      * @throws MarvelException
      */
     public function getUsersToNotify(Request $request)
@@ -105,7 +106,7 @@ class StoreNoticeController extends CoreController
     /**
      * Display the specified resource.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param int $id
      * @throws MarvelException
      */

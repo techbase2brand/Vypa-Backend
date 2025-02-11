@@ -4,6 +4,7 @@
 namespace Marvel\Http\Controllers;
 
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -101,7 +102,7 @@ class MessageController extends CoreController
             return $this->repository->where('conversation_id', $conversation_id)
                 ->with(['conversation.shop', 'conversation.user.profile'])
                 ->orderBy('id', 'DESC');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new MarvelException(NOT_AUTHORIZED);
         }
     }

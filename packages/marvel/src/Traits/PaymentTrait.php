@@ -16,6 +16,7 @@ use Marvel\Enums\PaymentStatus;
 use Marvel\Events\PaymentMethods;
 use Marvel\Facades\Payment;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
 trait PaymentTrait
 {
@@ -83,7 +84,7 @@ trait PaymentTrait
                 $query->where('tracking_number', '=', $order_tracking_number)
                     ->orWhere('order_id', '=', $order_tracking_number);
             })->where('payment_gateway', '=', ucfirst($chosen_payment_gateway))->first();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw $e;
         }
     }
@@ -135,7 +136,7 @@ trait PaymentTrait
         $order->save();
         try {
             $children = json_decode($order->children);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $children = $order->children;
         }
         if (is_array($children) && count($children)) {
@@ -212,7 +213,7 @@ trait PaymentTrait
     {
         try {
             return Order::where('id', "=", $tracking_number)->orWhere('tracking_number', $tracking_number)->first();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new HttpException(404, NOT_FOUND);
         }
     }
@@ -267,7 +268,7 @@ trait PaymentTrait
             }
 
             return $payment_method;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new MarvelException(SOMETHING_WENT_WRONG."dsfs");
         }
     }
@@ -296,7 +297,7 @@ trait PaymentTrait
                 $customer = PaymentGateway::where('user_id', '=', $request->user()->id)->where('gateway_name', '=', $selected_payment_gateway)->first();
             }
             return $customer;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new HttpException(400, SOMETHING_WENT_WRONG."trait");
         }
     }
@@ -316,7 +317,7 @@ trait PaymentTrait
                 return true;
             }
             return $customer_exists;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -336,7 +337,7 @@ trait PaymentTrait
                 return true;
             }
             return $payment_method_exists;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -359,7 +360,7 @@ trait PaymentTrait
         $order->save();
         try {
             $children = json_decode($order->children);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $children = $order->children;
         }
         if (is_array($children) && count($children)) {

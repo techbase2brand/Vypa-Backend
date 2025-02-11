@@ -2,6 +2,7 @@
 
 namespace Marvel\Http\Controllers;
 
+use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Marvel\Enums\Permission;
@@ -233,7 +234,7 @@ class GroupController extends CoreController
         if ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN) || ($request->user()->hasPermissionTo(Permission::STORE_OWNER) && ($request->user()->shops->contains($id)))) {
             try {
                 $shop = $this->repository->findOrFail($id);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
             $shop->delete();

@@ -146,7 +146,7 @@ class RefundController extends CoreController
         if ($this->repository->hasPermission($user)) {
             try {
                 $refund = $this->repository->with(['shop', 'order', 'customer'])->findOrFail($request->id);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
             if ($refund->status == RefundStatus::APPROVED) {
@@ -199,7 +199,7 @@ class RefundController extends CoreController
     {
         try {
             $refund = $this->repository->findOrFail($request->id);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ModelNotFoundException(NOT_FOUND);
         }
         if ($this->repository->hasPermission($request->user())) {

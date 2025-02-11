@@ -5,6 +5,7 @@ namespace Marvel\Otp\Gateways;
 
 use Marvel\Otp\OtpInterface;
 use Marvel\Otp\Result;
+use Twilio\Exceptions\ConfigurationException;
 use Twilio\Exceptions\TwilioException;
 use Twilio\Rest\Client;
 
@@ -28,7 +29,7 @@ class TwilioGateway implements OtpInterface
 	 * Verification constructor.
 	 * @param $client
 	 * @param string|null $verification_sid
-	 * @throws \Twilio\Exceptions\ConfigurationException
+	 * @throws ConfigurationException
 	 */
 	public function __construct($client = null, string $verification_sid = null)
 	{
@@ -84,10 +85,10 @@ class TwilioGateway implements OtpInterface
 
 	/**
 	 * The function sends an SMS message using Twilio API and returns a result object.
-	 * 
+	 *
 	 * @param phone_number The phone number to which the SMS message will be sent.
 	 * @param message The message to be sent via SMS.
-	 * 
+	 *
 	 * @return Result an instance of the `Result` class. If the message is successfully sent, it returns a
 	 * `Result` object with the `sid` property set to the message ID. If there is an error, it returns a
 	 * `Result` object with an array containing an error message.

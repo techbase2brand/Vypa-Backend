@@ -5,6 +5,7 @@ namespace Marvel\Otp\Gateways;
 
 use Exception;
 use MessageBird\Client;
+use MessageBird\Objects\Message;
 use MessageBird\Objects\Verify;
 use Marvel\Otp\OtpInterface;
 use Marvel\Otp\Result;
@@ -35,7 +36,7 @@ class MessagebirdGateway implements OtpInterface
     {
         try {
             $verify = new Verify();
-            $verify->originator = config('services.messagebird.originator');;
+            $verify->originator = config('services.messagebird.originator');
             $verify->recipient = $phone_number;
             $result = $this->client->verify->create($verify);
             return new Result($result->getId());
@@ -65,7 +66,7 @@ class MessagebirdGateway implements OtpInterface
     public function sendSms($phone_number, $messageBody)
     {
         try {
-            $message = new \MessageBird\Objects\Message();
+            $message = new Message();
             $message->originator = config('services.messagebird.originator');
             $message->recipients = [$phone_number];
             $message->body = $message;

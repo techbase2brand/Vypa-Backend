@@ -25,11 +25,11 @@ class TransferredShopOwnershipStatus extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      *
-     * @param \Marvel\Database\Models\Shop $shop
+     * @param Shop $shop
      * @param User $previousOwner
      * @param User $newOwner
      * @param mixed $optional
-     * 
+     *
      * @return void
      */
     public function __construct($shop, $previousOwner, $newOwner, $optional = null)
@@ -55,7 +55,7 @@ class TransferredShopOwnershipStatus extends Notification implements ShouldQueue
      * Get the mail representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return MailMessage
      */
     public function toMail($notifiable)
     {

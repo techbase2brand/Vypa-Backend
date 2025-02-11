@@ -2,6 +2,7 @@
 
 namespace Marvel\Http\Controllers;
 
+use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -92,7 +93,7 @@ class AttributeValueController extends CoreController
             try {
                 $validatedData = $request->except('id');
                 return $this->repository->findOrFail($request->id)->update($validatedData);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
         }

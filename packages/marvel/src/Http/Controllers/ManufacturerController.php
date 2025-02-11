@@ -118,7 +118,7 @@ class ManufacturerController extends CoreController
         if ($this->repository->hasPermission($request->user(), $request->shop_id)) {
             try {
                 $Manufacturer = $this->repository->findOrFail($request->id);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new HttpException(404, NOT_FOUND);
             }
             return $this->repository->updateManufacturer($request, $Manufacturer);

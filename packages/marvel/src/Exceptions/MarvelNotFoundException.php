@@ -12,7 +12,7 @@ class MarvelNotFoundException extends HttpException
      * Create a new "Not Found" exception instance for REST Client.
      *
      * @param  string  $message
-     * @param  \Throwable|null  $previous
+     * @param Throwable|null  $previous
      * @param  array  $headers
      * @param  int  $code
      * @return void

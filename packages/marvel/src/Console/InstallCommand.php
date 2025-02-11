@@ -12,6 +12,7 @@ use Spatie\Permission\Models\Role;
 use Marvel\Database\Seeders\MarvelSeeder;
 use PDO;
 use PDOException;
+use Spatie\Permission\PermissionRegistrar;
 use function Laravel\Prompts\{text, confirm, info, error, table};
 
 class InstallCommand extends Command
@@ -73,7 +74,7 @@ class InstallCommand extends Command
             }
         }
 
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         Permission::firstOrCreate(['name' => UserPermission::SUPER_ADMIN]);
         Permission::firstOrCreate(['name' => UserPermission::CUSTOMER]);
@@ -95,7 +96,7 @@ class InstallCommand extends Command
         $this->call('marvel:copy-files');
 
         $this->modifySettingsData();
-        
+
         info('You need to configure your mail server for proper application performance.');
         info('Do you want to configure mail server.');
         $confirmed = confirm(
@@ -110,7 +111,7 @@ class InstallCommand extends Command
             info('You can configuration by below command or manual process.');
             table(['Command', 'Details'], [['marvel:mail-setup', 'Mail setup (mailtrap, mailgun, gmail)']]);
         }
-        
+
         info('Everything is successful. Now clearing all cached...');
         $this->call('optimize:clear');
         info('Thank You.');

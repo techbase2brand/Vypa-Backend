@@ -2,6 +2,7 @@
 
 namespace Marvel\Console;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Marvel\Traits\ENVSetupTrait;
@@ -33,7 +34,7 @@ class TranslationEnabledCommand extends Command
         // Check if the .env file exists
         $this->CheckENVExistOrNot();
         try {
-            
+
             $reconfigure = '';
             do { // Read the current .env content
                 $envFilePath = base_path('.env');
@@ -88,7 +89,7 @@ class TranslationEnabledCommand extends Command
 
                 // If the user wants to reconfigure, the loop will continue
             } while ($reconfigure);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->error($e->getMessage());
         }
     }

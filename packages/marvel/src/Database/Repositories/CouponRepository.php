@@ -140,7 +140,7 @@ class CouponRepository extends BaseRepository
             } else {
                 return ["is_valid" => false, "message" => INVALID_COUPON_CODE];
             }
-        } catch (\Exception $th) {
+        } catch (Exception $th) {
             return ["is_valid" => false, "message" => INVALID_COUPON_CODE];
         }
     }

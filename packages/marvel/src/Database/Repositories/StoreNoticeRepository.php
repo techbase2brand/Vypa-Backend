@@ -5,7 +5,9 @@ namespace Marvel\Database\Repositories;
 
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Marvel\Database\Models\Shop;
 use Marvel\Database\Models\StoreNotice;
 use Marvel\Database\Models\User;
@@ -148,7 +150,7 @@ class StoreNoticeRepository extends BaseRepository
     /**
      * This method will generate User list or Shop list based on requested user permission
      * @param Request $request
-     * @return Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response
+     * @return Builder[]|Collection|Response
      * @throws MarvelException
      */
     public function fetchUserToSendNotification(Request $request)
@@ -188,7 +190,7 @@ class StoreNoticeRepository extends BaseRepository
     /**
      * Updating Specific resource in storage
      *
-     * @param \Marvel\Database\Models\StoreNotice $storeNotice
+     * @param StoreNotice $storeNotice
      * @param array $data
      * @return mixed
      */

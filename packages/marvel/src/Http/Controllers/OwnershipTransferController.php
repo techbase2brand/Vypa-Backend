@@ -31,7 +31,7 @@ class OwnershipTransferController extends CoreController
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -103,7 +103,7 @@ class OwnershipTransferController extends CoreController
      * @param Request $request
      * @param int $id
      * @return OwnershipTransferResource
-     * @throws \Marvel\Exceptions\MarvelException
+     * @throws MarvelException
      */
     public function update(Request $request, $id)
     {
@@ -123,7 +123,7 @@ class OwnershipTransferController extends CoreController
                 throw new AuthorizationException(NOT_AUTHORIZED);
             }
             $data =  $this->repository->updateOwnershipTransfer($request);
-            
+
             event(new OwnershipTransferStatusControl($data));
 
             return new OwnershipTransferResource($data);

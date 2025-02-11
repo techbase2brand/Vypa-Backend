@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Notification;
 use Marvel\Events\ProcessOwnershipTransition;
 use Marvel\Notifications\TransferredShopOwnership;
 use Marvel\Traits\UsersTrait;
+use Throwable;
 
 class TransferredShopOwnershipNotification implements ShouldQueue
 {
@@ -48,7 +49,7 @@ class TransferredShopOwnershipNotification implements ShouldQueue
                     ));
                 }
             }
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             Log::error("Error from TransferredShopOwnershipNotification: " . $th->getMessage());
         }
     }

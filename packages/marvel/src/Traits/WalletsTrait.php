@@ -4,6 +4,7 @@ namespace Marvel\Traits;
 
 use Marvel\Database\Models\Settings;
 use Marvel\Database\Models\Wallet;
+use Throwable;
 
 trait WalletsTrait
 {
@@ -37,7 +38,7 @@ trait WalletsTrait
     try {
       $settings = Settings::getData();
       $currencyToWalletRatio = $settings['options']['currencyToWalletRatio'];
-    } catch (\Throwable $th) {
+    } catch (Throwable $th) {
       $currencyToWalletRatio = 1;
     }
     return $currencyToWalletRatio == 0 ? 1 : $currencyToWalletRatio;
@@ -50,7 +51,7 @@ trait WalletsTrait
     try {
       $settings = Settings::getData();
       $signupPoints = $settings['options']['signupPoints'];
-    } catch (\Throwable $th) {
+    } catch (Throwable $th) {
       $signupPoints = 0;
     }
 

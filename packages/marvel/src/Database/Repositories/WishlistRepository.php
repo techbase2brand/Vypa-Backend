@@ -2,6 +2,7 @@
 
 namespace Marvel\Database\Repositories;
 
+use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
@@ -55,7 +56,7 @@ class WishlistRepository extends BaseRepository
                 $wishlistInput = $request->only($this->dataArray);
                 return $this->create($wishlistInput);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new HttpException(400, ALREADY_ADDED_TO_WISHLIST_FOR_THIS_PRODUCT);
         }
     }
@@ -78,7 +79,7 @@ class WishlistRepository extends BaseRepository
                 $this->delete($wishlist->id);
                 return false;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }

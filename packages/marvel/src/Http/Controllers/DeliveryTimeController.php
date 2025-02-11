@@ -11,6 +11,7 @@ use Marvel\Database\Repositories\DeliveryTimeRepository;
 use Marvel\Exceptions\MarvelException;
 use Marvel\Http\Requests\DeliveryTimeRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
+use Throwable;
 
 class DeliveryTimeController extends CoreController
 {
@@ -78,7 +79,7 @@ class DeliveryTimeController extends CoreController
         try {
             try {
                 return $this->repository->findOrFail($id)->update($request->validated());
-            } catch (\Throwable $th) {
+            } catch (Throwable $th) {
                 abort(400, COULD_NOT_UPDATE_THE_RESOURCE);
             }
         } catch (MarvelException $e) {

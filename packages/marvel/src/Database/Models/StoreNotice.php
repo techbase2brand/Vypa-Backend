@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Marvel\Enums\Permission;
+use Throwable;
 
 class StoreNotice extends Model
 {
@@ -86,7 +87,7 @@ class StoreNotice extends Model
                 return ucfirst(str_replace('_', ' ', Permission::SUPER_ADMIN));
             }
             return ucfirst(str_replace('_', ' ', Permission::STORE_OWNER));
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             return '';
         }
     }
@@ -104,7 +105,7 @@ class StoreNotice extends Model
                 }
             }
             return false;
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             return false;
         }
     }

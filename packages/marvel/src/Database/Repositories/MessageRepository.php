@@ -3,6 +3,7 @@
 namespace Marvel\Database\Repositories;
 
 use App\Events\ReviewCreated;
+use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
@@ -77,7 +78,7 @@ class MessageRepository extends BaseRepository
             event(new MessageSent($message, $conversation, $type, $request->user()));
 
             return $message;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new MarvelException(NOT_AUTHORIZED);
         }
     }

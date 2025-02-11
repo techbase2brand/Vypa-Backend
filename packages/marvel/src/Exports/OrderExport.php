@@ -3,6 +3,7 @@
 namespace Marvel\Exports;
 
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Marvel\Database\Models\Settings;
@@ -28,7 +29,7 @@ class OrderExport implements FromCollection, WithHeadings
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function collection()
     {

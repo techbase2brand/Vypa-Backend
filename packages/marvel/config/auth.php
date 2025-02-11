@@ -1,5 +1,7 @@
 <?php
 
+use Marvel\Database\Models\User;
+
 return [
 
     /*
@@ -71,7 +73,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model'  => \Marvel\Database\Models\User::class,
+            'model'  => User::class,
         ],
 
         // 'users' => [

@@ -5,6 +5,7 @@ namespace Marvel\Traits;
 use Marvel\Enums\PaymentStatus;
 use Marvel\Enums\PaymentGatewayType;
 use Marvel\Enums\OrderStatus as OrderStatusEnum;
+use Throwable;
 
 trait OrderManagementTrait
 {
@@ -43,7 +44,7 @@ trait OrderManagementTrait
 
         try {
             $children = json_decode($order->children);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $children = $order->children;
         }
         if (is_array($children) && count($children) && $order->order_status === OrderStatusEnum::CANCELLED) {

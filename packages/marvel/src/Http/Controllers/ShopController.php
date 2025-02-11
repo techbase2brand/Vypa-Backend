@@ -2,6 +2,7 @@
 
 namespace Marvel\Http\Controllers;
 
+use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -218,7 +219,7 @@ class ShopController extends CoreController
                 'message' => 'Company deleted successfully.',
                 'deleted_ids' => $ids,
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'error' => $e,
             ], 500);
@@ -230,7 +231,7 @@ class ShopController extends CoreController
         if ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN) || ($request->user()->hasPermissionTo(Permission::STORE_OWNER) && ($request->user()->shops->contains($id)))) {
             try {
                 $shop = $this->repository->findOrFail($id);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
             $shop->delete();
@@ -250,7 +251,7 @@ class ShopController extends CoreController
             $admin_commission_rate = $request->admin_commission_rate;
             try {
                 $shop = $this->repository->with(['owner','employees'])->findOrFail($id);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
             $shop->is_active = true;
@@ -290,7 +291,7 @@ class ShopController extends CoreController
             $id = $request->id;
             try {
                 $shop = $this->repository->with('owner')->findOrFail($id);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
 
@@ -361,7 +362,7 @@ class ShopController extends CoreController
         $id = $request->id;
         try {
             $staff = User::findOrFail($id);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ModelNotFoundException(NOT_FOUND);
         }
         if ($request->user()->hasPermissionTo(Permission::STORE_OWNER) || ($request->user()->hasPermissionTo(Permission::STORE_OWNER) && ($request->user()->shops->contains('id', $staff->shop_id)))) {

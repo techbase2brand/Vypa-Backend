@@ -14,6 +14,7 @@ use Marvel\Database\Models\User;
 use Marvel\Database\Models\Variation;
 use Marvel\Traits\WalletsTrait;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
 class CheckoutRepository
 {
@@ -24,7 +25,7 @@ class CheckoutRepository
         if ($request['customer_id']) {
             try {
                 $user = User::findOrFail($request->customer_id);
-            } catch (\Throwable $th) {
+            } catch (Throwable $th) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
         } else {
@@ -94,7 +95,7 @@ class CheckoutRepository
             } else {
                 return $this->calculateShippingChargeByProduct($request['products']);
             }
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             return 0;
         }
     }
@@ -181,7 +182,7 @@ class CheckoutRepository
             // Get tax settings from settings
             $tax_class = $settings['options']['taxClass'];
             return Tax::findOrFail($tax_class);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             return 0;
         }
 

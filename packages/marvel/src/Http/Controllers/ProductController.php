@@ -27,7 +27,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Marvel\Database\Models\Settings;
 use Marvel\Database\Models\Tag;
 use Marvel\Exceptions\MarvelNotFoundException;
-use \OpenAI;
+use OpenAI;
 use Marvel\Enums\Permission;
 use Marvel\Http\Resources\GetSingleProductResource;
 use Marvel\Http\Resources\ProductResource;
@@ -758,7 +758,7 @@ class ProductController extends CoreController
      */
     public function fetchDraftedProducts(Request $request)
     {
-        $user = $request->user() ?? null;;
+        $user = $request->user() ?? null;
         $language = $request->language ? $request->language : DEFAULT_LANGUAGE;
 
         $products_query = $this->repository->with(['type', 'shop'])->where('language', $language);
@@ -857,7 +857,7 @@ class ProductController extends CoreController
             $id = $request->id;
             try {
                 $product = $this->repository->findOrFail($id);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
             $product->status = 'publish';
@@ -878,7 +878,7 @@ class ProductController extends CoreController
             $id = $request->id;
             try {
                 $product = $this->repository->findOrFail($id);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
             $product->status = 'unpublish';

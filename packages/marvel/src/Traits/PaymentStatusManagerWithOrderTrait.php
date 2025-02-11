@@ -9,6 +9,7 @@ use Marvel\Database\Models\Settings;
 use Marvel\Enums\OrderStatus;
 use Marvel\Enums\PaymentStatus;
 use Marvel\Facades\Payment;
+use Throwable;
 
 trait PaymentStatusManagerWithOrderTrait
 {
@@ -67,7 +68,7 @@ trait PaymentStatusManagerWithOrderTrait
                 }
             }
         } catch (Exception $e) {
-            throw new \Exception(SOMETHING_WENT_WRONG."payment");
+            throw new Exception(SOMETHING_WENT_WRONG."payment");
         }
     }
 
@@ -463,7 +464,7 @@ trait PaymentStatusManagerWithOrderTrait
         $order->save();
         try {
             $children = json_decode($order->children);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $children = $order->children;
         }
         if (is_array($children) && count($children)) {

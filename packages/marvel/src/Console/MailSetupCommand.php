@@ -186,7 +186,7 @@ class MailSetupCommand extends Command
             } while ($reconfigure);
             info('If you want to test your mail configuration, then you can run this command');
             table(['Command', 'Details'], [['marvel:test-mail-send', 'It will send a test mail']]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->error($e->getMessage());
         }
     }

@@ -2,6 +2,7 @@
 
 namespace Marvel\Console;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Marvel\Traits\ENVSetupTrait;
@@ -80,7 +81,7 @@ class MailchimpNewsletterSetupCommand extends Command
 
                 // If the user wants to reconfigure, the loop will continue
             } while ($reconfigure);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->error($e->getMessage());
         }
     }

@@ -2,6 +2,7 @@
 
 namespace Marvel\Console;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use function Laravel\Prompts\{info, error};
@@ -27,7 +28,7 @@ class CopyFilesCommand extends Command
             (new Filesystem)->copyDirectory(__DIR__ . '/../../stubs/resources/lang', resource_path('lang'));
 
             info('Installation Complete');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             error($e->getMessage());
         }
     }

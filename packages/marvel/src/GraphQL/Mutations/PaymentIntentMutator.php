@@ -4,6 +4,7 @@
 namespace Marvel\GraphQL\Mutation;
 
 
+use Exception;
 use Marvel\Exceptions\MarvelException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use Marvel\Facades\Shop;
@@ -17,7 +18,7 @@ class PaymentIntentMutator
     {
         try {
             return Shop::call('Marvel\Http\Controllers\PaymentMethodController@savePaymentMethod', $args);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new MarvelException(SOMETHING_WENT_WRONG."21");
         }
     }

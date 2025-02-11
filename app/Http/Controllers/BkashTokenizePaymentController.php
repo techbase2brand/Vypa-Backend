@@ -20,7 +20,7 @@ class BkashTokenizePaymentController extends Controller
         $request['currency'] = 'BDT';
         $request['amount'] = 10;
         $request['merchantInvoiceNumber'] = $inv;
-        $request['callbackURL'] = config("bkash.callbackURL");;
+        $request['callbackURL'] = config("bkash.callbackURL");
 
         $request_data_json = json_encode($request->all());
 

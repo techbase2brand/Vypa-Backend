@@ -1,5 +1,8 @@
 <?php
 
+use Luigel\Paymongo\Paymongo;
+use Luigel\Paymongo\Signer\DefaultSigner;
+
 return [
 
     'livemode' => env('PAYMONGO_LIVEMODE', false),
@@ -22,7 +25,7 @@ return [
      * The prefixes for the secret keys are sk_live_ for live mode and sk_test_ for test mode.
      */
     'secret_key' => env('PAYMONGO_SECRET_KEY', null),
-    
+
     'source_type' => env('PAYMONGO_PAYMENT_TYPE',null),
     /**
      * Paymongo's team continuously adding more features and integrations to the API.
@@ -35,7 +38,7 @@ return [
      * the headers of the webhook request. A webhook client can use the signature
      * to verify the request hasn't been tampered with.
      */
-    'signer' => \Luigel\Paymongo\Signer\DefaultSigner::class,
+    'signer' => DefaultSigner::class,
 
     /**
      * Paymongo webhooks signature secret.
@@ -64,5 +67,5 @@ return [
      *
      * Choices are: Paymongo::AMOUNT_TYPE_FLOAT, or Paymongo::AMOUNT_TYPE_INT
      */
-    'amount_type' => \Luigel\Paymongo\Paymongo::AMOUNT_TYPE_FLOAT,
+    'amount_type' => Paymongo::AMOUNT_TYPE_FLOAT,
 ];

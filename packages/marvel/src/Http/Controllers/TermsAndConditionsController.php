@@ -2,6 +2,7 @@
 
 namespace Marvel\Http\Controllers;
 
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -189,7 +190,7 @@ class TermsAndConditionsController extends CoreController
             $id = $request->id;
             try {
                 $term = $this->repository->findOrFail($id);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
             $term->is_approved = true;
@@ -215,7 +216,7 @@ class TermsAndConditionsController extends CoreController
             $id = $request->id;
             try {
                 $term = $this->repository->findOrFail($id);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
 

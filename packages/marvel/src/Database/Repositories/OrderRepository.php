@@ -42,6 +42,7 @@ use Marvel\Traits\WalletsTrait;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
 class OrderRepository extends BaseRepository
 {
@@ -487,7 +488,7 @@ class OrderRepository extends BaseRepository
                     $variation_option->availabilities()->create($product);
                 }
             }
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             throw new ModelNotFoundException(NOT_FOUND);
         }
     }

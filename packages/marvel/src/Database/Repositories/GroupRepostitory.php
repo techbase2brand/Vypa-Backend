@@ -79,7 +79,7 @@ class GroupRepository extends BaseRepository
             $group->users()->syncWithoutDetaching($users);
 
             return true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Handle any exceptions
             return response()->json([
                 'error' => 'Failed to add users to the group',

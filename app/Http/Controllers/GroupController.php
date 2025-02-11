@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -63,7 +64,7 @@ class GroupController extends Controller
         // Update the group
         $group->update([
             'name' => $request->name,
-            'slug' => \Illuminate\Support\Str::slug($request->name),
+            'slug' => Str::slug($request->name),
             'tag' => $request->tag,
         ]);
 
@@ -87,7 +88,7 @@ class GroupController extends Controller
             $group->delete();
 
             return response()->json(['message' => 'Group deleted successfully'], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Handle any errors that occur during deletion
             return response()->json([
                 'error' => 'Failed to delete group',
@@ -108,7 +109,7 @@ class GroupController extends Controller
                 'user_ids.*' => 'exists:users,id',
             ]);
         }
-        catch (\Exception $e) {
+        catch (Exception $e) {
             // Handle any exceptions
             return response()->json([
                 'error' => 'Failed to add users to the group',
@@ -123,7 +124,7 @@ class GroupController extends Controller
                 'message' => 'Users added to the group successfully',
                 'group' => $group->load('users'), // Load the updated users relationship
             ], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Handle any exceptions
             return response()->json([
                 'error' => 'Failed to add users to the group',

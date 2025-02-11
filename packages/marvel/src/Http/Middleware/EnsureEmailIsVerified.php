@@ -4,6 +4,8 @@ namespace Marvel\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Marvel\Database\Models\Settings;
 
 class EnsureEmailIsVerified
@@ -11,10 +13,10 @@ class EnsureEmailIsVerified
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  Request  $request
+     * @param Closure $next
      * @param  string|null  $redirectToRoute
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function handle($request, Closure $next, $redirectToRoute = null)
     {

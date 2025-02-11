@@ -93,7 +93,7 @@ class AuthorController extends CoreController
         $language = $request->language ?? DEFAULT_LANGUAGE;
         try {
             $author = $this->repository->where('slug', $slug)->where('language', $language)->firstOrFail();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ModelNotFoundException(NOT_FOUND);
         }
         return $author;
@@ -121,7 +121,7 @@ class AuthorController extends CoreController
         if ($this->repository->hasPermission($request->user(), $request->shop_id)) {
             try {
                 $author = $this->repository->findOrFail($request->id);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
             return $this->repository->updateAuthor($request, $author);

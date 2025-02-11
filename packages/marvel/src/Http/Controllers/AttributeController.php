@@ -104,7 +104,7 @@ class AttributeController extends CoreController
         if ($this->repository->hasPermission($request->user(), $request->shop_id)) {
             try {
                 $attribute = $this->repository->with('values')->findOrFail($request->id);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new HttpException(404, NOT_FOUND);
             }
             return $this->repository->updateAttribute($request, $attribute);
@@ -132,7 +132,7 @@ class AttributeController extends CoreController
     {
         try {
             $attribute = $this->repository->findOrFail($request->id);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new HttpException(404, NOT_FOUND);
         }
         if ($this->repository->hasPermission($request->user(), $attribute->shop->id)) {

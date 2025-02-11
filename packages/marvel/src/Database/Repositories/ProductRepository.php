@@ -29,6 +29,7 @@ use Marvel\Events\ProductReviewRejected;
 use Marvel\Events\DigitalProductUpdateEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Marvel\Exceptions\MarvelException;
+use Throwable;
 
 class ProductRepository extends BaseRepository
 {
@@ -611,7 +612,7 @@ class ProductRepository extends BaseRepository
         $quantity = 0;
         try {
             $product = Product::findOrFail($productId);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             throw $th;
         }
 
@@ -641,7 +642,7 @@ class ProductRepository extends BaseRepository
         $quantity = 0;
         try {
             $variation = Variation::findOrFail($variationId);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             throw $th;
         }
 
@@ -702,7 +703,7 @@ class ProductRepository extends BaseRepository
     {
         try {
             $product = Product::findOrFail($product_id);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             throw $th;
         }
         return $product->sale_price ? $product->sale_price : $product->price;
@@ -712,7 +713,7 @@ class ProductRepository extends BaseRepository
     {
         try {
             $variation = Variation::findOrFail($variation_id);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             throw $th;
         }
         return $variation->sale_price ? $variation->sale_price : $variation->price;
@@ -722,7 +723,7 @@ class ProductRepository extends BaseRepository
     {
         try {
             $location = Resource::findOrFail($location_id);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             throw $th;
         }
         return $location->price;
@@ -734,7 +735,7 @@ class ProductRepository extends BaseRepository
         foreach ($resources as $resource_id) {
             try {
                 $resource = Resource::findOrFail($resource_id);
-            } catch (\Throwable $th) {
+            } catch (Throwable $th) {
                 throw $th;
             }
             if ($resource->price) {

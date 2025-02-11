@@ -54,6 +54,9 @@ use Marvel\Enums\StoreNoticePriority;
 use Marvel\Enums\StoreNoticeType;
 use Marvel\Http\Resources\Resource;
 use Marvel\Providers\MarvelBroadcastServiceProvider;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+use Spatie\Permission\Middleware\RoleMiddleware;
+use Throwable;
 
 class ShopServiceProvider extends ServiceProvider
 {
@@ -118,8 +121,8 @@ class ShopServiceProvider extends ServiceProvider
      * @var string[]
      */
     protected $routeMiddleware = [
-        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
-        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+        'role' => RoleMiddleware::class,
+        'permission' => PermissionMiddleware::class,
         'email.verified' => EnsureEmailIsVerified::class,
     ];
 
@@ -250,7 +253,7 @@ class ShopServiceProvider extends ServiceProvider
             try {
                 $gateway = 'Marvel\\Payments\\' . ucfirst($active_payment_gateway);
                 return new Payment($app->make($gateway));
-            } catch (\Throwable $th) {
+            } catch (Throwable $th) {
                 $gateway = 'Marvel\\Payments\\' . ucfirst($settings->options['defaultPaymentGateway']);
                 return new Payment($app->make($gateway));
             }
@@ -300,7 +303,7 @@ class ShopServiceProvider extends ServiceProvider
         $this->commands($this->commandList);
     }
 
- 
+
     /**
      * Load Middleware from shop
      */

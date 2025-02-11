@@ -3,6 +3,7 @@
 namespace Marvel\Http\Controllers;
 
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -68,12 +69,12 @@ class BecameSellerController extends CoreController
                 ...$request->page_options,
             ]
         ]);
-        
+
         $this->commission->storeCommission($request['commissions'], $language);
 
         $data = $this->repository->where('language', $request->language)->first();
         if ($data) {
-            
+
             $becomeSeller =  tap($data)->update($request->only(['page_options']));
         } else {
             $becomeSeller =  $this->repository->create(['page_options' => $request['page_options'], 'language' => $language]);
@@ -91,7 +92,7 @@ class BecameSellerController extends CoreController
     {
         try {
             return $this->repository->first();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new MarvelException(NOT_FOUND);
         }
     }

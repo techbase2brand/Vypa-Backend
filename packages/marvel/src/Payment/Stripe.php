@@ -5,6 +5,14 @@ namespace Marvel\Payments;
 use Exception;
 
 use Marvel\Database\Models\Order;
+use Stripe\Exception\ApiConnectionException;
+use Stripe\Exception\ApiErrorException;
+use Stripe\Exception\AuthenticationException;
+use Stripe\Exception\CardException;
+use Stripe\Exception\InvalidArgumentException;
+use Stripe\Exception\InvalidRequestException;
+use Stripe\Exception\RateLimitException;
+use Stripe\Exception\SignatureVerificationException;
 use Stripe\StripeClient;
 use Marvel\Payments\PaymentInterface;
 use Marvel\Payments\Base;
@@ -12,7 +20,9 @@ use Marvel\Traits\OrderStatusManagerWithPaymentTrait;
 use Marvel\Enums\OrderStatus;
 use Marvel\Enums\PaymentStatus;
 use Marvel\Traits\PaymentTrait;
+use Stripe\Webhook;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use UnexpectedValueException;
 
 class Stripe extends Base implements PaymentInterface
 {
@@ -96,7 +106,7 @@ class Stripe extends Base implements PaymentInterface
    */
   public function getIntent($data): array
   {
-    
+
     try {
       extract($data);
       $intent_array = [];
@@ -106,12 +116,12 @@ class Stripe extends Base implements PaymentInterface
         'description' => 'Marvel Payment',
 
         /**
-         *  If you want selective payment method type then list those method name in the "payment_method_types" array 
+         *  If you want selective payment method type then list those method name in the "payment_method_types" array
          * and uncomment this "payment_method_types" and comment "automatic_payment_methods" lines
-         * or you can enabled true "automatic_payment_methods" array. so that stripe can handle everything 
+         * or you can enabled true "automatic_payment_methods" array. so that stripe can handle everything
          */
 
-        // 'payment_method_types' => ['card','cashapp','alipay','wechat_pay','etc'], 
+        // 'payment_method_types' => ['card','cashapp','alipay','wechat_pay','etc'],
         'automatic_payment_methods' => [
           'enabled' => true,
         ],
@@ -131,19 +141,19 @@ class Stripe extends Base implements PaymentInterface
         'payment_id'    => $intent->id,
         'is_redirect'   => false
       ];
-    } catch (\Stripe\Exception\CardException $e) {
+    } catch (CardException $e) {
       throw new HttpException(400, INVALID_CARD);
-    } catch (\Stripe\Exception\RateLimitException $e) {
+    } catch (RateLimitException $e) {
       throw new HttpException(400, TOO_MANY_REQUEST);
-    } catch (\Stripe\Exception\InvalidRequestException $e) {
+    } catch (InvalidRequestException $e) {
       throw new HttpException(400, INVALID_REQUEST);
-    } catch (\Stripe\Exception\InvalidArgumentException $e) {
+    } catch (InvalidArgumentException $e) {
       throw new HttpException(400, INVALID_REQUEST);
-    } catch (\Stripe\Exception\AuthenticationException $e) {
+    } catch (AuthenticationException $e) {
       throw new HttpException(400, AUTHENTICATION_FAILED);
-    } catch (\Stripe\Exception\ApiConnectionException $e) {
+    } catch (ApiConnectionException $e) {
       throw new HttpException(400, API_CONNECTION_FAILED);
-    } catch (\Stripe\Exception\ApiErrorException $e) {
+    } catch (ApiErrorException $e) {
       throw new HttpException(400, API_CONNECTION_FAILED);
     } catch (Exception $e) {
       throw new HttpException(400, SOMETHING_WENT_WRONG_WITH_PAYMENT);
@@ -170,21 +180,21 @@ class Stripe extends Base implements PaymentInterface
       // requires_payment_method ------ Customer’s payment failed on your checkout page
 
       return $intent_data;
-    } catch (\Stripe\Exception\ApiErrorException $e) {
+    } catch (ApiErrorException $e) {
       throw new HttpException(400, API_CONNECTION_FAILED);
-    } catch (\Stripe\Exception\RateLimitException $e) {
+    } catch (RateLimitException $e) {
       throw new HttpException(400, TOO_MANY_REQUEST);
-    } catch (\Stripe\Exception\InvalidRequestException $e) {
+    } catch (InvalidRequestException $e) {
       throw new HttpException(400, INVALID_REQUEST);
-    } catch (\Stripe\Exception\InvalidArgumentException $e) {
+    } catch (InvalidArgumentException $e) {
       throw new HttpException(400, INVALID_REQUEST);
-    } catch (\Stripe\Exception\AuthenticationException $e) {
+    } catch (AuthenticationException $e) {
       throw new HttpException(400, AUTHENTICATION_FAILED);
-    } catch (\Stripe\Exception\ApiConnectionException $e) {
+    } catch (ApiConnectionException $e) {
       throw new HttpException(400, API_CONNECTION_FAILED);
-    } catch (\Stripe\Exception\ApiErrorException $e) {
+    } catch (ApiErrorException $e) {
       throw new HttpException(400, API_CONNECTION_FAILED);
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       throw new HttpException(400, SOMETHING_WENT_WRONG_WITH_PAYMENT);
     }
   }
@@ -205,21 +215,21 @@ class Stripe extends Base implements PaymentInterface
       );
 
       return $intent_data;
-    } catch (\Stripe\Exception\ApiErrorException $e) {
+    } catch (ApiErrorException $e) {
       throw new HttpException(400, API_CONNECTION_FAILED);
-    } catch (\Stripe\Exception\RateLimitException $e) {
+    } catch (RateLimitException $e) {
       throw new HttpException(400, TOO_MANY_REQUEST);
-    } catch (\Stripe\Exception\InvalidRequestException $e) {
+    } catch (InvalidRequestException $e) {
       throw new HttpException(400, INVALID_REQUEST);
-    } catch (\Stripe\Exception\InvalidArgumentException $e) {
+    } catch (InvalidArgumentException $e) {
       throw new HttpException(400, INVALID_REQUEST);
-    } catch (\Stripe\Exception\AuthenticationException $e) {
+    } catch (AuthenticationException $e) {
       throw new HttpException(400, AUTHENTICATION_FAILED);
-    } catch (\Stripe\Exception\ApiConnectionException $e) {
+    } catch (ApiConnectionException $e) {
       throw new HttpException(400, API_CONNECTION_FAILED);
-    } catch (\Stripe\Exception\ApiErrorException $e) {
+    } catch (ApiErrorException $e) {
       throw new HttpException(400, API_CONNECTION_FAILED);
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       throw new HttpException(400, SOMETHING_WENT_WRONG_WITH_PAYMENT);
     }
   }
@@ -237,17 +247,17 @@ class Stripe extends Base implements PaymentInterface
       $payment = $this->stripe->charges->retrieve($id);
 
       return isset($payment->paid) ? $payment->paid : false;
-    } catch (\Stripe\Exception\CardException $e) {
+    } catch (CardException $e) {
       throw new HttpException(400, INVALID_CARD);
-    } catch (\Stripe\Exception\RateLimitException $e) {
+    } catch (RateLimitException $e) {
       throw new HttpException(400, TOO_MANY_REQUEST);
-    } catch (\Stripe\Exception\InvalidRequestException $e) {
+    } catch (InvalidRequestException $e) {
       throw new HttpException(400, INVALID_REQUEST);
-    } catch (\Stripe\Exception\AuthenticationException $e) {
+    } catch (AuthenticationException $e) {
       throw new HttpException(400, AUTHENTICATION_FAILED);
-    } catch (\Stripe\Exception\ApiConnectionException $e) {
+    } catch (ApiConnectionException $e) {
       throw new HttpException(400, API_CONNECTION_FAILED);
-    } catch (\Stripe\Exception\ApiErrorException $e) {
+    } catch (ApiErrorException $e) {
       throw new HttpException(400, API_CONNECTION_FAILED);
     } catch (Exception $e) {
       throw new HttpException(400, SOMETHING_WENT_WRONG_WITH_PAYMENT);
@@ -268,16 +278,16 @@ class Stripe extends Base implements PaymentInterface
     $event = null;
 
     try {
-      $event = \Stripe\Webhook::constructEvent(
+      $event = Webhook::constructEvent(
         $payload,
         $sig_header,
         $endpoint_secret
       );
-    } catch (\UnexpectedValueException $e) {
+    } catch (UnexpectedValueException $e) {
       // Invalid payload
       http_response_code(400);
       exit();
-    } catch (\Stripe\Exception\SignatureVerificationException $e) {
+    } catch (SignatureVerificationException $e) {
       // Invalid signature
       http_response_code(400);
       exit();

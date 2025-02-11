@@ -381,7 +381,7 @@ Route::group(
         Route::apiResource('shops', ShopController::class, [
             'only' => ['store', 'update', 'destroy'],
         ]);
-
+        Route::apiResource('users', UserController::class);
         Route::apiResource('uniforms', UniformController::class);
         Route::post('company/create', [ShopController::class, 'createCompany']);
         Route::put('company/update/{id}', [ShopController::class, 'update']);
@@ -513,7 +513,7 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN, 'auth:sa
     Route::apiResource('settings', SettingsController::class, [
         'only' => ['store'],
     ]);
-
+    Route::apiResource('users', UserController::class);
     Route::apiResource('authors', AuthorController::class, [
         'only' => ['update', 'destroy'],
     ]);
@@ -566,6 +566,5 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN, 'auth:sa
         'only' => ['update', 'destroy'],
     ]);
 });
-Route::apiResource('users', UserController::class);
 Route::apiResource('became-seller', BecameSellerController::class);
 Route::get('superdashboard',[ShopController::class,'dashboard']);

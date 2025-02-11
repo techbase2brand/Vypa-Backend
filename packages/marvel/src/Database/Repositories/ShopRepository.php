@@ -107,8 +107,9 @@ class ShopRepository extends BaseRepository
     //         throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE);
     //     }
     // }
-    public function storeCompany($request)
+    public function storeCompany($request,$is_active=1)
     {
+        $data['is_active']=$is_active;
         try {
             // $data = $request->only($this->dataArray);
 
@@ -162,6 +163,7 @@ class ShopRepository extends BaseRepository
                     'name' => $request->input('name'),
                     'email' => $loginDetails['email'],
                     'password' => bcrypt($loginDetails['password']),
+                    'is_active' => $is_active
                 ]);
                 $user->givePermissionTo(Permission::STORE_OWNER);
                 $user->assignRole(Permission::STORE_OWNER);

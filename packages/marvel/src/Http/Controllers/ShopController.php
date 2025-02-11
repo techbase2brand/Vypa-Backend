@@ -116,7 +116,7 @@ class ShopController extends CoreController
     public function CompanyRegister(ShopCreateRequest $request)
     {
         try {
-                return $this->repository->storeCompany($request);
+                return $this->repository->storeCompany($request,$is_active=0);
 
             throw new AuthorizationException(NOT_AUTHORIZED);
         } catch (MarvelException $th) {

@@ -112,6 +112,7 @@ class EmployeeRepository extends BaseRepository
         }else{
             $created_by="company";
         }
+        $data['is_active']=$user->id?1:0;
         try {
                 // $data = $request->only($this->dataArray);
 
@@ -198,7 +199,8 @@ class EmployeeRepository extends BaseRepository
                         'email' => $request->input('Employee_email'),
                         'password' => bcrypt($request->input('password')),
                         'shop_id' => $request->input('shop_id'),
-                        'created_by' =>$created_by
+                        'created_by' =>$created_by,
+                        'is_active' =>$user->id?1:0
                     ]);
                 $user->givePermissionTo(Permission::CUSTOMER);
                 $user->assignRole(Permission::CUSTOMER);

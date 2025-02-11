@@ -366,6 +366,9 @@ class UserController extends CoreController
         if (count($user) < 1) {
             return ['message' => NOT_FOUND, 'success' => false];
         }
+        if ($user->is_active==0) {
+            return ['message' => "Sorry Contact to Administrator for approval process.", 'success' => false];
+        }
         $tokenData = DB::table('password_resets')
             ->where('email', $request->email)->first();
         if (!$tokenData) {

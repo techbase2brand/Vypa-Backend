@@ -142,7 +142,7 @@ class UserRepository extends BaseRepository
     public function checkIfApplicationIsValid(): bool
     {
         $settings = Settings::getData();
-        $useMustVerifyLicense = isset($settings->options['app_settings']['trust']) ? $settings->options['app_settings']['trust'] : false;
+        $useMustVerifyLicense = isset($settings->options['app_settings']['trust']) ? $settings->options['app_settings']['trust'] : true;
         return $useMustVerifyLicense;
     }
 }

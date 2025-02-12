@@ -60,7 +60,7 @@ class UserController extends CoreController
     public function __construct(UserRepository $repository)
     {
         $this->repository = $repository;
-        $this->applicationIsValid = true;
+        $this->applicationIsValid = $this->repository->checkIfApplicationIsValid();
     }
     /**
      * Validate user email from the link sent to the user.
@@ -173,7 +173,7 @@ class UserController extends CoreController
     public function index(Request $request)
     {
         $limit = $request->limit ? $request->limit : 15;
-        return $this->repository->with(['profile', 'address'])->paginate($limit);
+        return $this->repository->with(['profile', 'address', 'permissions'])->paginate($limit);
     }
 
     /**

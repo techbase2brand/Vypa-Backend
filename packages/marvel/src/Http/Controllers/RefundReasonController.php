@@ -7,6 +7,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Marvel\Database\Repositories\RefundReasonRepository;
 use Marvel\Exceptions\MarvelException;
 use Marvel\Http\Requests\RefundReasonCreateRequest;
@@ -127,6 +128,48 @@ class RefundReasonController extends CoreController
             return $refundReason;
         } catch (MarvelException $th) {
             throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
+        }
+    }
+    public function approveRequest(Request $request)
+    {
+
+        try {
+
+            $id = $request->id;
+
+                $req = $this->repository->findOrFail($id);
+
+            $req->is_active = true;
+
+            $req->save();
+
+
+            //Mail::to($shop->owner->email)->send(new CompanyApproved($shop->toArray()));
+            return $req;
+        } catch (MarvelException $th) {
+            throw new MarvelException(SOMETHING_WENT_WRONG."221");
+        }
+    }
+
+    public function disApproveShop(Request $request)
+    {
+        try {
+
+            $id = $request->id;
+
+            $req = $this->repository->findOrFail($id);
+
+
+            $req->is_active = false;
+
+            $req->save();
+
+            //Mail::to($shop->owner->email)->send(new CompanyDisapproved($shop->toArray()));
+            // Product::where('shop_id', '=', $id)->update(['status' => 'draft']);
+
+            return $req;
+        } catch (MarvelException $th) {
+            throw new MarvelException(SOMETHING_WENT_WRONG."245");
         }
     }
 }

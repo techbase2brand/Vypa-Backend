@@ -376,7 +376,7 @@ Route::post('budget', [GroupController::class, 'budget']);
 
 
 Route::group(
-    ['middleware' => ['permission:' . Permission::STORE_OWNER, 'auth:sanctum', 'email.verified']],
+    ['middleware' => ['permission:' . Permission::STORE_OWNER, 'auth:sanctum']],
     function () {
         Route::apiResource('shops', ShopController::class, [
             'only' => ['store', 'update', 'destroy'],
@@ -405,6 +405,8 @@ Route::group(
         Route::post('employee/filter', [EmployeeController::class, 'filter']);
 
 
+        Route::post('refund-reasons/approve', [RefundReasonController::class, 'approve']);
+        Route::post('refund-reasons/disapprove', [RefundReasonController::class, 'disApprove']);
 
 
 

@@ -205,7 +205,7 @@ class OrderRepository extends BaseRepository
                 $request['payment_status'] = PaymentStatus::SUCCESS;
                 $order = $this->createOrder($request);
                 $this->storeOrderWalletPoint($request['paid_total'], $order->id);
-                $this->manageWalletAmount($request['paid_total'], $user->id);
+                $this->manageWalletAmount($request['paid_total'], $request['customer_id']);
                 return $order;
             }
         } else {

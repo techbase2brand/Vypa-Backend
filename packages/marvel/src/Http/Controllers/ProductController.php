@@ -473,14 +473,14 @@ class ProductController extends CoreController
 //        if (!$this->repository->hasPermission($user, $shop_id)) {
 //            throw new AuthorizationException(NOT_AUTHORIZED);
 //        }
-        if (isset($shop_id)) {
-            $file = $uploadedCsv->storePubliclyAs('csv-files', 'products-' . $shop_id . '.' . $uploadedCsv->getClientOriginalExtension(), 'public');
+
+            $file = $uploadedCsv->storePubliclyAs('csv-files', 'products.' . $uploadedCsv->getClientOriginalExtension(), 'public');
 
             $products = $this->repository->csvToArray(storage_path() . '/app/public/' . $file);
 
             foreach ($products as $key => $product) {
                 if (!isset($product['type_id'])) {
-                    throw new MarvelException("MARVEL_ERROR.WRONG_CSV");
+                   // throw new MarvelException("VYPA_ERROR.WRONG_CSV");
                 }
                 unset($product['id']);
                 //$product['shop_id'] = $shop_id;
@@ -515,7 +515,7 @@ class ProductController extends CoreController
                 }
             }
             return true;
-        }
+
     }
 
 

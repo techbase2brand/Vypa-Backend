@@ -67,7 +67,7 @@ use Marvel\Http\Controllers\TermsAndConditionsController;
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 Route::get('/email/verify/{id}/{hash}', [UserController::class, 'verifyEmail'])->name('verification.verify');
-
+Route::get('users/{id}', [UserController::class, 'show']);
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/token', [UserController::class, 'token']);
 Route::post('/logout', [UserController::class, 'logout']);
@@ -571,4 +571,4 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN, 'auth:sa
 Route::apiResource('became-seller', BecameSellerController::class);
 Route::get('superdashboard',[ShopController::class,'dashboard']);
 Route::get('users', [UserController::class, 'index']);
-Route::get('users/{id}', [UserController::class, 'show']);
+

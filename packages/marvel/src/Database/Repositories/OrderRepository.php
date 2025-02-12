@@ -292,9 +292,9 @@ class OrderRepository extends BaseRepository
         try {
             $total = $this->currencyToWalletPoints($total);
             $wallet = Wallet::where('customer_id', $customer_id)->first();
-            $available_points = $wallet->available_points - $total >= 0 ? $wallet->available_points - $total : 0;
+            $available_points = (is_object($wallet) && isset($wallet->available_points) && $wallet->available_points - $total >= 0) ? $wallet->available_points - $total : 0;
             if ($available_points === 0) {
-                $spend = $wallet->points_used + $wallet->available_points;
+                $spend = (is_object($wallet) && isset($wallet->available_points))?$wallet->points_used + $wallet->available_points:$total;
             } else {
                 $spend = $wallet->points_used + $total;
             }

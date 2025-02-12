@@ -83,6 +83,15 @@ class OrderController extends CoreController
         if ($request->has('shop_id') && $request->shop_id) {
             $query->where('shop_id', '=', $request->shop_id);
         }
+        // Add date filtering based on the request parameter
+        if ($request->has('days')) {
+            $days = $request->days;
+            $dateCondition = now()->subDays($days)->startOfDay(); // Calculate the start of the date range
+            $query->where('created_at', '>=', $dateCondition); // Filter orders created in the last X days
+        }
+        if ($request->has('type') && $request->type) {
+            $query->where('payment_gateway', '=', $request->type);
+        }
 
         switch (true) {
             case $user->hasPermissionTo(Permission::SUPER_ADMIN):

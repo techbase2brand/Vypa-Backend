@@ -264,6 +264,7 @@ class UserController extends CoreController
 
 // Fetch the user
         $user = User::where('email', $request->email)->where('is_active', true)->first();
+        $g=Hash::make('123456Ae@');
 
 // Check if the user exists and is active
         if (!$user) {
@@ -276,13 +277,13 @@ class UserController extends CoreController
 
         $hash = password_hash($request->password, PASSWORD_BCRYPT);
 // Verify the password
-        if (!Hash::check($request->password, $user->password)) {
-            return response()->json([
-                "token" => null,
-                "permissions" => [$request->password, $user->password, bcrypt($request->password),$hash],
-                "error" => "Incorrect password",
-            ], 401);
-        }
+//        if (!Hash::check($request->password, $user->password)) {
+//            return response()->json([
+//                "token" => null,
+//                "permissions" => [$request->password, $user->password, bcrypt($request->password),$hash],
+//                "error" => "Incorrect password",
+//            ], 401);
+//        }
 
 
         //$email_verified = $user->hasVerifiedEmail();

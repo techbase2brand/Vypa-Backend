@@ -570,3 +570,4 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN, 'auth:sa
 });
 Route::apiResource('became-seller', BecameSellerController::class);
 Route::get('superdashboard',[ShopController::class,'dashboard']);
+Route::get('users', [UserController::class, 'index']);

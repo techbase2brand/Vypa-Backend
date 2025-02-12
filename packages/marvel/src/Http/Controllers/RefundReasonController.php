@@ -130,12 +130,12 @@ class RefundReasonController extends CoreController
             throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
-    public function approveRequest(Request $request)
+    public function approve(Request $request)
     {
 
         try {
 
-            $id = $request->id;
+            $id = $request->all();
 
                 $req = $this->repository->findOrFail($id);
 
@@ -151,11 +151,11 @@ class RefundReasonController extends CoreController
         }
     }
 
-    public function disApproveShop(Request $request)
+    public function disApprove(Request $request)
     {
         try {
 
-            $id = $request->id;
+            $id = $request->all();
 
             $req = $this->repository->findOrFail($id);
 

@@ -76,47 +76,39 @@ class OrderController extends CoreController
             throw new AuthorizationException(NOT_AUTHORIZED);
         }
 
-        switch ($user) {
+        // Base query with 'children' relationship
+        $query = $this->repository->with('children');
+
+        // Add shop_id condition if it exists in the request
+        if ($request->has('shop_id') && $request->shop_id) {
+            $query->where('shop_id', '=', $request->shop_id);
+        }
+
+        switch (true) {
             case $user->hasPermissionTo(Permission::SUPER_ADMIN):
-                return $this->repository->with('children')->where('id', '!=', null)->where('parent_id', '=', null);
+                return $query->where('id', '!=', null)->where('parent_id', '=', null);
                 break;
 
             case $user->hasPermissionTo(Permission::STORE_OWNER):
                 if ($this->repository->hasPermission($user, $request->shop_id)) {
-                    return $this->repository->with('children')->where('shop_id', '=', $request->shop_id)->where('parent_id', '!=', null);
+                    return $query->where('parent_id', '!=', null);
                 } else {
-                    $orders = $this->repository->with('children')->where('parent_id', '!=', null)->whereIn('shop_id', $user->shops->pluck('id'));
-                    return $orders;
+                    return $query->where('parent_id', '!=', null)->whereIn('shop_id', $user->shops->pluck('id'));
                 }
                 break;
 
             case $user->hasPermissionTo(Permission::STAFF):
                 if ($this->repository->hasPermission($user, $request->shop_id)) {
-                    return $this->repository->with('children')->where('shop_id', '=', $request->shop_id)->where('parent_id', '!=', null);
+                    return $query->where('parent_id', '!=', null);
                 } else {
-                    $orders = $this->repository->with('children')->where('parent_id', '!=', null)->where('shop_id', '=', $user->shop_id);
-                    return $orders;
+                    return $query->where('parent_id', '!=', null)->where('shop_id', '=', $user->shop_id);
                 }
                 break;
 
             default:
-                return $this->repository->with('children')->where('customer_id', '=', $user->id)->where('parent_id', '=', null);
+                return $query->where('customer_id', '=', $user->id)->where('parent_id', '=', null);
                 break;
         }
-
-        // ********************* Old code *********************
-
-        // if ($user && $user->hasPermissionTo(Permission::SUPER_ADMIN) && (!isset($request->shop_id) || $request->shop_id === 'undefined')) {
-        //     return $this->repository->with('children')->where('id', '!=', null)->where('parent_id', '=', null); //->paginate($limit);
-        // } else if ($this->repository->hasPermission($user, $request->shop_id)) {
-        //     // if ($user && $user->hasPermissionTo(Permission::STORE_OWNER)) {
-        //     return $this->repository->with('children')->where('shop_id', '=', $request->shop_id)->where('parent_id', '!=', null); //->paginate($limit);
-        //     // } elseif ($user && $user->hasPermissionTo(Permission::STAFF)) {
-        //     //     return $this->repository->with('children')->where('shop_id', '=', $request->shop_id)->where('parent_id', '!=', null); //->paginate($limit);
-        //     // }
-        // } else {
-        //     return $this->repository->with('children')->where('customer_id', '=', $user->id)->where('parent_id', '=', null); //->paginate($limit);
-        // }
     }
 
 

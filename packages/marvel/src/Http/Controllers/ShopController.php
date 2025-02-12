@@ -59,7 +59,12 @@ class ShopController extends CoreController
             ->withAvg('orders', 'amount')
             ->with(['owner.profile', 'ownership_history', 'orders'])
             ->where('id', '!=', null);
-
+        // Add date filtering based on the request parameter
+        if ($request->has('days')) {
+            $days = $request->days;
+            $dateCondition = now()->subDays($days)->startOfDay(); // Calculate the start of the date range
+            $query->where('created_at', '>=', $dateCondition); // Filter orders created in the last X days
+        }
         if ($request->has('company_status')) {
             $query->where('is_active', $request->company_status);
         }

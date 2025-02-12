@@ -6,6 +6,7 @@ namespace Marvel\Database\Repositories;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Marvel\Database\Models\Balance;
 use Marvel\Database\Models\OwnershipTransfer;
@@ -197,7 +198,7 @@ class EmployeeRepository extends BaseRepository
                     $user = User::create([
                         'name' => $request->input('name'),
                         'email' => $request->input('Employee_email'),
-                        'password' => bcrypt($request->input('password')),
+                        'password' => Hash::make($request->input('password')),
                         'shop_id' => $request->input('shop_id'),
                         'created_by' =>$created_by,
                         'is_active' =>($user!=null)?1:0

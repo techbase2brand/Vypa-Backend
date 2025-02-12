@@ -5,6 +5,7 @@ namespace Marvel\Database\Repositories;
 
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Marvel\Database\Models\Balance;
 use Marvel\Database\Models\OwnershipTransfer;
@@ -162,7 +163,7 @@ class ShopRepository extends BaseRepository
                 $user = User::create([
                     'name' => $request->input('name'),
                     'email' => $loginDetails['email'],
-                    'password' => bcrypt($loginDetails['password']),
+                    'password' => Hash::make($loginDetails['password']),
                     'is_active' => $is_active
                 ]);
                 $user->givePermissionTo(Permission::STORE_OWNER);

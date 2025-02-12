@@ -135,7 +135,7 @@ class RefundReasonController extends CoreController
 
         try {
 
-            $id = $request->all();
+            $id = $request->id;
 
                 $req = $this->repository->findOrFail($id);
 
@@ -155,7 +155,7 @@ class RefundReasonController extends CoreController
     {
         try {
 
-            $id = $request->all();
+            $id = $request->id;
 
             $req = $this->repository->findOrFail($id);
 

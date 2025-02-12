@@ -87,7 +87,7 @@ Route::get('check-availability', [ProductController::class, 'checkAvailability']
 Route::get("products/calculate-rental-price", [ProductController::class, 'calculateRentalPrice']);
 Route::post('import-products', [ProductController::class, 'importProducts']);
 Route::post('import-variation-options', [ProductController::class, 'importVariationOptions']);
-Route::get('export-products/{shop_id}', [ProductController::class, 'exportProducts']);
+Route::get('export-products', [ProductController::class, 'exportProducts']);
 Route::get('export-variation-options/{shop_id}', [ProductController::class, 'exportVariableOptions']);
 Route::post('generate-description', [ProductController::class, 'generateDescription']);
 Route::post('import-attributes', [AttributeController::class, 'importAttributes']);

@@ -318,10 +318,10 @@ class ProductController extends CoreController
      * @param  mixed $shop_id
      * @return void
      */
-    public function exportProducts(Request $request, $shop_id):mixed
+    public function exportProducts(Request $request):mixed
     {
 
-        $filename = 'products-for-shop-id-' . $shop_id . '.csv';
+        $filename = 'products.csv';
         $headers = [
             'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0',
             'Content-type'        => 'text/csv',

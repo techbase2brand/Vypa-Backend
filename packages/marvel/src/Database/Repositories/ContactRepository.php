@@ -24,7 +24,8 @@ class ContactRepository  extends BaseRepository
         'subject',
         'email',
         'question',
-        'phone_no'
+        'phone_no',
+        'employee_id'
     ];
 
     public function boot()
@@ -49,6 +50,7 @@ class ContactRepository  extends BaseRepository
         try {
             $request['slug'] = $this->makeSlug($request);
             $request['shop_id']=isset($user->shop_id)?$user->shop_id:$user->id;
+            $request['employee_id']=$user->id??0;
             $contact = $this->create($request->only($this->dataArray));
             return $contact;
         } catch (Throwable $th) {

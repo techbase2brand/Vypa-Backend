@@ -17,6 +17,7 @@ use Marvel\Http\Controllers\AuthorController;
 use Marvel\Http\Controllers\BecameSellerController;
 use Marvel\Http\Controllers\CategoryController;
 use Marvel\Http\Controllers\CheckoutController;
+use Marvel\Http\Controllers\ContactController;
 use Marvel\Http\Controllers\ConversationController;
 use Marvel\Http\Controllers\CouponController;
 use Marvel\Http\Controllers\DeliveryTimeController;
@@ -176,7 +177,9 @@ Route::post('orders/checkout/verify', [CheckoutController::class, 'verify']);
 Route::apiResource('orders', OrderController::class, [
     'only' => ['show', 'store'],
 ]);
-
+Route::apiResource('contact', ContactController::class, [
+    'only' => ['index', 'show'],
+]);
 Route::post('/email/verification-notification', [UserController::class, 'sendVerificationEmail'])
     ->middleware(['auth:sanctum', 'throttle:6,1'])
     ->name('verification.send');

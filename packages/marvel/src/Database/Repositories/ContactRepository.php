@@ -2,6 +2,7 @@
 
 namespace Marvel\Database\Repositories;
 
+use Illuminate\Support\Facades\Auth;
 use Marvel\Database\Models\Contact;
 use Marvel\Database\Repositories\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
@@ -40,8 +41,10 @@ class ContactRepository  extends BaseRepository
 
     public function storeContact($request)
     {
+        $user=Auth::user();
         try {
             $request['slug'] = $this->makeSlug($request);
+            $request['shop_id']=isset($user->shop_id)?$user->shop_id:$user->id;
             $contact = $this->create($request->only($this->dataArray));
             return $contact;
         } catch (Throwable $th) {

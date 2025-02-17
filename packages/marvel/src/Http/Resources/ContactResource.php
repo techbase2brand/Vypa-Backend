@@ -18,8 +18,8 @@ class ContactResource
             'id'                   => $this->id,
             'name'                 => $this->name,
             'shop_id'              => $this->shop_id,
-            'language'             => $this->language,
-            'translated_languages' => $this->translated_languages,
+            'subject'              => $this->subject,
+            'question'             => $this->question,
             'slug'                 => $this->slug
         ];
     }

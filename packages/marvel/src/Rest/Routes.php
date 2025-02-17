@@ -177,9 +177,7 @@ Route::post('orders/checkout/verify', [CheckoutController::class, 'verify']);
 Route::apiResource('orders', OrderController::class, [
     'only' => ['show', 'store'],
 ]);
-Route::apiResource('contact', ContactController::class, [
-    'only' => ['index', 'show'],
-]);
+Route::apiResource('contact', ContactController::class);
 Route::post('/email/verification-notification', [UserController::class, 'sendVerificationEmail'])
     ->middleware(['auth:sanctum', 'throttle:6,1'])
     ->name('verification.send');

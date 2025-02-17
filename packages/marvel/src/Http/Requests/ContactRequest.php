@@ -32,7 +32,7 @@ class ContactRequest extends FormRequest
             'subject'     => ['nullable', 'string'],
             'question'    => ['nullable', 'string'],
             'email'       => ['nullable', 'string'],
-            'phone_no'    => ['nullable', 'number'],
+            'phone_no'    => ['nullable', 'string'],
         ];
     }
 

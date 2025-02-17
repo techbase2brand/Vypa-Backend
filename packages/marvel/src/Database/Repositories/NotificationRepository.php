@@ -48,6 +48,7 @@ class NotificationRepository  extends BaseRepository
             $request['slug'] = $this->makeSlug($request);
             $request['shop_id']=isset($user->shop_id)?$user->shop_id:$user->id;
             $request['employee_id']=$user->id??0;
+            $request['selectedfor']=json_encode($request->selectedfor);
             $contact = $this->create($request->only($this->dataArray));
             return $contact;
         } catch (Throwable $th) {
@@ -58,6 +59,7 @@ class NotificationRepository  extends BaseRepository
     public function updateNotification($request, $notification)
     {
         try {
+            $request['selectedfor']=json_encode($request->selectedfor);
             return $notification->update($request->only($this->dataArray));
         } catch (Throwable $th) {
             throw new HttpException(400, COULD_NOT_UPDATE_THE_RESOURCE."_Contact-".$th);

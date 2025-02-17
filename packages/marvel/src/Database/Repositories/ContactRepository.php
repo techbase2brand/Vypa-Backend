@@ -21,6 +21,10 @@ class ContactRepository  extends BaseRepository
         'name',
         'slug',
         'shop_id',
+        'subject',
+        'email',
+        'question',
+        'phone_no'
     ];
 
     public function boot()

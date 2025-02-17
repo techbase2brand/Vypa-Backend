@@ -20,6 +20,8 @@ class ContactResource
             'shop_id'              => $this->shop_id,
             'subject'              => $this->subject,
             'question'             => $this->question,
+            'email'                => $this->email,
+            'phone_no'             => $this->phone_no,
             'slug'                 => $this->slug
         ];
     }

@@ -38,23 +38,23 @@ class ContactRepository  extends BaseRepository
         return Contact::class;
     }
 
-    public function storeAttribute($request)
+    public function storeContact($request)
     {
         try {
             $request['slug'] = $this->makeSlug($request);
             $contact = $this->create($request->only($this->dataArray));
             return $contact;
         } catch (Throwable $th) {
-            throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_attribute");
+            throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_contact");
         }
     }
 
-    public function updateAttribute($request, $contact)
+    public function updateContact($request, $contact)
     {
         try {
             return $contact->update($request->only($this->dataArray));
         } catch (Throwable $th) {
-            throw new HttpException(400, COULD_NOT_UPDATE_THE_RESOURCE."_Attribute-".$th);
+            throw new HttpException(400, COULD_NOT_UPDATE_THE_RESOURCE."_Contact-".$th);
         }
     }
 }

@@ -11,6 +11,7 @@ use Marvel\Exceptions\MarvelException;
 use Marvel\Http\Requests\AttributeRequest;
 use Illuminate\Database\Eloquent\Collection;
 use Marvel\Database\Repositories\ContactRepository;
+use Marvel\Http\Requests\ContactRequest;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ContactController extends CoreController
@@ -43,13 +44,10 @@ class ContactController extends CoreController
      * @return mixed
      * @throws ValidatorException
      */
-    public function store(AttributeRequest $request)
+    public function store(ContactRequest $request)
     {
         try {
-            if ($this->repository->hasPermission($request->user(), $request->shop_id)) {
-                return $this->repository->storeAttribute($request);
-            }
-            throw new AuthorizationException(NOT_AUTHORIZED);
+                return $this->repository->storeContact($request);
         } catch (MarvelException $e) {
             throw new MarvelException(NOT_FOUND);
         }
@@ -68,11 +66,11 @@ class ContactController extends CoreController
             $language = $request->language ?? DEFAULT_LANGUAGE;
             if (is_numeric($params)) {
                 $params = (int) $params;
-                $attribute = $this->repository->with('values')->where('id', $params)->firstOrFail();
-                return new AttributeResource($attribute);
+                $contact = $this->repository->where('id', $params)->firstOrFail();
+                return  $contact;
             }
-            $attribute = $this->repository->with('values')->where('slug', $params)->where('language', $language)->firstOrFail();
-            return new AttributeResource($attribute);
+            $contact = $this->repository->where('slug', $params)->where('language', $language)->firstOrFail();
+            return $contact;
         } catch (MarvelException $e) {
             throw new MarvelException(NOT_FOUND);
         }
@@ -89,24 +87,23 @@ class ContactController extends CoreController
     {
         try {
             $request->id = $id;
-            return $this->updateAttribute($request);
+            return $this->updateContact($request);
         } catch (MarvelException $e) {
             throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE);
         }
     }
 
-    public function updateAttribute(AttributeRequest $request)
+    public function updateContact(ContactRequest $request)
     {
 
-        if ($this->repository->hasPermission($request->user(), $request->shop_id)) {
+
             try {
-                $attribute = $this->repository->with('values')->findOrFail($request->id);
+                $contact = $this->repository->with('values')->findOrFail($request->id);
             } catch (Exception $e) {
                 throw new HttpException(404, NOT_FOUND);
             }
-            return $this->repository->updateAttribute($request, $attribute);
-        }
-        throw new AuthorizationException(NOT_AUTHORIZED);
+            return $this->repository->updateContact($request, $contact);
+
     }
 
     /**

@@ -116,24 +116,22 @@ class ContactController extends CoreController
     {
         try {
             $request->id = $id;
-            return $this->deleteAttribute($request);
+            return $this->deleteContact($request);
         } catch (MarvelException $e) {
             throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE);
         }
     }
 
-    public function deleteAttribute(Request $request)
+    public function deleteContact(Request $request)
     {
         try {
-            $attribute = $this->repository->findOrFail($request->id);
+            $contact = $this->repository->findOrFail($request->id);
         } catch (Exception $e) {
             throw new HttpException(404, NOT_FOUND);
         }
-        if ($this->repository->hasPermission($request->user(), $attribute->shop->id)) {
-            $attribute->delete();
-            return $attribute;
-        }
-        throw new AuthorizationException(NOT_AUTHORIZED);
+
+        $contact->delete();
+            return $contact;
     }
 
     public function exportAttributes(Request $request, $shop_id)

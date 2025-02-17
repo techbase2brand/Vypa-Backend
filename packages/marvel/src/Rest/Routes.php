@@ -24,6 +24,7 @@ use Marvel\Http\Controllers\DeliveryTimeController;
 use Marvel\Http\Controllers\DownloadController;
 use Marvel\Http\Controllers\EmployeeController;
 use Marvel\Http\Controllers\GroupController;
+use Marvel\Http\Controllers\NotificationController;
 use Marvel\Http\Controllers\UniformController;
 use Marvel\Http\Controllers\FaqsController;
 use Marvel\Http\Controllers\FeedbackController;
@@ -178,6 +179,7 @@ Route::apiResource('orders', OrderController::class, [
     'only' => ['show', 'store'],
 ]);
 Route::apiResource('contact', ContactController::class);
+Route::apiResource('notification', NotificationController::class);
 Route::post('/email/verification-notification', [UserController::class, 'sendVerificationEmail'])
     ->middleware(['auth:sanctum', 'throttle:6,1'])
     ->name('verification.send');

@@ -43,7 +43,13 @@ class CompanySettingRepository  extends BaseRepository
         try {
             $request['slug'] = $this->makeSlug($request);
             $request['shop_id']=$user->id;
-            $contact = $this->create($request->only($this->dataArray));
+            $check=$this->where('shop_id',$user->id)->get();
+            if($check==null || count($check)==0) {
+                $contact = $this->create($request->only($this->dataArray));
+            }
+            else{
+                $contact = $this->update($request->only($this->dataArray));
+            }
             return $contact;
         } catch (Throwable $th) {
             throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_contact");

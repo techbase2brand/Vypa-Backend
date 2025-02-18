@@ -123,7 +123,7 @@ class NotificationController extends CoreController
         } catch (Exception $e) {
             throw new HttpException(404, NOT_FOUND);
         }
-        return $this->repository->updateContact($request, $contact);
+        return $this->repository->updateNotification($request, $contact);
 
     }
 

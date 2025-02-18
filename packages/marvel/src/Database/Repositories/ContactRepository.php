@@ -2,9 +2,12 @@
 
 namespace Marvel\Database\Repositories;
 
+use App\Models\Employee;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Marvel\Database\Models\Contact;
 use Marvel\Database\Repositories\BaseRepository;
+use Marvel\Mail\ContactMail;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -52,6 +55,8 @@ class ContactRepository  extends BaseRepository
             $request['shop_id']=isset($user->shop_id)?$user->shop_id:$user->id;
             $request['employee_id']=$user->id??0;
             $contact = $this->create($request->only($this->dataArray));
+            $data=Employee::findorfail($user->id);
+            Mail::to($data->email)->send(new ContactMail($data));
             return $contact;
         } catch (Throwable $th) {
             throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_contact");

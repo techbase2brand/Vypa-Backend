@@ -47,6 +47,7 @@ class ContactController extends CoreController
     public function store(ContactRequest $request)
     {
         try {
+
                 return $this->repository->storeContact($request);
         } catch (MarvelException $e) {
             throw new MarvelException(NOT_FOUND);
@@ -134,89 +135,4 @@ class ContactController extends CoreController
             return $contact;
     }
 
-    public function exportAttributes(Request $request, $shop_id)
-    {
-        $filename = 'attributes-for-shop-id-' . $shop_id . '.csv';
-        $headers = [
-            'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0',
-            'Content-type'        => 'text/csv',
-            'Content-Disposition' => 'attachment; filename=' . $filename,
-            'Expires'             => '0',
-            'Pragma'              => 'public'
-        ];
-
-        $list = $this->repository->where('shop_id', $shop_id)->with(['values'])->get()->toArray();
-
-        if (!count($list)) {
-            return response()->stream(function () {
-            }, 200, $headers);
-        }
-        # add headers for each column in the CSV download
-        array_unshift($list, array_keys($list[0]));
-
-        $callback = function () use ($list) {
-            $FH = fopen('php://output', 'w');
-            foreach ($list as $key => $row) {
-                if ($key === 0) {
-                    $exclude = ['id', 'created_at', 'updated_at', 'slug', 'translated_languages'];
-                    $row = array_diff($row, $exclude);
-                }
-                unset($row['id']);
-                unset($row['updated_at']);
-                unset($row['slug']);
-                unset($row['created_at']);
-                unset($row['translated_languages']);
-                if (isset($row['values'])) {
-                    $row['values'] = implode(',', Arr::pluck($row['values'], 'value'));
-                }
-
-                fputcsv($FH, $row);
-            }
-            fclose($FH);
-        };
-
-        return response()->stream($callback, 200, $headers);
-    }
-
-    public function importAttributes(Request $request)
-    {
-        $requestFile = $request->file();
-        $user = $request->user();
-        $shop_id = $request->shop_id;
-
-        if (count($requestFile)) {
-            if (isset($requestFile['csv'])) {
-                $uploadedCsv = $requestFile['csv'];
-            } else {
-                $uploadedCsv = current($requestFile);
-            }
-        }
-
-        if (!$this->repository->hasPermission($user, $shop_id)) {
-            throw new MarvelException(NOT_AUTHORIZED);
-        }
-        if (isset($shop_id)) {
-            $file = $uploadedCsv->storePubliclyAs('csv-files', 'attributes-' . $shop_id . '.' . $uploadedCsv->getClientOriginalExtension(), 'public');
-
-            $attributes = $this->repository->csvToArray(storage_path() . '/app/public/' . $file);
-
-            foreach ($attributes as $key => $attribute) {
-                if (!isset($attribute['name'])) {
-                    throw new MarvelException("MARVEL_ERROR.WRONG_CSV");
-                }
-                unset($attribute['id']);
-                $attribute['shop_id'] = $shop_id;
-                $values = [];
-                if (isset($attribute['values'])) {
-                    $values = explode(',', $attribute['values']);
-                }
-                unset($attribute['values']);
-                $newAttribute = $this->repository->firstOrCreate($attribute);
-                foreach ($values as $key => $value) {
-                    $newAttribute->values()->create(['value' => $value]);
-                }
-            }
-            return true;
-        }
-    }
 }

@@ -15,7 +15,9 @@ class CompanySetting extends Model
     public $guarded = [];
 
 
-
+    protected $casts = [
+        'logo' => 'json',
+    ];
 
 
     /**

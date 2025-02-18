@@ -18,7 +18,7 @@ class CompanySettingRepository  extends BaseRepository
         'rear_logo',
         'front_logo',
         'name',
-        'image'
+        'logo'
     ];
 
     public function boot()

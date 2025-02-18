@@ -180,6 +180,7 @@ Route::apiResource('orders', OrderController::class, [
 ]);
 Route::apiResource('contact', ContactController::class);
 Route::apiResource('notification', NotificationController::class);
+Route::post('markAsRead',[NotificationController::class, 'markAsRead']);
 Route::post('/email/verification-notification', [UserController::class, 'sendVerificationEmail'])
     ->middleware(['auth:sanctum', 'throttle:6,1'])
     ->name('verification.send');

@@ -14,7 +14,7 @@ use Marvel\Database\Repositories\NotificationRepository;
 use Marvel\Http\Requests\NotificationRequest;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class NotificationController extends CoreController
+class CompanySettingController extends CoreController
 {
     public $repository;
 
@@ -152,7 +152,7 @@ class NotificationController extends CoreController
         }
 
         $notification->delete();
-            return $notification;
+        return $notification;
 
     }
 

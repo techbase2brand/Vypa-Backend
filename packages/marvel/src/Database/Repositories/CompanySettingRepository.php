@@ -37,14 +37,12 @@ class CompanySettingRepository  extends BaseRepository
         return CompanySetting::class;
     }
 
-    public function storeNotification($request)
+    public function storeCompanySetting($request)
     {
         $user=Auth::user();
         try {
             $request['slug'] = $this->makeSlug($request);
-            $request['shop_id']=isset($user->shop_id)?$user->shop_id:$user->id;
-            $request['employee_id']=$user->id??0;
-            $request['selectedfor']=json_encode($request->selectedfor);
+            $request['shop_id']=$user->id;
             $contact = $this->create($request->only($this->dataArray));
             return $contact;
         } catch (Throwable $th) {

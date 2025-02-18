@@ -6,6 +6,7 @@ use Exception;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Marvel\Exceptions\MarvelException;
 use Marvel\Http\Requests\CompanySettingRequest;
 use Illuminate\Database\Eloquent\Collection;
@@ -31,8 +32,9 @@ class CompanySettingController extends CoreController
      */
     public function index(Request $request)
     {
+        $user=Auth::user();
         //$language = $request->language ?? DEFAULT_LANGUAGE;
-        $contacts = $this->repository->get();
+        $contacts = $this->repository->where('shop_id',$user->id)->get();
         return $contacts;
     }
 

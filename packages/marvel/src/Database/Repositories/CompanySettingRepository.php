@@ -37,32 +37,21 @@ class CompanySettingRepository  extends BaseRepository
         return CompanySetting::class;
     }
 
-    public function storeCompanySetting($request)
+    public function storeCompanySetting($request,$company_setting)
     {
-        $user=Auth::user();
         try {
-            $request['slug'] = $this->makeSlug($request);
-            $request['shop_id']=$user->id;
-            $check=$this->where('shop_id',$user->id)->get();
-            if($check==null || count($check)==0) {
-                $contact = $this->create($request->only($this->dataArray));
+            if(!isset($company_setting[0]->id)) {
+                $user=Auth::user();
+                $request['shop_id']=$user->id;
+                $company_setting = $this->create($request->only($this->dataArray));
             }
             else{
-                $contact = $this->update($request->only($this->dataArray));
+                $company_setting = $this->update($request->only($this->dataArray),$company_setting[0]->id);
             }
-            return $contact;
+            return $company_setting;
         } catch (Throwable $th) {
             throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_contact");
         }
     }
 
-    public function updateNotification($request, $notification)
-    {
-        try {
-            $request['selectedfor']=json_encode($request->selectedfor);
-            return $notification->update($request->only($this->dataArray));
-        } catch (Throwable $th) {
-            throw new HttpException(400, COULD_NOT_UPDATE_THE_RESOURCE."_Contact-".$th);
-        }
-    }
 }

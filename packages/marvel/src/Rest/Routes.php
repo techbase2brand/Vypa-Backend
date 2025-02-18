@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 use Marvel\Database\Models\Commission;
+use Marvel\Database\Models\CompanySetting;
 use Marvel\Enums\Permission;
 use Marvel\Http\Controllers\AbusiveReportController;
 use Marvel\Http\Controllers\AddressController;
@@ -17,6 +18,7 @@ use Marvel\Http\Controllers\AuthorController;
 use Marvel\Http\Controllers\BecameSellerController;
 use Marvel\Http\Controllers\CategoryController;
 use Marvel\Http\Controllers\CheckoutController;
+use Marvel\Http\Controllers\CompanySettingController;
 use Marvel\Http\Controllers\ContactController;
 use Marvel\Http\Controllers\ConversationController;
 use Marvel\Http\Controllers\CouponController;
@@ -180,6 +182,7 @@ Route::apiResource('orders', OrderController::class, [
 ]);
 Route::apiResource('contact', ContactController::class);
 Route::apiResource('notification', NotificationController::class);
+Route::apiResource('company/setting', CompanySettingController::class);
 Route::post('markAsRead',[NotificationController::class, 'markAsRead']);
 Route::post('/email/verification-notification', [UserController::class, 'sendVerificationEmail'])
     ->middleware(['auth:sanctum', 'throttle:6,1'])

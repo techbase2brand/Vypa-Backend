@@ -40,7 +40,7 @@ class NotificationController extends CoreController
     /**
      * Store a newly created resource in storage.
      *
-     * @param AttributeRequest $request
+     * @param NotificationRequest $request
      * @return mixed
      * @throws ValidatorException
      */

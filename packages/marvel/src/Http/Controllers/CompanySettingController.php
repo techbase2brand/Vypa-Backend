@@ -3,14 +3,13 @@
 namespace Marvel\Http\Controllers;
 
 use Exception;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Support\Arr;
+
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Marvel\Exceptions\MarvelException;
-use Marvel\Http\Requests\AttributeRequest;
+use Marvel\Http\Requests\CompanySettingRequest;
 use Illuminate\Database\Eloquent\Collection;
-use Marvel\Database\Repositories\NotificationRepository;
+use Marvel\Database\Repositories\CompanySettingRepository;
 use Marvel\Http\Requests\NotificationRequest;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -18,7 +17,7 @@ class CompanySettingController extends CoreController
 {
     public $repository;
 
-    public function __construct(NotificationRepository $repository)
+    public function __construct(CompanySettingRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -40,14 +39,14 @@ class CompanySettingController extends CoreController
     /**
      * Store a newly created resource in storage.
      *
-     * @param AttributeRequest $request
+     * @param CompanySettingRequest $request
      * @return mixed
      * @throws ValidatorException
      */
-    public function store(NotificationRequest $request)
+    public function store(CompanySettingRequest $request)
     {
         try {
-            return $this->repository->storeNotification($request);
+            return $this->repository->storeCompanySetting($request);
         } catch (MarvelException $e) {
             throw new MarvelException(NOT_FOUND);
         }
@@ -66,11 +65,9 @@ class CompanySettingController extends CoreController
             $language = $request->language ?? DEFAULT_LANGUAGE;
             if (is_numeric($params)) {
                 $params = (int) $params;
-                $notification = $this->repository->where('id', $params)->firstOrFail();
+                $notification = $this->repository->where('shop_id', $params)->firstOrFail();
                 return  $notification;
             }
-            $notification = $this->repository->where('slug', $params)->firstOrFail();
-            return $notification;
         } catch (MarvelException $e) {
             throw new MarvelException(NOT_FOUND);
         }
@@ -79,11 +76,11 @@ class CompanySettingController extends CoreController
     /**
      * Update the specified resource in storage.
      *
-     * @param AttributeRequest $request
+     * @param CompanySettingRequest $request
      * @param int $id
      * @return JsonResponse
      */
-    public function update(NotificationRequest $request, $id)
+    public function update(CompanySettingRequest $request, $id)
     {
         try {
             $request->id = $id;
@@ -92,27 +89,7 @@ class CompanySettingController extends CoreController
             throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE);
         }
     }
-    public function markAsRead(Request $request)
-    {
 
-        try {
-
-            $id = $request->id;
-
-            try {
-                $notification = $this->repository->findOrFail($id);
-            } catch (Exception $e) {
-                throw new ModelNotFoundException(NOT_FOUND);
-            }
-            $notification->markAsRead = 1;
-
-            $notification->save();
-
-            return $notification;
-        } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG."221");
-        }
-    }
 
     public function updateNotification(NotificationRequest $request)
     {

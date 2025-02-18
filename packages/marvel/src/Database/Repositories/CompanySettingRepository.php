@@ -3,7 +3,7 @@
 namespace Marvel\Database\Repositories;
 
 use Illuminate\Support\Facades\Auth;
-use Marvel\Database\Models\Notification;
+use Marvel\Database\Models\CompanySetting;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Symfony\Component\HttpKernel\Exception\HttpException;

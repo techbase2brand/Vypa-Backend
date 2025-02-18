@@ -20,6 +20,9 @@ class Notification extends Model
 
     public $guarded = [];
 
+    protected $casts = [
+        'selectedfor' => 'json'
+    ];
     /**
      * Return the sluggable configuration array for this model.
      *

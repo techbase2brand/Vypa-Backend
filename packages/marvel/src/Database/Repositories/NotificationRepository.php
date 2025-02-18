@@ -48,7 +48,7 @@ class NotificationRepository  extends BaseRepository
             $request['slug'] = $this->makeSlug($request);
             $request['shop_id']=isset($user->shop_id)?$user->shop_id:$user->id;
             $request['employee_id']=$user->id??0;
-            $request['selectedfor']=json_encode($request->selectedfor);
+            $request['selectedfor']=$request->selectedfor;
             $contact = $this->create($request->only($this->dataArray));
             return $contact;
         } catch (Throwable $th) {

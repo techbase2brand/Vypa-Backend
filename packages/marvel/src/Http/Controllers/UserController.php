@@ -387,7 +387,7 @@ class UserController extends CoreController
         if (count($user) < 1) {
             return ['message' => NOT_FOUND, 'success' => false];
         }
-        if ($user->is_active==0) {
+        if (isset($user->is_active) && $user->is_active==0) {
             return ['message' => "Access denied: Your account is currently inactive. Please contact the administrator for further assistance.", 'success' => false];
         }
         $tokenData = DB::table('password_resets')

@@ -32,7 +32,11 @@ class CompanySettingController extends CoreController
         $company_setting = $this->repository->where('shop_id',$user->id)->get();
         return $company_setting;
     }
-
+    public function show(Request $request,$id)
+    {
+        $company_setting = $this->repository->where('shop_id',$id)->get();
+        return $company_setting;
+    }
     /**
      * Store a newly created resource in storage.
      *

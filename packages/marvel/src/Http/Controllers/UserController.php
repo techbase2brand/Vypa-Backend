@@ -403,7 +403,7 @@ class UserController extends CoreController
         }
 
         if ($this->repository->sendResetEmail($request->email, $tokenData->token)) {
-            return ['message' => CHECK_INBOX_FOR_PASSWORD_RESET_EMAIL, 'success' => true];
+            return ['user'=>$user,'message' => CHECK_INBOX_FOR_PASSWORD_RESET_EMAIL, 'success' => true];
         } else {
             return ['message' => SOMETHING_WENT_WRONG."384", 'success' => false];
         }

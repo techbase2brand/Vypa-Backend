@@ -324,9 +324,25 @@ class EmployeeRepository extends BaseRepository
             if ($request->has('gender')) {
                 $employee->gender = $request->input('gender');
             }
-//            if ($request->has('company_name')) {
-//                $employee->company_name = ($request->input('company_name'));
-//            }
+            ////////////
+            if ($request->has('time_duration')) {
+                $employee->time_duration = $request->input('time_duration');
+            }
+            if ($request->has('category')) {
+                $employee->category = $request->input('category');
+            }
+            if ($request->has('purchase_limit_updates')) {
+                $employee->purchase_limit_updates = $request->input('purchase_limit_updates')??false;
+            }
+            if ($request->has('orders_update')) {
+                $employee->orders_update = $request->input('orders_update')??false;
+            }
+            if ($request->has('announcements')) {
+                $employee->announcements = $request->input('announcements')??false;
+            }
+            if ($request->has('credit_card_option')) {
+                $employee->credit_card_option = $request->input('credit_card_option')??false;
+            }
 
             // Save shop updates
             $employee->save();

@@ -150,8 +150,8 @@ class EmployeeController extends CoreController
 
         try {
             $shopData = match (true) {
-                is_numeric($slug) => $shop->where('id', $slug)->firstOrFail(),
-                is_string($slug)  => $shop->where('slug', $slug)->firstOrFail(),
+                is_numeric($slug) => $shop->with(['shop','wallet','orders'])->where('id', $slug)->firstOrFail(),
+                is_string($slug)  => $shop->with(['shop','wallet','orders'])->where('slug', $slug)->firstOrFail(),
             };
             // Convert the shop data to an array
             $shopArray = $shopData->toArray();

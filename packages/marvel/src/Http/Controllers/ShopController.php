@@ -110,7 +110,7 @@ class ShopController extends CoreController
 
         try {
            // if ($request->user()->hasPermissionTo(Permission::STORE_OWNER)) {
-                return $this->repository->storeCompany($request);
+                return $this->repository->storeCompany($request,1);
            // }
            // throw new AuthorizationException(NOT_AUTHORIZED);
         } catch (MarvelException $th) {
@@ -122,7 +122,7 @@ class ShopController extends CoreController
     public function CompanyRegister(ShopCreateRequest $request)
     {
         try {
-                return $this->repository->storeCompany($request,$is_active=0);
+                return $this->repository->storeCompany($request,0);
 
             throw new AuthorizationException(NOT_AUTHORIZED);
         } catch (MarvelException $th) {

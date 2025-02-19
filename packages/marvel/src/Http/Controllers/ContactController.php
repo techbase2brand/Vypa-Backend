@@ -46,6 +46,7 @@ class ContactController extends CoreController
      */
     public function store(ContactRequest $request)
     {
+
         try {
 
                 return $this->repository->storeContact($request);

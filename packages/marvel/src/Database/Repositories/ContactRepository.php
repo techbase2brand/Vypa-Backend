@@ -50,17 +50,17 @@ class ContactRepository  extends BaseRepository
     public function storeContact($request)
     {
         $user=Auth::user();
-        try {
+        //try {
             $request['slug'] = $this->makeSlug($request);
             $request['shop_id']=isset($user->shop_id)?$user->shop_id:$user->id;
             $request['employee_id']=$user->id??0;
             $contact = $this->create($request->only($this->dataArray));
-            $data=Employee::findorfail($user->id);
-            Mail::to($data->email)->send(new ContactMail($data));
+
+           // Mail::to($contact->email)->send(new ContactMail($contact));
             return $contact;
-        } catch (Throwable $th) {
+      /*  } catch (Throwable $th) {
             throw new HttpException(400, COULD_NOT_CREATE_THE_RESOURCE."_contact");
-        }
+        }*/
     }
 
     public function updateContact($request, $contact)

@@ -472,7 +472,9 @@ Route::group(
  * Authorized Route for Super Admin only
  * *****************************************
  */
-
+Route::apiResource('refund-reasons', RefundReasonController::class, [
+    'only' => ['store', 'update', 'destroy'],
+]);
 Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN, 'auth:sanctum']], function () {
     // Route::get('messages/get-conversations/{shop_id}', [ConversationController::class, 'getConversationByShopId']);
     // Route::get('analytics', [AnalyticsController::class, 'analytics']);
@@ -494,9 +496,7 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN, 'auth:sa
     Route::apiResource('tags', TagController::class, [
         'only' => ['store', 'update', 'destroy'],
     ]);
-    Route::apiResource('refund-reasons', RefundReasonController::class, [
-        'only' => ['store', 'update', 'destroy'],
-    ]);
+
     Route::apiResource('resources', ResourceController::class, [
         'only' => ['update', 'destroy']
     ]);

@@ -272,7 +272,7 @@ class UserController extends CoreController
                 "token" => null,
                 "permissions" => [],
                 "error" => "User not found or inactive",
-            ], 401);
+            ]);
         }
 
         $hash = password_hash($request->password, PASSWORD_BCRYPT);

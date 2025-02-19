@@ -51,9 +51,8 @@ class RefundReasonController extends CoreController
     public function store(RefundReasonCreateRequest $request)
     {
         try {
-            if ($this->repository->hasPermission($request->user(), $request->shop_id)) {
                 return $this->repository->storeRefundReason($request);
-            }
+
             throw new AuthorizationException(NOT_AUTHORIZED);
         } catch (MarvelException $e) {
             throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);

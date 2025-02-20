@@ -31,7 +31,8 @@ class WishlistRepository extends BaseRepository
     protected $dataArray = [
         'user_id',
         'product_id',
-        'variation_option_id'
+        'variation_option_id',
+        'uniform_id'
     ];
 
     /**
@@ -55,6 +56,11 @@ class WishlistRepository extends BaseRepository
                 $request['user_id'] = $user_id;
                 $wishlistInput = $request->only($this->dataArray);
                 return $this->create($wishlistInput);
+            }
+            else{
+                $request['user_id'] = $user_id;
+                $wishlistInput = $request->only($this->dataArray);
+                return $this->update($wishlistInput,$wishlist->id??$wishlist[0]->id);
             }
         } catch (Exception $e) {
             throw new HttpException(400, ALREADY_ADDED_TO_WISHLIST_FOR_THIS_PRODUCT);

@@ -36,9 +36,25 @@ class WishlistController extends CoreController
      */
     public function index(Request $request)
     {
-        $limit = $request->limit ? $request->limit : 15;
-        $wishlist = $this->repository->pluck('product_id');
-        return Product::whereIn('id', $wishlist)->paginate($limit);
+        $limit = $request->limit ?? 15; // Default to 15 if limit is not set
+
+// Get wishlist entries for the given uniform_id
+        $wishlist = $this->repository->where('uniform_id', $request->uniform_id)
+            ->get(['product_id', 'variation_option_id']); // Fetch both product_id & variation_option_id
+
+// Extract product IDs and variation_option_ids
+        $productIds = $wishlist->pluck('product_id')->toArray();
+        $variationOptionIds = $wishlist->pluck('variation_option_id')->toArray();
+
+// Fetch products and filter by variation_option_id
+        $products = Product::whereIn('id', $productIds)
+            ->with(['variation_options' => function ($query) use ($variationOptionIds) {
+                $query->whereIn('id', $variationOptionIds);
+            }])
+            ->paginate($limit);
+
+        return $products;
+
     }
 
     /**

@@ -29,7 +29,7 @@ class WishlistCreateRequest extends FormRequest
     {
         return [
             'product_id'            => ['required', 'exists:Marvel\Database\Models\Product,id'],
-            'variation_option_id'   => ['integer', 'exists:Marvel\Database\Models\Variation,id'],
+            'variation_option_id'   => ['nullable', 'integer', 'exists:Marvel\Database\Models\Variation,id'],
         ];
     }
 

@@ -38,24 +38,27 @@ class WishlistController extends CoreController
     {
         $limit = $request->limit ?? 15; // Default to 15 if limit is not set
 
-// Get wishlist entries for the given uniform_id
+        // Get wishlist entries for the given uniform_id
         $wishlist = $this->repository->where('uniform_id', $request->uniform_id)
             ->get(['product_id', 'variation_option_id']); // Fetch both product_id & variation_option_id
 
-// Extract product IDs and variation_option_ids
+        // Extract product IDs and variation_option_ids
         $productIds = $wishlist->pluck('product_id')->toArray();
         $variationOptionIds = $wishlist->pluck('variation_option_id')->toArray();
 
-// Fetch products and filter by variation_option_id
+        // Fetch products and filter by variation_option_id
         $products = Product::whereIn('id', $productIds)
             ->with(['variation_options' => function ($query) use ($variationOptionIds) {
                 $query->whereIn('id', $variationOptionIds);
             }])
             ->paginate($limit);
-
+        $products['wishlist'] = $wishlist;
+           // $return['products'] = $products;
+        // Return both wishlist and products
         return $products;
 
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -118,7 +121,7 @@ class WishlistController extends CoreController
             }
 
             // Delete employees with the provided IDs
-            $this->repository->whereIn('product_id', $ids)->delete();
+            $this->repository->whereIn('id', $ids)->delete();
 
             return response()->json([
                 'message' => 'WhishList deleted successfully.',

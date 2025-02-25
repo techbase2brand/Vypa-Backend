@@ -249,6 +249,7 @@ Route::group(['middleware' => ['can:' . Permission::CUSTOMER, 'auth:sanctum', 'e
     Route::apiResource('wishlists', WishlistController::class, [
         'only' => ['index', 'store', 'destroy'],
     ]);
+    Route::post('wishlists/deleteAll', [WishlistController::class,'destroyAll']);
     Route::get('wishlists/in_wishlist/{product_id}', [WishlistController::class, 'in_wishlist']);
     Route::get('my-wishlists', [ProductController::class, 'myWishlists']);
     Route::get('orders/tracking-number/{tracking_number}', 'Marvel\Http\Controllers\OrderController@findByTrackingNumber');

@@ -118,7 +118,7 @@ class WishlistController extends CoreController
             }
 
             // Delete employees with the provided IDs
-            $this->repository->whereIn('id', $ids)->delete();
+            $this->repository->whereIn('product_id', $ids)->delete();
 
             return response()->json([
                 'message' => 'WhishList deleted successfully.',

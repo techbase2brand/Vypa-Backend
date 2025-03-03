@@ -46,6 +46,11 @@ class OrderCreateRequest extends FormRequest
             'use_wallet_points'       => 'nullable|boolean',
             'shipping_address'        => 'array',
             'billing_address'         => 'array',
+            'selectlogo'              => 'nullable|array',
+            'employee'                => 'nullable|numeric',
+            'employee_details'        => 'nullable|string',
+            'logoUrl'                 => 'nullable|string',
+            'total_logo_cost'         => 'nullable|numeric',
             'note'                    => 'nullable|string',
         ];
     }

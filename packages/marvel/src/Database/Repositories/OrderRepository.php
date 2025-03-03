@@ -83,6 +83,11 @@ class OrderRepository extends BaseRepository
         'customer_contact',
         'customer_name',
         'note',
+        'employee',
+        'employee_details',
+        'logoUrl',
+        'total_logo_cost',
+        'selectlogo',
         'shop_id'
     ];
 

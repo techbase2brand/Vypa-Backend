@@ -52,7 +52,7 @@ class Order extends Model
     {
         return $this->belongsToMany(Product::class)
             ->using(OrderProduct::class) // Use the custom pivot model
-            ->withPivot('order_quantity', 'unit_price', 'subtotal', 'variation_option_id', 'selectlogo')
+            ->withPivot('order_quantity', 'unit_price', 'subtotal', 'variation_option_id', 'selectlogo','total_logo_cost','logoUrl','employee','employee_details')
             ->withTimestamps();
     }
 

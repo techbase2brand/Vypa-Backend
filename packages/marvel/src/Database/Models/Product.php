@@ -36,6 +36,8 @@ class Product extends Model
         'image' => 'json',
         'gallery' => 'json',
         'video' => 'json',
+        'logoUrl' => 'json',
+        'selectlogo' => 'json'
     ];
 
     protected $appends = [

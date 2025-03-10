@@ -24,7 +24,8 @@ class Order extends Model
         'shipping_address'    => 'json',
         'billing_address'     => 'json',
         'payment_intent_info' => 'json',
-        'selectlogo'          => 'json'
+        'selectlogo'          => 'json',
+        'logoUrl'             => 'json',
     ];
 
     protected $hidden = [

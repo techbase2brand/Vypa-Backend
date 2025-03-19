@@ -52,7 +52,7 @@ class CompanySettingController extends CoreController
     public function store(CompanySettingRequest $request)
     {
         try {
-            $company_setting = $this->repository->where('shop_id',Auth::user()->id)->get();
+            $company_setting = $this->repository->get();
             return $this->repository->storeCompanySetting($request,$company_setting);
         } catch (MarvelException $e) {
             throw new MarvelException(NOT_FOUND);

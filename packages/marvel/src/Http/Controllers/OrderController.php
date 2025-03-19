@@ -102,7 +102,7 @@ class OrderController extends CoreController
                 if ($this->repository->hasPermission($user, $request->shop_id)) {
                     return $query->where('parent_id', '!=', null);
                 } else {
-                    return $query->where('parent_id', '!=', null)->whereIn('shop_id', $user->shops->pluck('id'));
+                    return $query->whereIn('shop_id', $user->shops->pluck('id'));
                 }
                 break;
 
@@ -110,12 +110,12 @@ class OrderController extends CoreController
                 if ($this->repository->hasPermission($user, $request->shop_id)) {
                     return $query->where('parent_id', '!=', null);
                 } else {
-                    return $query->where('parent_id', '!=', null)->where('shop_id', '=', $user->shop_id);
+                    return $query->where('shop_id', '=', $user->shop_id);
                 }
                 break;
 
             default:
-                return $query->where('customer_id', '=', $user->id)->where('parent_id', '=', null);
+                return $query->where('customer_id', '=', $user->id);
                 break;
         }
     }

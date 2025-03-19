@@ -92,6 +92,9 @@ class OrderController extends CoreController
         if ($request->has('type') && $request->type) {
             $query->where('payment_gateway', '=', $request->type);
         }
+        if ($request->has('status') && $request->status) {
+            $query->where('order_status', '=', $request->status);
+        }
 
         switch (true) {
             case $user->hasPermissionTo(Permission::SUPER_ADMIN):

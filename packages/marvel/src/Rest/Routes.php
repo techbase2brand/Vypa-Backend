@@ -383,7 +383,7 @@ Route::delete('groups/{group}/users', [GroupController::class, 'removeUsers']);
 Route::get('groups/{group}/users', [GroupController::class, 'listUsers']);
 Route::post('budget', [GroupController::class, 'budget']);
 
-
+Route::apiResource('uniforms', UniformController::class);
 Route::group(
     ['middleware' => ['permission:' . Permission::STORE_OWNER, 'auth:sanctum']],
     function () {
@@ -391,7 +391,7 @@ Route::group(
             'only' => ['store', 'update', 'destroy'],
         ]);
         Route::apiResource('users', UserController::class);
-        Route::apiResource('uniforms', UniformController::class);
+
         Route::post('company/create', [ShopController::class, 'createCompany']);
         Route::put('company/update/{id}', [ShopController::class, 'update']);
         Route::get('company/list', [ShopController::class, 'index']);

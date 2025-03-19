@@ -154,7 +154,7 @@ class OrderRepository extends BaseRepository
         if ($request->user() && $request->user()->hasPermissionTo(Permission::SUPER_ADMIN) && isset($request['customer_id'])) {
             $request['customer_id'] =  $request['customer_id'];
         } else {
-            $request['customer_id'] = $request->user()->id ?? $request['customer_id'];
+            $request['customer_id'] = $request['customer_id']??$request->user()->id;
         }
 
 

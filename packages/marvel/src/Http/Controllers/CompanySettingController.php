@@ -29,7 +29,7 @@ class CompanySettingController extends CoreController
     public function index(Request $request)
     {
         $user=Auth::user();
-        $company_setting = $this->repository->get();
+        $company_setting = $this->repository->where('shop_id',$user->id)->get();
         return $company_setting;
     }
     public function show(Request $request,$id)
@@ -39,7 +39,7 @@ class CompanySettingController extends CoreController
     }
     public function getResult(Request $request)
     {
-        $company_setting = $this->repository->where('shop_id',$request->shop_id)->get();
+        $company_setting = $this->repository->get();
         return $company_setting;
     }
     /**

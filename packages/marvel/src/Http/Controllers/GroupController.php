@@ -232,7 +232,7 @@ class GroupController extends CoreController
     {
         // Retrieve the JSON data from the request
         $data = $request->json()->all();
-
+        $data = $data['payload']??$data;
         // Debugging: Dump the data to check its structure
         // dd($data);
 

@@ -248,12 +248,12 @@ class GroupController extends CoreController
         // Check if the wallet exists
         if (isset($existingWallets[$customerId])) {
             // Existing wallet: calculate available_points based on current points_used
-            $currentPointsUsed = $existingWallets[$customerId]->points_used;
-            $availablePoints = $totalPoints - $currentPointsUsed;
+            $currentPoints = $existingWallets[$customerId]->available_points;
+            $availablePoints = (int)$totalPoints + $currentPoints;
 
             // Update the existing wallet
             Wallet::where('customer_id', $customerId)->update([
-                'total_points' => $totalPoints,
+                'total_points' => $availablePoints,
                 'available_points' => $availablePoints,
                 'updated_at' => now(),
             ]);

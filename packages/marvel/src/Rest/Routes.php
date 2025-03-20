@@ -382,6 +382,7 @@ Route::put('uniforms/update/{group}', [UniformController::class, 'update']);
 Route::delete('groups/{group}/users', [GroupController::class, 'removeUsers']);
 Route::get('groups/{group}/users', [GroupController::class, 'listUsers']);
 Route::post('budget', [GroupController::class, 'budget']);
+Route::post('assignbudget',[GroupController::class, 'assignBudget']);
 
 Route::apiResource('uniforms', UniformController::class);
 Route::group(

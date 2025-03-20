@@ -228,6 +228,43 @@ class GroupController extends CoreController
 
         return response()->json(['message' => 'Wallets updated successfully.'], 200);
     }
+    public function assignBudget(Request $request)
+    {
+            // Fetch existing wallets to get current points_used
+            $existingWallets = Wallet::whereIn('customer_id', $request->employee_id)
+                ->get()
+                ->keyBy('customer_id');
+
+
+                $customerId = $request->employee_id;
+                $totalPoints = $request->assign_budget;
+                //$expiryDate = $data['expiry_date'];
+
+                // Check if the wallet exists
+                if (isset($existingWallets[$customerId])) {
+                    // Existing wallet: calculate available_points based on current points_used
+                    $currentPointsUsed = $existingWallets[$customerId]->points_used;
+                    $availablePoints = $totalPoints - $currentPointsUsed;
+
+                    // Update the existing wallet
+                    Wallet::where('customer_id', $customerId)->update([
+                        'total_points' => $totalPoints,
+                        'available_points' => $availablePoints,
+                        'updated_at' => now(),
+                    ]);
+                } else {
+                    // New wallet: set points_used to 0 and available_points = total_points
+                    Wallet::create([
+                        'customer_id' => $customerId,
+                        'total_points' => $totalPoints,
+                        'points_used' => 0,
+                        'available_points' => $totalPoints,
+                        //'expiry_date' => $expiryDate,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+    }
     public function deleteGroup(Request $request)
     {
         $id = $request->id;

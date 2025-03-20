@@ -269,6 +269,8 @@ class GroupController extends CoreController
                 'updated_at' => now(),
             ]);
         }
+        return Wallet::whereIn('customer_id', [$data['employee_id']])
+            ->get();
     }
     public function deleteGroup(Request $request)
     {

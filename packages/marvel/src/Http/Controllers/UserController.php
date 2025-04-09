@@ -282,7 +282,7 @@ class UserController extends CoreController
                 "token" => null,
                 "permissions" => [$request->password, $user->password, bcrypt($request->password),$hash],
                 "error" => "Incorrect password",
-            ], 401);
+            ], 200);
         }
 
 

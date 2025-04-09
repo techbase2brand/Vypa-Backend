@@ -277,13 +277,13 @@ class UserController extends CoreController
 
         $hash = password_hash($request->password, PASSWORD_BCRYPT);
 // Verify the password
-//        if (!Hash::check($request->password, $user->password)) {
-//            return response()->json([
-//                "token" => null,
-//                "permissions" => [$request->password, $user->password, bcrypt($request->password),$hash],
-//                "error" => "Incorrect password",
-//            ], 401);
-//        }
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json([
+                "token" => null,
+                "permissions" => [$request->password, $user->password, bcrypt($request->password),$hash],
+                "error" => "Incorrect password",
+            ], 401);
+        }
 
 
         //$email_verified = $user->hasVerifiedEmail();

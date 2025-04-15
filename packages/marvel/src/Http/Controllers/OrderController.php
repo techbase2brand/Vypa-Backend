@@ -31,6 +31,7 @@ use Marvel\Traits\TranslationTrait;
 use Marvel\Traits\WalletsTrait;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Support\Facades\Cache;
 
 
 class OrderController extends CoreController
@@ -47,7 +48,9 @@ class OrderController extends CoreController
     public function __construct(OrderRepository $repository)
     {
         $this->repository = $repository;
-        $this->settings = Settings::first();
+        $this->settings = Cache::remember('settings', 3600, function () {
+            return Settings::first();
+        });
     }
 
     /**
@@ -58,8 +61,14 @@ class OrderController extends CoreController
      */
     public function index(Request $request)
     {
-        $limit = $request->limit ? $request->limit : 10;
-        return $this->fetchOrders($request)->paginate($limit)->withQueryString();
+        $cacheKey = 'orders_' . md5(json_encode($request->all()));
+        $limit = $request->limit ?: 10;
+
+        return Cache::remember($cacheKey, 300, function () use ($request, $limit) {
+            return $this->fetchOrders($request)
+                ->paginate($limit)
+                ->withQueryString();
+        });
     }
 
     /**
@@ -76,29 +85,42 @@ class OrderController extends CoreController
             throw new AuthorizationException(NOT_AUTHORIZED);
         }
 
-        // Base query with 'children' relationship
-        $query = $this->repository->with('children');
+        // Base query with selective loading
+        $query = $this->repository->select([
+            'id',
+            'tracking_number',
+            'order_status',
+            'payment_gateway',
+            'shop_id',
+            'customer_id',
+            'created_at',
+            'parent_id'
+        ]);
 
         // Add shop_id condition if it exists in the request
         if ($request->has('shop_id') && $request->shop_id) {
             $query->where('shop_id', '=', $request->shop_id);
         }
+
         // Add date filtering based on the request parameter
         if ($request->has('days')) {
             $days = $request->days;
-            $dateCondition = now()->subDays($days)->startOfDay(); // Calculate the start of the date range
-            $query->where('created_at', '>=', $dateCondition); // Filter orders created in the last X days
+            $dateCondition = now()->subDays($days)->startOfDay();
+            $query->where('created_at', '>=', $dateCondition);
         }
+
         if ($request->has('type') && $request->type) {
             $query->where('payment_gateway', '=', $request->type);
         }
+
         if ($request->has('status') && $request->status) {
             $query->where('order_status', '=', $request->status);
         }
 
+        // Optimize permission-based queries
         switch (true) {
             case $user->hasPermissionTo(Permission::SUPER_ADMIN):
-                return $query->where('id', '!=', null)->where('parent_id', '=', null);
+                return $query->where('parent_id', '=', null);
                 break;
 
             case $user->hasPermissionTo(Permission::STORE_OWNER):
@@ -133,16 +155,12 @@ class OrderController extends CoreController
      */
     public function store(OrderCreateRequest $request)
     {
-        //try {
-            // decision need
-            // if(!($this->settings->options['useCashOnDelivery'] && $this->settings->options['useEnableGateway'])){
-            //     throw new HttpException(400, PLEASE_ENABLE_PAYMENT_OPTION_FROM_THE_SETTINGS);
-            // }
-
-            return DB::transaction(fn () => $this->repository->storeOrder($request, $this->settings));
-        //} catch (MarvelException $th) {
-           // throw new MarvelException(SOMETHING_WENT_WRONG."140", $th->getMessage());
-        //}
+        $result = DB::transaction(fn () => $this->repository->storeOrder($request, $this->settings));
+        
+        // Clear relevant caches
+        Cache::tags(['orders'])->flush();
+        
+        return $result;
     }
 
     /**
@@ -175,39 +193,72 @@ class OrderController extends CoreController
         $user = $request->user() ?? null;
         $language = $request->language ?? DEFAULT_LANGUAGE;
         $orderParam = $request->tracking_number ?? $request->id;
-        try {
-            $order = $this->repository->where('language', $language)->with([
-                'products',
-                'shop',
-                'children.shop',
-                'wallet_point',
-            ])->where('id', $orderParam)->orWhere('tracking_number', $orderParam)->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            throw new ModelNotFoundException(NOT_FOUND);
-        }
+        
+        $cacheKey = 'order_' . $orderParam . '_' . $language;
 
-        // Create Intent
-        if (!in_array($order->payment_gateway, [
-            PaymentGatewayType::CASH, PaymentGatewayType::CASH_ON_DELIVERY, PaymentGatewayType::FULL_WALLET_PAYMENT
-        ])) {
-            // $order['payment_intent'] = $this->processPaymentIntent($request, $this->settings);
-            $order['payment_intent'] = $this->attachPaymentIntent($orderParam);
-        }
+        return Cache::remember($cacheKey, 300, function () use ($request, $user, $language, $orderParam) {
+            try {
+                $order = $this->repository->select([
+                    'id',
+                    'tracking_number',
+                    'order_status',
+                    'payment_gateway',
+                    'shop_id',
+                    'customer_id',
+                    'created_at',
+                    'parent_id',
+                    'language'
+                ])
+                ->with([
+                    'products' => function($query) {
+                        $query->select(['id', 'name', 'price', 'order_id']);
+                    },
+                    'shop' => function($query) {
+                        $query->select(['id', 'name', 'slug']);
+                    },
+                    'children.shop' => function($query) {
+                        $query->select(['id', 'name', 'slug']);
+                    },
+                    'wallet_point' => function($query) {
+                        $query->select(['id', 'points', 'order_id']);
+                    }
+                ])
+                ->where('language', $language)
+                ->where(function($query) use ($orderParam) {
+                    $query->where('id', $orderParam)
+                          ->orWhere('tracking_number', $orderParam);
+                })
+                ->firstOrFail();
 
-        if (!$order->customer_id) {
-            return $order;
-        }
-        if ($user && $user->hasPermissionTo(Permission::SUPER_ADMIN)) {
-            return $order;
-        } elseif (isset($order->shop_id)) {
-            if ($user && ($this->repository->hasPermission($user, $order->shop_id) || $user->id == $order->customer_id)) {
-                return $order;
+                if (!in_array($order->payment_gateway, [
+                    PaymentGatewayType::CASH, 
+                    PaymentGatewayType::CASH_ON_DELIVERY, 
+                    PaymentGatewayType::FULL_WALLET_PAYMENT
+                ])) {
+                    $order['payment_intent'] = $this->attachPaymentIntent($orderParam);
+                }
+
+                if (!$order->customer_id) {
+                    return $order;
+                }
+
+                if ($user && $user->hasPermissionTo(Permission::SUPER_ADMIN)) {
+                    return $order;
+                }
+
+                if (isset($order->shop_id)) {
+                    if ($user && ($this->repository->hasPermission($user, $order->shop_id) || $user->id == $order->customer_id)) {
+                        return $order;
+                    }
+                } elseif ($user && $user->id == $order->customer_id) {
+                    return $order;
+                }
+
+                throw new AuthorizationException(NOT_AUTHORIZED);
+            } catch (ModelNotFoundException $e) {
+                throw new ModelNotFoundException(NOT_FOUND);
             }
-        } elseif ($user && $user->id == $order->customer_id) {
-            return $order;
-        } else {
-            throw new AuthorizationException(NOT_AUTHORIZED);
-        }
+        });
     }
 
     /**
@@ -248,7 +299,13 @@ class OrderController extends CoreController
     {
         try {
             $request["id"] = $id;
-            return $this->updateOrder($request);
+            $result = $this->updateOrder($request);
+            
+            // Clear relevant caches
+            Cache::tags(['orders'])->flush();
+            Cache::forget('order_' . $id);
+            
+            return $result;
         } catch (MarvelException $e) {
             throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE, $e->getMessage());
         }
@@ -268,7 +325,13 @@ class OrderController extends CoreController
     public function destroy($id)
     {
         try {
-            return $this->repository->findOrFail($id)->delete();
+            $result = $this->repository->findOrFail($id)->delete();
+            
+            // Clear relevant caches
+            Cache::tags(['orders'])->flush();
+            Cache::forget('order_' . $id);
+            
+            return $result;
         } catch (MarvelException $e) {
             throw new MarvelException(NOT_FOUND);
         }

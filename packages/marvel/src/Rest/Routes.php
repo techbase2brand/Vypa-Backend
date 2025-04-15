@@ -383,7 +383,10 @@ Route::delete('groups/{group}/users', [GroupController::class, 'removeUsers']);
 Route::get('groups/{group}/users', [GroupController::class, 'listUsers']);
 Route::post('budget', [GroupController::class, 'budget']);
 Route::post('assignbudget',[GroupController::class, 'assignBudget']);
-
+Route::post('requestBudget',[GroupController::class, 'requestBudget']);
+Route::post('requestBudget/approveRequestBudget',[GroupController::class, 'approveRequestBudget']);
+Route::post('requestBudget/disapproveRequestBudget',[GroupController::class, 'disapproveRequestBudget']);
+Route::get('requestBudget',[GroupController::class, 'showRequestBudget']);
 Route::apiResource('uniforms', UniformController::class);
 Route::group(
     ['middleware' => ['permission:' . Permission::STORE_OWNER, 'auth:sanctum']],

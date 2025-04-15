@@ -10,6 +10,7 @@ use Marvel\Database\Models\Shop;
 use Marvel\Database\Models\Group;
 use Marvel\Database\Models\Employee;
 use Marvel\Database\Models\Wallet;
+use Marvel\Database\Models\RequestBudget;
 use Illuminate\Http\JsonResponse;
 use Marvel\Exceptions\MarvelException;
 use Marvel\Http\Requests\GroupCreateRequest;
@@ -17,6 +18,7 @@ use Marvel\Http\Requests\GroupUpdateRequest;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Marvel\Database\Repositories\GroupRepository;
+use Illuminate\Support\Facades\Auth;
 
 class GroupController extends CoreController
 {
@@ -242,7 +244,7 @@ class GroupController extends CoreController
             ->keyBy('customer_id');
 
         $customerId = $data['employee_id'];
-        $totalPoints = $data['assign_budget'];
+        $totalPoints = str_replace('$', '', $data['assign_budget']);
         // $expiryDate = $data['expiry_date']; // Uncomment if you have this field
 
         // Check if the wallet exists
@@ -271,6 +273,134 @@ class GroupController extends CoreController
         }
         return Wallet::whereIn('customer_id', [$data['employee_id']])
             ->get();
+    }
+    public function requestBudget(Request $request)
+    {
+
+        // Retrieve the JSON data from the request
+        $data = $request->json()->all();
+        $data = $data['payload']??$data;
+        // Debugging: Dump the data to check its structure
+        // dd($data);
+
+        // Fetch existing wallets to get current points_used
+
+
+        $customerId = $data['employee_id'];
+        $totalPoints = $data['assign_budget'];
+        // $expiryDate = $data['expiry_date']; // Uncomment if you have this field
+        $shop_id = Employee::whereIn('id', [$data['employee_id']])
+            ->get()
+            ->pluck('shop_id');
+
+            // New wallet: set points_used to 0 and available_points = total_points
+            RequestBudget::create([
+                'customer_id' => $customerId,
+                'points_requested' => $totalPoints,
+                'approved' => 0,
+                'shop_id' => $shop_id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+        return RequestBudget::whereIn('customer_id', [$data['employee_id']])
+            ->get();
+    }
+    public function showRequestBudget(Request $request)
+    {
+        $userId = auth()->id();
+
+        // Get the shop(s) owned by this user
+        $shops = Shop::where('owner_id', $userId)->get();
+
+        // If you only need the IDs
+        $shopIds = $shops->pluck('id')->toArray();
+
+        // Then use these IDs to find request budgets
+        return RequestBudget::whereIn('shop_id', $shopIds)->with('user')
+            ->paginate(20);
+    }
+    public function approveRequestBudget(Request $request)
+    {
+
+        $id=$request->input('id');
+        RequestBudget::where('id', $id)->update([
+                'approved' => 1,
+                'updated_at' => now(),
+            ]);
+
+        $finals= RequestBudget::where('id', $id)
+            ->get();
+        $final=$finals->toArray()[0];
+            $existingWallets = Wallet::whereIn('customer_id', [$final['customer_id']])
+            ->get()
+            ->keyBy('customer_id');
+
+        $customerId = $final['customer_id'];
+        $points = $final['points_requested'];
+        // $expiryDate = $data['expiry_date']; // Uncomment if you have this field
+
+        // Check if the wallet exists
+        if (isset($existingWallets[$customerId])) {
+            // Existing wallet: calculate available_points based on current points_used
+            $currentPoints = $existingWallets[$customerId]->available_points;
+            $availablePoints = (int)$points + $currentPoints;
+
+            // Update the existing wallet
+            Wallet::where('customer_id', $customerId)->update([
+                'total_points' => $currentPoints,
+                'available_points' => $availablePoints,
+                'updated_at' => now(),
+            ]);
+        } else {
+            // New wallet: set points_used to 0 and available_points = total_points
+            Wallet::create([
+                'customer_id' => $customerId,
+                'total_points' => 0,
+                'points_used' => 0,
+                'available_points' => $points,
+                // 'expiry_date' => $expiryDate, // Uncomment if you have this field
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+            return $final;
+    }
+    public function disapproveRequestBudget(Request $request)
+    {
+
+        $id=$request->input('id');
+        RequestBudget::where('id', $id)->update([
+                'approved' => 0,
+                'updated_at' => now(),
+            ]);
+
+        $finals= RequestBudget::where('id', $id)
+            ->get();
+        $finals= RequestBudget::where('id', $id)
+            ->get();
+        $final=$finals->toArray()[0];
+            $existingWallets = Wallet::whereIn('customer_id', [$final['customer_id']])
+            ->get()
+            ->keyBy('customer_id');
+
+        $customerId = $final['customer_id'];
+        $points = $final['points_requested'];
+        // $expiryDate = $data['expiry_date']; // Uncomment if you have this field
+
+        // Check if the wallet exists
+        if (isset($existingWallets[$customerId])) {
+            // Existing wallet: calculate available_points based on current points_used
+            $currentPoints = $existingWallets[$customerId]->available_points;
+            $availablePoints =  $currentPoints-(int)$points;
+            // Update the existing wallet
+            Wallet::where('customer_id', $customerId)->update([
+                'available_points' => $availablePoints,
+                'updated_at' => now(),
+            ]);
+        }
+        return $final;
     }
     public function deleteGroup(Request $request)
     {

@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('CACHE_DRIVER', 'file'),
+    'default' => env('CACHE_DRIVER', 'redis'),
 
     /*
     |--------------------------------------------------------------------------
@@ -76,6 +76,7 @@ return [
         'redis' => [
             'driver' => 'redis',
             'connection' => 'cache',
+            'lock_connection' => 'default',
         ],
 
         'dynamodb' => [
@@ -100,6 +101,25 @@ return [
     |
     */
 
-    'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_cache'),
+    'prefix' => env('CACHE_PREFIX', 'marvel_cache'),
+
+    'cache_tags' => [
+        'orders' => [
+            'ttl' => 300, // 5 minutes
+            'clear_on' => ['create', 'update', 'delete'],
+        ],
+        'settings' => [
+            'ttl' => 3600, // 1 hour
+            'clear_on' => ['update'],
+        ],
+        'products' => [
+            'ttl' => 300,
+            'clear_on' => ['create', 'update', 'delete'],
+        ],
+        'users' => [
+            'ttl' => 300,
+            'clear_on' => ['update'],
+        ],
+    ],
 
 ];

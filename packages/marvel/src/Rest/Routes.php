@@ -123,6 +123,9 @@ Route::get('store-notices', [StoreNoticeController::class, 'index'])->name('stor
 Route::apiResource('products', ProductController::class, [
     'only' => ['index', 'show'],
 ]);
+
+Route::post('products/destroyMany', [ProductController::class, 'destroyMany']);
+
 Route::apiResource('types', TypeController::class, [
     'only' => ['index', 'show'],
 ]);

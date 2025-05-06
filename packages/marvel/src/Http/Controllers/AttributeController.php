@@ -135,10 +135,10 @@ class AttributeController extends CoreController
         } catch (Exception $e) {
             throw new HttpException(404, NOT_FOUND);
         }
-        if ($this->repository->hasPermission($request->user(), $attribute->shop->id)) {
+        // if ($this->repository->hasPermission($request->user(), $attribute->shop->id)) {
             $attribute->delete();
             return $attribute;
-        }
+        // }
         throw new AuthorizationException(NOT_AUTHORIZED);
     }
 

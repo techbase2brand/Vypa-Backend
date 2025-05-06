@@ -94,7 +94,15 @@ class OrderController extends CoreController
             'shop_id',
             'customer_id',
             'created_at',
-            'parent_id'
+            'parent_id',
+            'id',
+            'customer_contact',
+            'customer_name',
+            'paid_total',
+            'total',
+            'payment_status',
+            'billing_address',
+            'amount',
         ]);
 
         // Add shop_id condition if it exists in the request
@@ -156,10 +164,13 @@ class OrderController extends CoreController
     public function store(OrderCreateRequest $request)
     {
         $result = DB::transaction(fn () => $this->repository->storeOrder($request, $this->settings));
-        
+
         // Clear relevant caches
-        Cache::tags(['orders'])->flush();
-        
+        if (Cache::getStore() instanceof \Illuminate\Cache\TaggableStore) {
+            Cache::tags(['orders'])->flush();
+        }
+
+
         return $result;
     }
 
@@ -193,7 +204,7 @@ class OrderController extends CoreController
         $user = $request->user() ?? null;
         $language = $request->language ?? DEFAULT_LANGUAGE;
         $orderParam = $request->tracking_number ?? $request->id;
-        
+
         $cacheKey = 'order_' . $orderParam . '_' . $language;
 
         return Cache::remember($cacheKey, 300, function () use ($request, $user, $language, $orderParam) {
@@ -207,11 +218,22 @@ class OrderController extends CoreController
                     'customer_id',
                     'created_at',
                     'parent_id',
-                    'language'
+                    'language',
+                    'id',
+                    'customer_contact',
+                    'customer_name',
+                    'paid_total',
+                    'total',
+                    'payment_status',
+                    'billing_address',
+                    'amount',
+                    'discount',
+                    'sales_tax',
+                    'note'
                 ])
                 ->with([
                     'products' => function($query) {
-                        $query->select(['id', 'name', 'price', 'order_id']);
+                        $query->select(['products.id', 'products.name', 'products.price', 'products.slug', 'order_id']);
                     },
                     'shop' => function($query) {
                         $query->select(['id', 'name', 'slug']);
@@ -220,7 +242,7 @@ class OrderController extends CoreController
                         $query->select(['id', 'name', 'slug']);
                     },
                     'wallet_point' => function($query) {
-                        $query->select(['id', 'points', 'order_id']);
+                        $query->select(['id', 'amount', 'order_id']);
                     }
                 ])
                 ->where('language', $language)
@@ -231,8 +253,8 @@ class OrderController extends CoreController
                 ->firstOrFail();
 
                 if (!in_array($order->payment_gateway, [
-                    PaymentGatewayType::CASH, 
-                    PaymentGatewayType::CASH_ON_DELIVERY, 
+                    PaymentGatewayType::CASH,
+                    PaymentGatewayType::CASH_ON_DELIVERY,
                     PaymentGatewayType::FULL_WALLET_PAYMENT
                 ])) {
                     $order['payment_intent'] = $this->attachPaymentIntent($orderParam);
@@ -300,11 +322,11 @@ class OrderController extends CoreController
         try {
             $request["id"] = $id;
             $result = $this->updateOrder($request);
-            
+
             // Clear relevant caches
-            Cache::tags(['orders'])->flush();
-            Cache::forget('order_' . $id);
-            
+            // Cache::tags(['orders'])->flush();
+            // Cache::forget('order_' . $id);
+
             return $result;
         } catch (MarvelException $e) {
             throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE, $e->getMessage());
@@ -326,11 +348,11 @@ class OrderController extends CoreController
     {
         try {
             $result = $this->repository->findOrFail($id)->delete();
-            
+
             // Clear relevant caches
             Cache::tags(['orders'])->flush();
             Cache::forget('order_' . $id);
-            
+
             return $result;
         } catch (MarvelException $e) {
             throw new MarvelException(NOT_FOUND);

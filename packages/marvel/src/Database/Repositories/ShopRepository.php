@@ -145,9 +145,6 @@ class ShopRepository extends BaseRepository
 
             $shop = $this->create($data);
 
-
-
-
             if (isset($request['categories'])) {
                 $shop->categories()->attach($request['categories']);
             }
@@ -164,14 +161,21 @@ class ShopRepository extends BaseRepository
                     'name' => $request->input('name'),
                     'email' => $loginDetails['email'],
                     'password' => Hash::make($loginDetails['password']),
-                    'is_active' => $is_active
+                    'is_active' => $is_active,
+                    'shop_id' => $shop->id
                 ]);
                 $user->givePermissionTo(Permission::STORE_OWNER);
                 $user->assignRole(Permission::STORE_OWNER);
                 $shop->owner_id = $user->id;
                 $shop->save();
             }
-            Mail::to($user->email)->send(new CompanyRegisteredMail($data));
+
+            try {
+                Mail::to($user->email)->send(new CompanyRegisteredMail($data));
+            } catch (\Exception $e) {
+                \Log::error('Mail sending failed: ' . $e->getMessage());
+            }
+
             return $shop;
 
         } catch (Exception $e) {

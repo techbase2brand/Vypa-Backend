@@ -293,6 +293,38 @@ class ProductController extends CoreController
         }
     }
 
+    /**
+         * relatedProducts
+         *
+         * @param  Request $request
+         * @return void
+         */
+        public function destroyMany(Request $request)
+        {
+            $ids = $request->input('ids');
+
+            if (!is_array($ids)) {
+                return response()->json(['error' => 'Invalid input. Expected array of IDs.'], 422);
+            }
+
+            $deleted = [];
+
+            foreach ($ids as $id) {
+                try {
+                    $req = clone $request;
+                    $req->id = $id;
+                    $this->destroyProduct($req);
+                    $deleted[] = $id;
+                } catch (\Throwable $e) {
+                    // Log error or continue
+                }
+            }
+
+            return response()->json([
+                'message' => 'Requested products deleted.',
+                'deleted_ids' => $deleted
+            ]);
+        }
 
 
     /**

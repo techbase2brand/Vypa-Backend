@@ -207,9 +207,17 @@ class EmployeeRepository extends BaseRepository
                 $user->assignRole(Permission::CUSTOMER);
                     $shop->owner_id = $user->id;
                     $shop->save();
-            Mail::raw('Congratulations, you are successfully registered as an Employee.', function ($message) use ($user) {
-                $message->to($user->email)->subject('Employee Registration');
-            });
+
+
+                    try {
+                        Mail::raw('Congratulations, you are successfully registered as an Employee.', function ($message) use ($user) {
+                            $message->to($user->email)->subject('Employee Registration');
+                        });
+                    } catch (\Exception $e) {
+                        \Log::error('Mail sending failed: ' . $e->getMessage());
+                    }
+
+
             if ($request->has('assign_budget')) {
                 $dataWallet['total_points'] = $request->input('assign_budget');
                 $dataWallet['points_used'] = 0;

@@ -55,7 +55,6 @@
                 }
             }
         }
-        
     @endphp
 
     <div style="display: block;">
@@ -203,6 +202,11 @@
 
     @if (!empty($products))
         @foreach ($products as $product)
+
+
+        {{-- @php
+            dd($order->amount);
+        @endphp --}}
             <ul style="list-style: none; margin: 0; padding: 0;">
                 <li
                     style="{{ $is_rtl
@@ -228,14 +232,13 @@
                 <li
                     style="{{ $is_rtl ? ' direction: rtl; float: right; text-align: left;' : 'float: left; text-align: right;' }} width: 30%; display: inline-block; border-bottom: solid 1px #d4d4d4;">
                     <div style="display: block; padding: 7px; box-sizing: broder-box;">
-                        {{ formatCurrency($product->pivot['unit_price'], $currency, $locale) }}
+                        {{ formatCurrency($order->amount, $currency, $locale) }}
                     </div>
                 </li>
                 <li style="clear: both;"></li>
             </ul>
         @endforeach
     @endif
-
     <div style="height: 20px;"></div>
 
     <div style="display: block;">
@@ -282,7 +285,7 @@
                     </div>
                     <br>
             @endif
-            @if (isset($order->delivery_fee))
+            @if (isset($order->delivery_fee) > 0)
                 <div style="padding: 3px 0px; box-sizing: border-box;">
                     <div
                         style="display: block; width: 48%; {{ $is_rtl ? ' direction: rtl; float: right; text-align: right;' : 'float: left;' }} color: #6b7280; font-size:14px;">
@@ -290,7 +293,7 @@
 
                     <div
                         style="display: block; width: 50%; {{ $is_rtl ? ' direction: rtl; float: left; text-align: left;' : 'float: right; text-align: right;' }} color: #6b7280; font-size:14px;">
-                        {{ formatCurrency($order->sales_tax + $order->cancelled_tax, $currency, $locale) }}
+                        {{ formatCurrency($order->delivery_fee , $currency, $locale) }}
                     </div>
 
                     <div style="clear: both;"></div>
@@ -314,7 +317,10 @@
                 </div>
                 <br>
             @endif
+
             @if (isset($order->cancelled_amount) && $order->cancelled_amount > 0 && $order->cancelled_delivery_fee > 0)
+
+
                 <div style="padding: 3px 0px; box-sizing: border-box;">
                     <div
                         style="display: block; width: 73%; {{ $is_rtl ? ' direction: rtl; float: right; text-align: right;' : 'float: left;' }}  color: #6b7280; font-size:14px;">

@@ -98,7 +98,6 @@ class MarvelVerification implements JsonSerializable
 
     public function modifySettingsData($language = DEFAULT_LANGUAGE): void
     {
-        Cache::flush();
         $settings = Settings::getData($language);
         $settings->update([
             'options' => [

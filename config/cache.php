@@ -46,6 +46,7 @@ return [
             'driver' => 'database',
             'table' => 'cache',
             'connection' => null,
+            'lock_connection' => null,
         ],
 
         'file' => [
@@ -73,8 +74,8 @@ return [
         ],
 
         'redis' => [
-            'driver' => 'redis',
-            'connection' => 'cache',
+            'driver' => 'file',
+            'path' => storage_path('framework/cache/data'),
         ],
 
         'dynamodb' => [

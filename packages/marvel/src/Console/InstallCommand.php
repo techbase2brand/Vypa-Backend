@@ -191,7 +191,6 @@ class InstallCommand extends Command
     {
 
         $language = isset(request()['language']) ? request()['language'] : DEFAULT_LANGUAGE;
-        Cache::flush();
         $settings = Settings::getData($language);
         $settings->update([
             'options' => [

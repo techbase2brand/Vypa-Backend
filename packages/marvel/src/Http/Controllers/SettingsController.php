@@ -11,7 +11,6 @@ use Marvel\Database\Models\Address;
 use Marvel\Database\Repositories\SettingsRepository;
 use Marvel\Events\Maintenance;
 use Marvel\Exceptions\MarvelException;
-use Illuminate\Support\Facades\Cache;
 use Marvel\Http\Requests\SettingsRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 
@@ -24,7 +23,6 @@ class SettingsController extends CoreController
         $this->repository = $repository;
     }
 
-
     /**
      * Display a listing of the resource.
      *
@@ -33,28 +31,33 @@ class SettingsController extends CoreController
      */
     public function index(Request $request)
     {
-        $language = $request->language ? $request->language : DEFAULT_LANGUAGE;
+        try {
+            $language = $request->language ? $request->language : DEFAULTNGUAGE;
 
-        $data = Cache::rememberForever(
-            'cached_settings_' . $language,
-            function () use ($request) {
-                return $this->repository->getData($request->language);
+            // Get data directlrom repository without caching temporarily
+            $data = $this->repository->getData($request->language);
+
+            // Format maintenance start and until data
+         if (isset($data['options']['maintenance'])) {
+                $maintenanceStart = Carbon::parse($data['options']['maintenance']['start'])->format('F j, Y h:i A');
+                $maintenanceUntil = Carbon::parse($data['options']['maintenance']['until'])->format('F j, Y h:i A');
+
+                $formattedMaintenance = [
+                    "start" => $maintenanceStart,
+                    "until" => $maintenanceUntil,
+                ];
+
+                // Add formatted maintenance data to the existing data
+                $data['maintenance'] = $formattedMaintenance;
             }
-        );
 
-        // Format maintenance start and until data
-        $maintenanceStart = Carbon::parse($data['options']['maintenance']['start'])->format('F j, Y h:i A');
-        $maintenanceUntil = Carbon::parse($data['options']['maintenance']['until'])->format('F j, Y h:i A');
-
-        $formattedMaintenance = [
-            "start" => $maintenanceStart,
-            "until" => $maintenanceUntil,
-        ];
-
-        // Add formatted maintenance data to the existing data
-        $data['maintenance'] = $formattedMaintenance;
-
-        return $data;
+            return $data;
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Failed to fetch settings',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     // public function fetchSettings(Request $request)
@@ -84,31 +87,12 @@ class SettingsController extends CoreController
         $data = $this->repository->where('language', $request->language)->first();
 
         if ($data) {
-            if (Cache::has('cached_settings_' . $language)) {
-                Cache::forget('cached_settings_' . $language);
-            }
-            $settings =  tap($data)->update($request->only(['options']));
+            $settings = tap($data)->update($request->only(['options']));
         } else {
-            // Cache::flush();
-            $settings =  $this->repository->create(['options' => $request['options'], 'language' => $language]);
+            $settings = $this->repository->create(['options' => $request['options'], 'language' => $language]);
         }
-        event(new Maintenance($language));
-        return $settings;
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param $id
-     * @return JsonResponse
-     */
-    public function show($id)
-    {
-        try {
-            return $this->repository->first();
-        } catch (Exception $e) {
-            throw new MarvelException(NOT_FOUND);
-        }
+        return $settings;
     }
 
     /**

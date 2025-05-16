@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use App\Models\User;
 use Marvel\Enums\Permission;
 use Marvel\Exceptions\MarvelException;
 use Marvel\Http\Requests\EmployeeCreateRequest;
@@ -135,10 +136,15 @@ class EmployeeController extends CoreController
         if ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN) || $request->user()->hasPermissionTo(Permission::STORE_OWNER)) {
             try {
                 $employee = $this->repository->findOrFail($id);
+
+
             } catch (Exception $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
             $employee->delete();
+
+            $userr = User::where('id',$employee->owner_id)->first();
+            $userr->delete();
             return $employee;
         }
         throw new AuthorizationException(NOT_AUTHORIZED);

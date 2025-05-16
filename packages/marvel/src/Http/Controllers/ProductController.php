@@ -491,8 +491,8 @@ class ProductController extends CoreController
     public function importProducts(Request $request)
     {
         $requestFile = $request->file();
-        //$user = $request->user();
-       // $shop_id = $request->shop_id;
+        $duplicateProducts = [];
+        $importedProducts = [];
 
         if (count($requestFile)) {
             if (isset($requestFile['csv'])) {
@@ -502,55 +502,69 @@ class ProductController extends CoreController
             }
         }
 
-//        if (!$this->repository->hasPermission($user, $shop_id)) {
-//            throw new AuthorizationException(NOT_AUTHORIZED);
-//        }
+        $file = $uploadedCsv->storePubliclyAs('csv-files', 'products.' . $uploadedCsv->getClientOriginalExtension(), 'public');
 
-            $file = $uploadedCsv->storePubliclyAs('csv-files', 'products.' . $uploadedCsv->getClientOriginalExtension(), 'public');
+        $products = $this->repository->csvToArray(storage_path() . '/app/public/' . $file);
 
-            $products = $this->repository->csvToArray(storage_path() . '/app/public/' . $file);
-
-            foreach ($products as $key => $product) {
-                if (!isset($product['type_id'])) {
-                   // throw new MarvelException("VYPA_ERROR.WRONG_CSV");
-                }
-                unset($product['id']);
-                //$product['shop_id'] = $shop_id;
-                $product['image'] = json_decode($product['image'], true);
-                $product['gallery'] = json_decode($product['gallery'], true);
-                $product['video'] = json_decode($product['video'], true);
-                $categoriesId = json_decode($product['categories'], true);
-                $tagsId = json_decode($product['tags'], true);
-                try {
-                    $type = Type::findOrFail($product['type_id']);
-                    $authorCacheKey = $product['author_id'] . '_author_id';
-                    $manufacturerCacheKey = $product['manufacturer_id'] . '_manufacturer_id';
-                    $product['author_id'] = Cache::remember($authorCacheKey, 30, fn () => Author::find($product['author_id'])?->id);
-                    $product['manufacturer_id'] = Cache::remember($manufacturerCacheKey, 30, fn () => Manufacturer::find($product['manufacturer_id'])?->id);
-                    $dataArray = $this->repository->getProductDataArray();
-                    $productArray = array_intersect_key($product, array_flip($dataArray));
-                    if (isset($type->id)) {
-                        $newProduct = Product::FirstOrCreate($productArray);
-                        $categoryCacheKey = $product['categories'] . '_categories';
-                        $tagCacheKey = $product['tags'] . '_tags';
-                        $categories = Cache::remember($categoryCacheKey, 30, fn () => Category::whereIn('id', $categoriesId)->get());
-                        $tags = Cache::remember($tagCacheKey, 30, fn () => Tag::whereIn('id', $tagsId)->get());
-                        if (!empty($categories)) {
-                            $newProduct->categories()->attach($categories);
-                        }
-                        if (!empty($tags)) {
-                            $newProduct->tags()->attach($tags);
-                        }
-                    }
-                } catch (Exception $e) {
-                    //
-                }
+        foreach ($products as $key => $product) {
+            if (!isset($product['type_id'])) {
+                continue;
             }
-            return true;
+            unset($product['id']);
+            $product['image'] = json_decode($product['image'], true);
+            $product['gallery'] = json_decode($product['gallery'], true);
+            $product['video'] = json_decode($product['video'], true);
+            $categoriesId = json_decode($product['categories'], true);
+            $tagsId = json_decode($product['tags'], true);
+            try {
+                $type = Type::findOrFail($product['type_id']);
+                $product['author_id'] = Author::find($product['author_id'])?->id;
+                $product['manufacturer_id'] = Manufacturer::find($product['manufacturer_id'])?->id;
+                $dataArray = $this->repository->getProductDataArray();
+                $productArray = array_intersect_key($product, array_flip($dataArray));
 
+                if (isset($type->id)) {
+                    // Check if product already exists
+                    $existingProduct = Product::where('name', $productArray['name'])
+                        ->where('type_id', $productArray['type_id'])
+                        ->where('author_id', $productArray['author_id'])
+                        ->where('manufacturer_id', $productArray['manufacturer_id'])
+                        ->first();
+
+                    if ($existingProduct) {
+                        $duplicateProducts[] = $productArray['name'];
+                        continue;
+                    }
+
+                    $newProduct = Product::create($productArray);
+                    $importedProducts[] = $productArray['name'];
+
+                    $categories = Category::whereIn('id', $categoriesId)->get();
+                    $tags = Tag::whereIn('id', $tagsId)->get();
+
+                    if (!empty($categories)) {
+                        $newProduct->categories()->attach($categories);
+                    }
+                    if (!empty($tags)) {
+                        $newProduct->tags()->attach($tags);
+                    }
+                }
+            } catch (Exception $e) {
+                continue;
+            }
+        }
+
+        $response = [
+            'success' => true,
+            'message' => 'Products import completed',
+            'imported_count' => count($importedProducts),
+            'duplicate_count' => count($duplicateProducts),
+            'imported_products' => $importedProducts,
+            'duplicate_products' => $duplicateProducts
+        ];
+
+        return response()->json($response);
     }
-
-
 
     /**
      * importVariationOptions

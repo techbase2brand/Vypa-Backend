@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use Marvel\Enums\Permission;
 use Marvel\Database\Models\Shop;
 use Marvel\Database\Models\User;
+use Marvel\Database\Models\Employee;
 use Illuminate\Http\JsonResponse;
 use Marvel\Database\Models\Balance;
 use Marvel\Database\Models\Product;
@@ -235,11 +236,15 @@ class ShopController extends CoreController
         $id = $request->id;
         if ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN) || ($request->user()->hasPermissionTo(Permission::STORE_OWNER) && ($request->user()->shops->contains($id)))) {
             try {
-                $shop = $this->repository->findOrFail($id);
+               $shop = $this->repository->findOrFail($id);
             } catch (Exception $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
             $shop->delete();
+            $getEmployee=  Employee::where('shop_id',$id)->delete();
+
+            $userr = \App\Models\User::where('shop_id',$id)->delete();
+
             return $shop;
         }
         throw new AuthorizationException(NOT_AUTHORIZED);

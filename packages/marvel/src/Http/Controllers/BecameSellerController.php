@@ -38,15 +38,10 @@ class BecameSellerController extends CoreController
     public function index(Request $request)
     {
         $language = $request->language ? $request->language : DEFAULT_LANGUAGE;
-        return Cache::rememberForever(
-            'cached_became_seller_' . $language,
-            function () use ($request) {
-                return [
-                    'page_options' => $this->repository->getData($request->language),
-                    'commissions' => $this->commission->get()
-                ];
-            }
-        );
+        return [
+            'page_options' => $this->repository->getData($request->language),
+            'commissions' => $this->commission->get()
+        ];
     }
 
     /**
@@ -60,9 +55,6 @@ class BecameSellerController extends CoreController
     public function store(BecameSellersRequest $request)
     {
         $language = $request->language ? $request->language : DEFAULT_LANGUAGE;
-        if (Cache::has('cached_became_seller_' . $language)) {
-            Cache::forget('cached_became_seller_' . $language);
-        }
 
         $request->merge([
             'page_options' => [
@@ -74,10 +66,9 @@ class BecameSellerController extends CoreController
 
         $data = $this->repository->where('language', $request->language)->first();
         if ($data) {
-
-            $becomeSeller =  tap($data)->update($request->only(['page_options']));
+            $becomeSeller = tap($data)->update($request->only(['page_options']));
         } else {
-            $becomeSeller =  $this->repository->create(['page_options' => $request['page_options'], 'language' => $language]);
+            $becomeSeller = $this->repository->create(['page_options' => $request['page_options'], 'language' => $language]);
         }
         return $becomeSeller;
     }

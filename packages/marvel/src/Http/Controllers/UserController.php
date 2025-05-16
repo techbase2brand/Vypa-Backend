@@ -384,8 +384,9 @@ class UserController extends CoreController
     public function forgetPassword(Request $request)
     {
         $user = $this->repository->findByField('email', $request->email);
+
         if (count($user) < 1) {
-            return ['message' => NOT_FOUND, 'success' => false];
+            return ['message' => "Email Not Found", 'success' => false];
         }
         if (isset($user[0]->is_active) && $user[0]->is_active==0) {
             return ['message' => "Access denied: Your account is currently inactive. Please contact the administrator for further assistance.", 'success' => false];

@@ -281,24 +281,18 @@ class GroupController extends CoreController
         $data = $request->json()->all();
         $data = $data['payload']??$data;
         // Debugging: Dump the data to check its structure
-        // dd($data);
-
-        // Fetch existing wallets to get current points_used
-
 
         $customerId = $data['employee_id'];
         $totalPoints = $data['assign_budget'];
         // $expiryDate = $data['expiry_date']; // Uncomment if you have this field
-        $shop_id = Employee::whereIn('id', [$data['employee_id']])
-            ->get()
-            ->pluck('shop_id');
+        $employeeData = Employee::whereIn('owner_id', [$data['employee_id']])->first();
 
             // New wallet: set points_used to 0 and available_points = total_points
             RequestBudget::create([
                 'customer_id' => $customerId,
                 'points_requested' => $totalPoints,
                 'approved' => 0,
-                'shop_id' => $shop_id,
+                'shop_id' => $employeeData->shop_id,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
